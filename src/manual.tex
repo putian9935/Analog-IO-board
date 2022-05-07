@@ -1,0 +1,28 @@
+\documentclass[pre, 12pt]{revtex4}
+
+\usepackage[]{url}
+\begin{document}
+
+\title{API to analog IO board}
+\author{Li Putian}
+\affiliation{Nicholson labs, CQT, NUS}
+\maketitle
+\section{Overview}
+The analog IO board v1.0 has two 4-channel 16-bit DACs(AD5764~\parencite{AD5764}), one 4-channel 16-bit ADC(AD7386~\parencite{AD7386}), and a Teensy 4.1 board. 
+
+\section{Quick setup} 
+\subsection{DAC}
+\subsection{ADC}
+Since the ADC chip AD7386 supports two SDO lines, the implementation is complicated. 
+\subsubsection{One channel}
+In this case, connect only to A0 pin. 
+\subsubsection{Two channel}
+In this case, connect only to A0, B0 pin. 
+\subsubsection{Three/Four channel}
+\subsection{Logic IO} 
+
+\nocite{*}
+
+\bibliography{manual.bib}
+
+\end{document}
