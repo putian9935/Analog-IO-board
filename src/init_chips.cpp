@@ -66,5 +66,5 @@ void init_ADC()
     pinMode(CS, OUTPUT); 
     digitalWrite(CS, HIGH);
     
-    initSPISlave(SPI_MODE2);
+    // initSPISlave(SPI_MODE2);
 }
