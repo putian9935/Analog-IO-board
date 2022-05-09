@@ -1,3 +1,4 @@
+
 #ifndef READ_HPP
 #define READ_HPP 
 
@@ -6,7 +7,9 @@
 #include "utilities.hpp"
 
 
+extern volatile uint32_t ain0, ain1, bin0, bin1;
 
+#if 0
 typedef struct {
     uint16_t a; 
     uint16_t b;
@@ -38,3 +41,6 @@ quad read_quad_high_throughput();
 extern void prepare_slave_read();
 extern uint16_t slave_read();
 #endif 
+
+#endif
+

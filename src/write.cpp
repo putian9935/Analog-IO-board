@@ -22,7 +22,7 @@ void write(uint8_t ch, uint16_t num)
     else
         ASSERT_DAC2;
 
-    transfer_dac24(((((uint32_t)((ch & 3) | DAC_DATA_REG)) << 16)+ num));
+    transfer_dac24(((((uint32_t)((ch & 3) | DAC_DATA_REG)) << 16) + num));
     
     if (ch < 4)
         DEASSERT_DAC1;

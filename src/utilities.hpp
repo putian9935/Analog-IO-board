@@ -15,7 +15,6 @@
 #define DEASSERT_DAC2 digitalWriteFast(DAC_SYNC2, HIGH)
 
 extern uint16_t transfer16(uint16_t);
-
 #define ADC_TRANSFER_NOP ASSERT_ADC;transfer16(ADC_NOP);DEASSERT_ADC
 
 

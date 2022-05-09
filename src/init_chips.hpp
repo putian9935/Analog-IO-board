@@ -6,11 +6,27 @@
 
 #include "utilities.hpp"
 #include "SPISlave.h"
+#include "SPIMaster.h"
 
+
+/*** 
+ * ADC input channel selection 
+ * define at *most* one of the following
+ */
+#define ADC_CH0_ON 
+// #define ADC_CH1_ON
+// #define ADC_SEQ_ON
+
+/***
+ * Clock frequency
+ */
 #define MAX_DAC_FCLK 30000000
 #define MAX_ADC_FCLK 80000000
 #define MAX_ADC_FCLK_PRAC 60000000
 
+/*****
+ * Pin configuration
+ */
 #define LDAC1 A4
 #define DAC_CLR1 A5
 #define DAC_SYNC1 A6
@@ -22,6 +38,10 @@
 #define RST_DAC 2
 
 #define CS 10
+
+/***
+ * Useful registers 
+ */
 
 #define ADC_NOP ((uint16_t) 0)
 #define ADC_READ ((uint16_t)(0 << 15))
@@ -53,22 +73,4 @@
  */
 void init_chips();
 
-/**
- * \brief initialize DAC1, IC8
- * \note both DAC1 and DAC2 share the same set of SPI pins
- **/
-void init_DAC1();
-
-/**
- * @brief initialize DAC2, IC4
- * \note both DAC1 and DAC2 share the same set of SPI pins
- */
-void init_DAC2();
-
-/**
- * @brief initialize ADC
- */
-void init_ADC();
-
-void write_master();
 #endif

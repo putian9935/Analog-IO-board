@@ -3,10 +3,13 @@
 
 #include <DMAChannel.h>
 #include <SPI.h>
+#include "init_chips.hpp"
 
-
+/**
+ * @brief Initialize SPI slave with DMA 
+ * 
+ * @note preferably called before initSPIMaster
+ */
 void initSPISlave(uint8_t);
-void prepare_slave_read();
-uint16_t slave_read(); 
 
 #endif 

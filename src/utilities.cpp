@@ -39,7 +39,7 @@ void adc_set_ch1() {
     ASSERT_ADC;
     SPI.transfer16((uint16_t) ((ADC_WRITE | ADC_CFG1 | old | ADC_CFG1_CH) & (~ADC_CFG1_SEQ)));
     DEASSERT_ADC; 
-
+    
     // discard the result of first two transfers, see Figure 31
     ADC_TRANSFER_NOP; 
     ADC_TRANSFER_NOP;

@@ -1,3 +1,4 @@
+
 #include "read.hpp"
 
 /**
@@ -14,6 +15,7 @@ uint16_t transfer16(uint16_t data)
     return spim_regs->RDR;
 }
 
+#if 0
 uint16_t read()
 {
     ADC_TRANSFER_NOP;
@@ -67,3 +69,4 @@ quad read_quad_high_throughput()
     DEASSERT_ADC;
     return ret;
 }
+#endif
