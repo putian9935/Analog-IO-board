@@ -19,6 +19,7 @@ static void init_DAC1()
     digitalWrite(DAC_SYNC1, HIGH);
     digitalWrite(DAC_CLR1, HIGH); 
 
+    prepare_fast_spi_transfer24();
 }
 
 static void init_DAC2()

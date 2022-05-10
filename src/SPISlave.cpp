@@ -31,18 +31,15 @@ static void initSPISlaveDMA()
 void initSPISlave(uint8_t dataMode)
 {
     SPIS.begin();
-    pinMode(ChipSelectSlave, INPUT);
     SPIS.setCS(ChipSelectSlave);
 
     uint32_t tcr = LPSPI_TCR_FRAMESZ(15);
     if (dataMode & 0x08) tcr |= LPSPI_TCR_CPOL;
     if (dataMode & 0x04) tcr |= LPSPI_TCR_CPHA;
-    
     spis_regs->TCR = tcr;
 
-    spis_regs->CFGR1 = (LPSPI_CFGR1_AUTOPCS | LPSPI_CFGR1_SAMPLE);
+    spis_regs->CFGR1 = 0;
     spis_regs->DER   = LPSPI_DER_RDDE;
-    spis_regs->CR    = LPSPI_CR_MEN;
     initSPISlaveDMA();
 }
 

@@ -12,6 +12,7 @@ void setup()
 
 void loop()
 {
+    write(2, ain0 >> 3);
     Serial.printf("%u %u %u %u\n", ain0, ain1, bin0, bin1);
 }
 

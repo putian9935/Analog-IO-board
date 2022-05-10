@@ -3,6 +3,8 @@
 .vscode/**
 cores/**
 makefile
+doc/**
+old.cpp
 
 # dependency files
 *.d
