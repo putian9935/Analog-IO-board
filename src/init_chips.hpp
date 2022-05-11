@@ -13,9 +13,14 @@
  * ADC input channel selection 
  * define at *most* one of the following
  */
-// #define ADC_CH0_ON 
+#define ADC_CH0_ON 
 // #define ADC_CH1_ON
-#define ADC_SEQ_ON
+// #define ADC_SEQ_ON
+
+/***
+ * Count ADC sampling rate with interrupt 
+ */
+// #define COUNT_SAMPLE_RATE
 
 /***
  * Clock frequency

@@ -5,6 +5,10 @@
 #include <SPI.h>
 #include "init_chips.hpp"
 
+#ifdef COUNT_SAMPLE_RATE 
+volatile uint32_t cnt_r, cnt_t;
+#endif 
+
 /**
  * @brief Initialize ADC SPI master with DMA setup
  * 

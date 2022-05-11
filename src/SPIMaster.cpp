@@ -7,8 +7,6 @@ static DMAChannel rx, tx;
 static uint32_t txb;
 
 #ifdef COUNT_SAMPLE_RATE
-volatile uint32_t cnt_r, cnt_t;
-
 static void rx_isr()
 {
     rx.clearInterrupt();
