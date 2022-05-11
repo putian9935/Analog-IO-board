@@ -1,22 +1,17 @@
 #include "SPISlave.h"
 
-#define SPIM SPI
 #define SPIS SPI2
 #define ChipSelectSlave 44
 
-#define SPIS_DMAMUX_SOURCE_RX DMAMUX_SOURCE_LPSPI1_RX
-#define CS_MASTER 10
-IMXRT_LPSPI_t* spis_regs    = &IMXRT_LPSPI1_S;
-
+static IMXRT_LPSPI_t* spis_regs    = &IMXRT_LPSPI1_S;
 volatile uint32_t bin0, bin1;
-
 static DMAChannel rx(false);
 
 static void initSPISlaveDMA()
 {
     rx.begin(true);
     rx.source(spis_regs->RDR);
-    rx.triggerAtHardwareEvent(SPIS_DMAMUX_SOURCE_RX);
+    rx.triggerAtHardwareEvent(DMAMUX_SOURCE_LPSPI1_RX);
     rx.destination(bin0);
     #ifdef ADC_SEQ_ON
     rx.transferCount(2);

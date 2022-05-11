@@ -80,7 +80,6 @@ void initSPIMaster(uint8_t dataMode)
 
     SPI.setCS(10);
     
-    spi_regs -> CCR &= 0xffffff;
     uint32_t tcr = LPSPI_TCR_FRAMESZ(15);
     if (dataMode & 0x08) tcr |= LPSPI_TCR_CPOL;
     if (dataMode & 0x04) tcr |= LPSPI_TCR_CPHA;
