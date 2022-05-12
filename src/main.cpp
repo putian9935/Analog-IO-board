@@ -4,11 +4,14 @@
 
 void setup()
 {
+    // This will set a higher IPG root clock 
+    CCM_CBCDR = (CCM_CBCDR & ~CCM_CBCDR_IPG_PODF_MASK) | CCM_CBCDR_IPG_PODF(1);
     while (!Serial);
     Serial.begin(115200);
     
     init_chips();
 }
+
 
 void loop()
 {

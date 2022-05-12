@@ -3,7 +3,8 @@
 
 static void prepare_fast_spi_transfer24(){
     IMXRT_LPSPI_t* spi_regs = &IMXRT_LPSPI3_S;
-    spi_regs -> CCR = (spi_regs -> CCR & 0xff);
+    uint16_t div = 720000000 / MAX_DAC_FCLK;
+    spi_regs -> CCR = LPSPI_CCR_SCKDIV(div-2) | LPSPI_CCR_DBT(0) | LPSPI_CCR_PCSSCK(0) | LPSPI_CCR_SCKPCS(2);
     uint32_t tcr = spi_regs -> TCR;
     spi_regs -> TCR = (tcr & 0xfffff000) | LPSPI_TCR_FRAMESZ(23);
 }

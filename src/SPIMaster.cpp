@@ -53,6 +53,9 @@ static void initSPIMasterDMA()
     #endif
     txb = 0;
 
+    CCM_CBCMR = (CCM_CBCMR & ~(CCM_CBCMR_LPSPI_PODF_MASK | CCM_CBCMR_LPSPI_CLK_SEL_MASK)) |
+		CCM_CBCMR_LPSPI_PODF(0) | CCM_CBCMR_LPSPI_CLK_SEL(1);
+
     rx.enable();
     tx.enable();
 }
@@ -78,6 +81,9 @@ void initSPIMaster(uint8_t dataMode)
 
     SPI.setCS(10);
     
+    uint16_t div = 720000000 / MAX_ADC_FCLK_PRAC;
+    spi_regs -> CCR = LPSPI_CCR_SCKDIV(div-2) | LPSPI_CCR_DBT(div/2) | LPSPI_CCR_PCSSCK(div/2) | LPSPI_CCR_SCKPCS(div/2);
+
     uint32_t tcr = LPSPI_TCR_FRAMESZ(15);
     if (dataMode & 0x08) tcr |= LPSPI_TCR_CPOL;
     if (dataMode & 0x04) tcr |= LPSPI_TCR_CPHA;
