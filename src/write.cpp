@@ -15,7 +15,7 @@ static void transfer_dac24(uint32_t data)
     spi_regs -> RDR;
 }
 
-void write(uint8_t ch, uint16_t num)
+FASTRUN void write(uint8_t ch, uint16_t num)
 {
     if (ch < 4)
         ASSERT_DAC1;

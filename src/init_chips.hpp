@@ -26,8 +26,9 @@
  * Clock frequency
  */
 #define MAX_DAC_FCLK 30000000
+#define MAX_DAC_FCLK_PRAC 36000000
 #define MAX_ADC_FCLK 80000000
-#define MAX_ADC_FCLK_PRAC 60000000
+#define MAX_ADC_FCLK_PRAC 90000000
 
 /*****
  * Pin configuration
@@ -78,4 +79,5 @@
  */
 void init_chips();
 
+void set_fastio_pin(uint8_t);
 #endif

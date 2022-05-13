@@ -8,6 +8,8 @@ void adc_reset() {
 
     ADC_TRANSFER_NOP; // discard the result of first two transfers
     ADC_TRANSFER_NOP; 
+
+    delay(1);
 }
 
 

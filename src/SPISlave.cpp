@@ -28,6 +28,10 @@ void initSPISlave(uint8_t dataMode)
     SPIS.begin();
     SPIS.setCS(ChipSelectSlave);
 
+    set_fastio_pin(ChipSelectSlave); 
+    set_fastio_pin(45);  // SCK2
+    set_fastio_pin(42);  // MISO2
+
     uint32_t tcr = LPSPI_TCR_FRAMESZ(15);
     if (dataMode & 0x08) tcr |= LPSPI_TCR_CPOL;
     if (dataMode & 0x04) tcr |= LPSPI_TCR_CPHA;
