@@ -4,6 +4,7 @@
 #include "init_chips.hpp"
 #include <SPI.h>
 #include <Arduino.h>
+#include "bit_mangler.h"
 
 /**
  * @brief Write num to channel

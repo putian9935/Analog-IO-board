@@ -7,6 +7,13 @@ void set_fastio_pin(uint8_t pin_num) {
 }
 
 static void prepare_fast_spi_transfer24(){
+    IOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B0_02 = (IOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B0_02 & ~0x7) | 5; 
+    pinMode(1, INPUT);
+    pinMode(39, OUTPUT);
+    SPI1.setCS(0);
+    SPI1.setMISO(39);
+    set_fastio_pin(0);
+    set_fastio_pin(39);
     IMXRT_LPSPI_t* spi_regs = &IMXRT_LPSPI3_S;
 
     // running at 36MHz
@@ -14,7 +21,8 @@ static void prepare_fast_spi_transfer24(){
     spi_regs -> CCR = LPSPI_CCR_SCKDIV(div-2) | LPSPI_CCR_SCKPCS(2);
     
     uint32_t tcr = spi_regs -> TCR;
-    spi_regs -> TCR = (tcr & 0xfffff000) | LPSPI_TCR_FRAMESZ(23);
+    spi_regs -> TCR = (tcr & 0xfffff000) | LPSPI_TCR_FRAMESZ(47) | LPSPI_TCR_RXMSK | LPSPI_TCR_WIDTH(1);
+    spi_regs->CFGR1 |= LPSPI_CFGR1_PINCFG(1);
 }
 
 static void init_DAC1()
