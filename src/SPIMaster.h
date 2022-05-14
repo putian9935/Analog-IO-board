@@ -6,7 +6,7 @@
 #include "init_chips.hpp"
 
 #ifdef COUNT_SAMPLE_RATE 
-volatile uint32_t cnt_r, cnt_t;
+extern volatile uint32_t cnt_r, cnt_t;
 #endif 
 
 /**

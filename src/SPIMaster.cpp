@@ -1,5 +1,9 @@
 #include "SPIMaster.h"
 
+#ifdef COUNT_SAMPLE_RATE 
+volatile uint32_t cnt_r, cnt_t;
+#endif 
+
 static IMXRT_LPSPI_t* spi_regs = &IMXRT_LPSPI4_S;
 volatile uint32_t ain0, ain1;
 
