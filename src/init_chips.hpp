@@ -6,7 +6,6 @@
 
 #include "utilities.hpp"
 #include "SPISlave.h"
-#include "SPIMaster.h"
 
 
 /*** 
@@ -20,7 +19,8 @@
 /***
  * Count ADC sampling rate with interrupt 
  */
-// #define COUNT_SAMPLE_RATE
+#define COUNT_SAMPLE_RATE
+#include "SPIMaster.h"
 
 /***
  * Clock frequency
