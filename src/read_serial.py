@@ -1,6 +1,6 @@
 import serial
 
-ser = serial.Serial("COM4", baudrate=200000)
+ser = serial.Serial("COM20", baudrate=200000)
 
 from time import sleep 
 while True:

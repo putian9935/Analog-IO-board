@@ -1,13 +1,13 @@
 #ifndef INIT_PINS_HPP
 #define INIT_PINS_HPP
 
+
+
 #include <Arduino.h>
 #include <SPI.h>
 
 #include "utilities.hpp"
 #include "SPISlave.h"
-#include "SPIMaster.h"
-
 
 /*** 
  * ADC input channel selection 
@@ -20,13 +20,14 @@
 /***
  * Count ADC sampling rate with interrupt 
  */
-// #define COUNT_SAMPLE_RATE
+#define COUNT_SAMPLE_RATE
+#include "SPIMaster.h"
 
 /***
  * Clock frequency
  */
 #define MAX_DAC_FCLK 30000000
-#define MAX_DAC_FCLK_PRAC 10000000
+#define MAX_DAC_FCLK_PRAC 36000000
 #define MAX_ADC_FCLK 80000000
 #define MAX_ADC_FCLK_PRAC 90000000
 

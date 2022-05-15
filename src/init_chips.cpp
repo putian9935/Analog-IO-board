@@ -8,8 +8,8 @@ void set_fastio_pin(uint8_t pin_num) {
 
 static void prepare_fast_spi_transfer24(){
     IOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B0_02 = (IOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B0_02 & ~0x7) | 5; 
-    pinMode(1, INPUT);
-    pinMode(39, OUTPUT);
+    pinMode(1, INPUT); // old MISO
+    pinMode(39, OUTPUT); // new MISO as output
     SPI1.setCS(0);
     SPI1.setMISO(39);
     set_fastio_pin(0);
@@ -18,7 +18,7 @@ static void prepare_fast_spi_transfer24(){
 
     // running at 36MHz
     uint16_t div = 720000000 / MAX_DAC_FCLK_PRAC;
-    spi_regs -> CCR = LPSPI_CCR_SCKDIV(div-2) | LPSPI_CCR_SCKPCS(2);
+    spi_regs -> CCR = LPSPI_CCR_SCKDIV(div-2) | LPSPI_CCR_SCKPCS(0) | LPSPI_CCR_DBT(0) | LPSPI_CCR_PCSSCK(0);
     
     uint32_t tcr = spi_regs -> TCR;
     spi_regs -> TCR = (tcr & 0xfffff000) | LPSPI_TCR_FRAMESZ(47) | LPSPI_TCR_RXMSK | LPSPI_TCR_WIDTH(1);
@@ -31,12 +31,8 @@ static void init_DAC1()
     SPI1.beginTransaction(SPISettings(MAX_DAC_FCLK, MSBFIRST, SPI_MODE1));
     pinMode(LDAC1, OUTPUT);
     pinMode(DAC_CLR1, OUTPUT);
-    pinMode(DAC_SYNC1, OUTPUT);
-
-    digitalWrite(DAC_SYNC1, HIGH);
     digitalWrite(DAC_CLR1, HIGH); 
 
-    set_fastio_pin(DAC_SYNC1);
     set_fastio_pin(26);  // MOSI1
     set_fastio_pin(17);  // SCK1
 }
@@ -45,12 +41,7 @@ static void init_DAC2()
 {
     pinMode(LDAC2, OUTPUT);
     pinMode(DAC_CLR2, OUTPUT);
-    pinMode(DAC_SYNC2, OUTPUT);
-
-    digitalWrite(DAC_SYNC2, HIGH);
     digitalWrite(DAC_CLR2, HIGH); 
-
-    set_fastio_pin(DAC_SYNC2);
 }
 
 
