@@ -1,4 +1,4 @@
-#include "show_ccm_registers.hpp"
+#include "show_registers.hpp"
 
 void show_ipg_clk() {
     static const uint32_t pre_periph_clk[] = {
@@ -26,6 +26,16 @@ void show_lpspi_clk() {
     PRREG((CCM_CBCMR & CCM_CBCMR_LPSPI_PODF_MASK) >> 26);
 }
 
+void show_gpio_reg(uint32_t gpio_pad) {
+    PRREG((gpio_pad & IOMUXC_PAD_HYS) >> 16);
+    PRREG((gpio_pad & IOMUXC_PAD_PUS(3)) >> 14);
+    PRREG((gpio_pad & IOMUXC_PAD_PUE) >> 13);
+    PRREG((gpio_pad & IOMUXC_PAD_PKE) >> 12);
+    PRREG((gpio_pad & IOMUXC_PAD_ODE) >> 11);
+    PRREG((gpio_pad & IOMUXC_PAD_SPEED(3)) >> 6);
+    PRREG((gpio_pad & IOMUXC_PAD_DSE(7)) >> 3);
+    PRREG((gpio_pad & IOMUXC_PAD_SRE));
+}
 
 void set_arm_clk_div(uint8_t new_div) {
     CCM_CBCMR &= (~CCM_CBCMR_PRE_PERIPH_CLK_SEL_MASK); // switch to PLL2(528MHz)
