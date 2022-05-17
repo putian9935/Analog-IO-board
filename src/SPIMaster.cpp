@@ -69,7 +69,7 @@ void initSPIMaster(uint8_t dataMode)
 {
     pinMode(10, OUTPUT);
     SPI.begin();
-    SPI.beginTransaction(SPISettings(MAX_ADC_FCLK_PRAC, MSBFIRST, dataMode));
+    SPI.beginTransaction(SPISettings(ADC_FCLK, MSBFIRST, dataMode));
     SPI.setCS(10);
 
     set_fastio_pin(CS); 
@@ -88,7 +88,7 @@ void initSPIMaster(uint8_t dataMode)
     #warning "No ADC channel selection flag defined. Using only CH0. "
     #endif
     
-    uint16_t div = 720000000 / MAX_ADC_FCLK_PRAC;
+    uint16_t div = 720000000 / ADC_FCLK;
     spi_regs -> CCR = LPSPI_CCR_SCKDIV(div-2) | LPSPI_CCR_DBT(4) | LPSPI_CCR_PCSSCK(3) | LPSPI_CCR_SCKPCS(3);
 
     uint32_t tcr = LPSPI_TCR_FRAMESZ(15);

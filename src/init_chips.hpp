@@ -24,11 +24,24 @@
 
 /***
  * Clock frequency
+ * Turning on overclock will increase phase margin to 210khz 
  */
+#define OVERCLOCK_ON 
+
 #define MAX_DAC_FCLK 30000000
 #define MAX_DAC_FCLK_PRAC 90000000
 #define MAX_ADC_FCLK 80000000
 #define MAX_ADC_FCLK_PRAC 90000000
+
+#define DAC_FCLK MAX_DAC_FCLK 
+#define ADC_FCLK MAX_ADC_FCLK
+
+#ifdef OVERCLOCK_ON
+#undef DAC_FCLK
+#undef ADC_FCLK
+#define DAC_FCLK MAX_DAC_FCLK_PRAC
+#define ADC_FCLK MAX_ADC_FCLK_PRAC
+#endif 
 
 /*****
  * Pin configuration

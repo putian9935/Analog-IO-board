@@ -10,7 +10,7 @@ static void prepare_fast_spi_transfer24(){
     IMXRT_LPSPI_t* spi_regs = &IMXRT_LPSPI3_S;
 
     // running at 36MHz
-    uint16_t div = 720000000 / MAX_DAC_FCLK_PRAC;
+    uint16_t div = 720000000 / DAC_FCLK;
     spi_regs -> CCR = LPSPI_CCR_SCKDIV(div-2) | LPSPI_CCR_SCKPCS(2);
     
     uint32_t tcr = spi_regs -> TCR;
