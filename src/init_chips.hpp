@@ -19,14 +19,14 @@
 /***
  * Count ADC sampling rate with interrupt 
  */
-#define COUNT_SAMPLE_RATE
+// #define COUNT_SAMPLE_RATE
 #include "SPIMaster.h"
 
 /***
  * Clock frequency
  */
 #define MAX_DAC_FCLK 30000000
-#define MAX_DAC_FCLK_PRAC 36000000
+#define MAX_DAC_FCLK_PRAC 90000000
 #define MAX_ADC_FCLK 80000000
 #define MAX_ADC_FCLK_PRAC 90000000
 
