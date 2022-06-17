@@ -16,15 +16,14 @@ void setup()
     init_chips();
 }
 
-elapsedMicros t;
+
 void loop()
 {
-    // int cnt = 0;
-    // t = 0;
-    // while (t < 1000000)
-    // {
-        write_both(2, ain0 >> 3, 5, ain0 >> 3);
-        // ++cnt;
-    // }
-    // Serial.println(cnt);
+  if (Serial.available())
+  {
+    char bytes[3];
+    Serial.readBytes(bytes,3);
+    
+    write(*bytes, *(uint16_t *)(bytes + 1)); 
+  }
 }

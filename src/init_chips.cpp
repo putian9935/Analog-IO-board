@@ -18,13 +18,22 @@ static void prepare_fast_spi_transfer24(){
 
     // running at 36MHz
     uint16_t div = 720000000 / MAX_DAC_FCLK_PRAC;
-    spi_regs -> CCR = LPSPI_CCR_SCKDIV(div-2) | LPSPI_CCR_SCKPCS(2);
+    spi_regs -> CCR = LPSPI_CCR_SCKDIV(div-2) | LPSPI_CCR_DBT(100);
     
     uint32_t tcr = spi_regs -> TCR;
     spi_regs -> TCR = (tcr & 0xfffff000) | LPSPI_TCR_FRAMESZ(47) | LPSPI_TCR_RXMSK | LPSPI_TCR_WIDTH(1);
     spi_regs->CFGR1 |= LPSPI_CFGR1_PINCFG(1);
 }
 
+#include "bit_mangler.h"
+#include "write.hpp"
+static void calibrate_DAC1() {
+    uint64_t new_dac_num = insert_zeros(((((uint32_t)((2 & 3) | DAC_OFFSET_REG)) << 16) | (uint8_t)(-11)));
+    transfer_dac24(new_dac_num << 1);
+
+    new_dac_num = insert_zeros(((((uint32_t)((2 & 3) | DAC_FGAIN_REG)) << 16) | (uint8_t)(-20)));
+    transfer_dac24(new_dac_num << 1);
+}
 static void init_DAC1()
 {
     SPI1.begin();
@@ -63,6 +72,8 @@ void init_chips()
     init_ADC();
     
     prepare_fast_spi_transfer24();
+
+    calibrate_DAC1();
 }
 
 

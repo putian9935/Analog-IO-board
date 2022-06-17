@@ -8,7 +8,7 @@ static IMXRT_LPSPI_t* spi_regs = &IMXRT_LPSPI3_S;
  * @param data
  * @return uint16_t
  */
-static void transfer_dac24(uint64_t data)
+void transfer_dac24(uint64_t data)
 {
     while ((spi_regs->FSR & 0xff) > 15)
         ;
