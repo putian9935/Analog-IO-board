@@ -16,14 +16,25 @@ void setup()
     init_chips();
 }
 
+#define MAXN 500 
 
 void loop()
 {
   if (Serial.available())
   {
-    char bytes[3];
-    Serial.readBytes(bytes,3);
+    static uint16_t res[MAXN];
+    // char bytes[3];
+    // Serial.readBytes(bytes,3);
     
-    write(*bytes, *(uint16_t *)(bytes + 1)); 
+    // write(*bytes, *(uint16_t *)(bytes + 1)); 
+    for(int i = 0; i < MAXN; ++i)
+    {
+        res[i] = ain0; 
+        delayMicroseconds(1);
+    }
+    for(int i = 0; i < MAXN; ++i)
+        Serial.printf("%d ", res[i]);
+    Serial.printf("\n");
+
   }
 }

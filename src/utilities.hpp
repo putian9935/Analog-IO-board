@@ -42,5 +42,10 @@ void adc_set_seq();
 void adc_unset_seq();
 
 
+#define ADC_CFG1_OSR_MASK (7 << 6)
+#define ADC_CFG1_OSR(x) ((1 << (x)) << 6)
+
+void adc_set_oversampling(uint8_t);
+
 void adc_reset();
 #endif

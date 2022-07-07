@@ -47,6 +47,18 @@ void adc_set_ch1() {
     ADC_TRANSFER_NOP;
 }
 
+void adc_set_oversampling(uint8_t osr) {
+    uint16_t old = adc_read_register(ADC_CFG1);
+
+    ASSERT_ADC;
+    SPI.transfer16((uint16_t) ((ADC_WRITE | ADC_CFG1 | old) & ~ADC_CFG1_OSR_MASK | ADC_CFG1_OSR(3)));
+    DEASSERT_ADC; 
+    
+    // discard the result of first two transfers, see Figure 31
+    ADC_TRANSFER_NOP; 
+    ADC_TRANSFER_NOP;
+}
+
 void adc_set_seq() {
     uint16_t old = adc_read_register(ADC_CFG1);
 
