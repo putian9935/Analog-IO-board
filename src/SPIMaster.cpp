@@ -88,6 +88,7 @@ void initSPIMaster(uint8_t dataMode)
     #warning "No ADC channel selection flag defined. Using only CH0. "
     #endif
     
+    // adc_set_oversampling(5);
     uint16_t div = 720000000 / MAX_ADC_FCLK_PRAC;
     spi_regs -> CCR = LPSPI_CCR_SCKDIV(div-2) | LPSPI_CCR_DBT(4) | LPSPI_CCR_PCSSCK(3) | LPSPI_CCR_SCKPCS(3);
 
