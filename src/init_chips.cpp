@@ -3,22 +3,20 @@
 #define FAST_IO IOMUXC_PAD_DSE(4) | IOMUXC_PAD_SPEED(3) | IOMUXC_PAD_SRE
 
 void set_fastio_pin(uint8_t pin_num) {
-	*(portControlRegister(pin_num)) = FAST_IO;
+	// *(portControlRegister(pin_num)) = FAST_IO;
 }
 
 static void prepare_fast_spi_transfer24(){
-    IOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B0_02 = (IOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B0_02 & ~0x7) | 5; 
-    pinMode(1, INPUT); // old MISO
     pinMode(39, OUTPUT); // new MISO as output
     SPI1.setCS(0);
-    SPI1.setMISO(39);
     set_fastio_pin(0);
-    set_fastio_pin(39);
+    SPI1.setMISO(1);
+    set_fastio_pin(1);
     IMXRT_LPSPI_t* spi_regs = &IMXRT_LPSPI3_S;
 
     // running at 36MHz
     uint16_t div = 720000000 / MAX_DAC_FCLK_PRAC;
-    spi_regs -> CCR = LPSPI_CCR_SCKDIV(div-2) | LPSPI_CCR_DBT(100);
+    spi_regs -> CCR = LPSPI_CCR_SCKDIV(div-2) | LPSPI_CCR_DBT(20) | LPSPI_CCR_PCSSCK(1)  | LPSPI_CCR_SCKPCS(1);
     
     uint32_t tcr = spi_regs -> TCR;
     spi_regs -> TCR = (tcr & 0xfffff000) | LPSPI_TCR_FRAMESZ(47) | LPSPI_TCR_RXMSK | LPSPI_TCR_WIDTH(1);
