@@ -1,20 +1,21 @@
 #ifndef INIT_PINS_HPP
 #define INIT_PINS_HPP
 
+
+
 #include <Arduino.h>
 #include <SPI.h>
 
 #include "utilities.hpp"
 #include "SPISlave.h"
 
-
 /*** 
  * ADC input channel selection 
  * define at *most* one of the following
  */
-#define ADC_CH0_ON 
+// #define ADC_CH0_ON 
 // #define ADC_CH1_ON
-// #define ADC_SEQ_ON
+#define ADC_SEQ_ON
 
 /***
  * Count ADC sampling rate with interrupt 

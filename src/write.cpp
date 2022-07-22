@@ -8,24 +8,34 @@ static IMXRT_LPSPI_t* spi_regs = &IMXRT_LPSPI3_S;
  * @param data
  * @return uint16_t
  */
-static void transfer_dac24(uint32_t data)
+void transfer_dac24(uint64_t data)
 {
-    spi_regs->TDR = data;
-    while ((spi_regs->RSR & LPSPI_RSR_RXEMPTY));
-    spi_regs -> RDR;
+    while ((spi_regs->FSR & 0xff) > 15)
+        ;
+    spi_regs->TDR = data >> 16;
+    spi_regs->TDR = (data & 0xFFFF);
 }
 
 void write(uint8_t ch, uint16_t num)
 {
-    if (ch < 4)
-        ASSERT_DAC1;
-    else
-        ASSERT_DAC2;
+    static uint64_t dac1_num_mangled, dac2_num_mangled;
 
-    transfer_dac24(((((uint32_t)((ch & 3) | DAC_DATA_REG)) << 16) + num));
-    
+    uint64_t new_dac_num = insert_zeros(((((uint32_t)((ch & 3) | DAC_DATA_REG)) << 16) | num));
+
     if (ch < 4)
-        DEASSERT_DAC1;
+        dac1_num_mangled = new_dac_num << 1;
     else
-        DEASSERT_DAC2;
+        dac2_num_mangled = new_dac_num;
+
+    transfer_dac24((dac1_num_mangled | dac2_num_mangled));
+}
+
+void write_both(uint8_t ch1, uint16_t num1, uint8_t ch2, uint16_t num2)
+{
+    uint64_t dac1_num_mangled, dac2_num_mangled;
+
+    dac1_num_mangled = insert_zeros(((((uint32_t)((ch1 & 3) | DAC_DATA_REG)) << 16) | num1)) << 1;
+    dac2_num_mangled = insert_zeros(((((uint32_t)((ch2 & 3) | DAC_DATA_REG)) << 16) | num2));
+
+    transfer_dac24((dac1_num_mangled | dac2_num_mangled));
 }
