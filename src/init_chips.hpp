@@ -2,7 +2,6 @@
 #define INIT_PINS_HPP
 
 
-
 #include <Arduino.h>
 #include <SPI.h>
 
@@ -36,13 +35,15 @@
  */
 #define LDAC1 A4
 #define DAC_CLR1 A5
-#define DAC_SYNC1 A6
 
 #define LDAC2 A7
 #define DAC_CLR2 A8
-#define DAC_SYNC2 A9
 
 #define RST_DAC 2
+#define CS_DAC 0 
+
+#define DAC_DIN1 1 
+#define DAC_DIN2 26
 
 #define CS 10
 

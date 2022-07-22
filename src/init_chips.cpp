@@ -25,34 +25,21 @@ static void prepare_fast_spi_transfer24(){
     spi_regs->CFGR1 |= LPSPI_CFGR1_PINCFG(1);
 }
 
-#include "bit_mangler.h"
-#include "write.hpp"
-static void calibrate_DAC1() {
-    uint64_t new_dac_num = insert_zeros(((((uint32_t)((2 & 3) | DAC_OFFSET_REG)) << 16) | (uint8_t)(-11)));
-    transfer_dac24(new_dac_num << 1);
-
-    new_dac_num = insert_zeros(((((uint32_t)((2 & 3) | DAC_FGAIN_REG)) << 16) | (uint8_t)(-20)));
-    transfer_dac24(new_dac_num << 1);
-}
 static void init_DAC1()
 {
     SPI1.begin();
     SPI1.beginTransaction(SPISettings(MAX_DAC_FCLK, MSBFIRST, SPI_MODE1));
     pinMode(LDAC1, OUTPUT);
     pinMode(DAC_CLR1, OUTPUT);
-    digitalWrite(DAC_CLR1, HIGH); 
-
-    set_fastio_pin(26);  // MOSI1
-    set_fastio_pin(17);  // SCK1
+    digitalWrite(DAC_CLR1, HIGH);
 }
 
 static void init_DAC2()
 {
     pinMode(LDAC2, OUTPUT);
     pinMode(DAC_CLR2, OUTPUT);
-    digitalWrite(DAC_CLR2, HIGH); 
+    digitalWrite(DAC_CLR2, HIGH);
 }
-
 
 static void init_ADC()
 {
@@ -70,10 +57,6 @@ void init_chips()
     digitalWrite(LDAC1, LOW);
     digitalWrite(LDAC2, LOW);
     init_ADC();
-    
+
     prepare_fast_spi_transfer24();
-
-    calibrate_DAC1();
 }
-
-

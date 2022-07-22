@@ -2,6 +2,9 @@
 #define UTILITIES_H
 
 #include "init_chips.hpp"
+#include "bit_mangler.h"
+#include "write.hpp"
+
 #include <SPI.h>
 #include <Arduino.h>
 
