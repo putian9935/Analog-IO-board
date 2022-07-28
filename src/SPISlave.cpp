@@ -12,7 +12,11 @@ static void initSPISlaveDMA()
     rx.begin(true);
     rx.source(spis_regs->RDR);
     rx.triggerAtHardwareEvent(DMAMUX_SOURCE_LPSPI1_RX);
+    #ifdef ADC_CH1_ON
+    rx.destination(bin1);
+    #else
     rx.destination(bin0);
+    #endif // ADC_CH1_ON 
     #ifdef ADC_SEQ_ON
     rx.transferCount(2);
     rx.TCD->DOFF     = 4;

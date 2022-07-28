@@ -6,8 +6,18 @@
 #include "init_chips.hpp"
 #include "utilities.hpp"
 
-
+// low-level read 
 extern volatile uint32_t ain0, ain1, bin0, bin1;
+
+// high-level read with averaging 
+#define SAMPLE 512
+#define SAMPLE_LOG 9
+
+uint16_t read_ain0();
+uint16_t read_ain1();
+uint16_t read_bin0();
+uint16_t read_bin1();
+
 
 #if 0
 typedef struct {

@@ -15,6 +15,37 @@ uint16_t transfer16(uint16_t data)
     return spim_regs->RDR;
 }
 
+
+uint16_t read_ain0()
+{
+    uint32_t ret = 0;
+    for (int j = 0; j < SAMPLE; ++j)
+        ret += ain0;
+    return (ret >> SAMPLE_LOG);
+}
+uint16_t read_ain1()
+{
+    uint32_t ret = 0;
+    for (int j = 0; j < SAMPLE; ++j)
+        ret += ain1;
+    return (ret >> SAMPLE_LOG);
+}
+uint16_t read_bin0()
+{
+    uint32_t ret = 0;
+    for (int j = 0; j < SAMPLE; ++j)
+        ret += bin0;
+    return (ret >> SAMPLE_LOG);
+}
+uint16_t read_bin1()
+{
+    uint32_t ret = 0;
+    for (int j = 0; j < SAMPLE; ++j)
+        ret += bin1;
+    return (ret >> SAMPLE_LOG);
+}
+
+
 #if 0
 uint16_t read()
 {

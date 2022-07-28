@@ -32,7 +32,11 @@ static void initSPIMasterDMA()
     rx.begin(true);
     rx.source(spi_regs->RDR);
     rx.triggerAtHardwareEvent(DMAMUX_SOURCE_LPSPI4_RX);
+    #ifdef ADC_CH1_ON
+    rx.destination(ain1);
+    #else
     rx.destination(ain0);
+    #endif // ADC_CH1_ON 
     #ifdef COUNT_SAMPLE_RATE
     rx.attachInterrupt(rx_isr);
     rx.interruptAtCompletion();

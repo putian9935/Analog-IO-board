@@ -3,15 +3,19 @@
 #define FAST_IO IOMUXC_PAD_DSE(4) | IOMUXC_PAD_SPEED(3) | IOMUXC_PAD_SRE
 
 void set_fastio_pin(uint8_t pin_num) {
-	// *(portControlRegister(pin_num)) = FAST_IO;
+	*(portControlRegister(pin_num)) = FAST_IO;
 }
 
 static void prepare_fast_spi_transfer24(){
     pinMode(39, OUTPUT); // new MISO as output
     SPI1.setCS(0);
     set_fastio_pin(0);
-    SPI1.setMISO(1);
-    set_fastio_pin(1);
+    // old board 
+    SPI1.setMISO(39); 
+    set_fastio_pin(39);
+    // new board 
+    // SPI1.setMISO(1);
+    // set_fastio_pin(1);
     IMXRT_LPSPI_t* spi_regs = &IMXRT_LPSPI3_S;
 
     // running at 36MHz
