@@ -1,5 +1,10 @@
 #include "SPIMaster.h"
 
+#include <DMAChannel.h>
+#include <SPI.h>
+#include "init_chips.hpp"
+#include "utilities.hpp"
+
 #ifdef COUNT_SAMPLE_RATE 
 volatile uint32_t cnt_r, cnt_t;
 #endif 
@@ -93,7 +98,11 @@ void initSPIMaster(uint8_t dataMode)
     #endif
     
     uint16_t div = 720000000 / ADC_FCLK;
+    #ifndef ADC_SEQ_ON
     spi_regs -> CCR = LPSPI_CCR_SCKDIV(div-2) | LPSPI_CCR_DBT(4) | LPSPI_CCR_PCSSCK(3) | LPSPI_CCR_SCKPCS(3);
+    #else
+    spi_regs -> CCR = LPSPI_CCR_SCKDIV(div-2) | LPSPI_CCR_DBT(255) | LPSPI_CCR_PCSSCK(255) | LPSPI_CCR_SCKPCS(255);
+    #endif
 
     uint32_t tcr = LPSPI_TCR_FRAMESZ(15);
     if (dataMode & 0x08) tcr |= LPSPI_TCR_CPOL;

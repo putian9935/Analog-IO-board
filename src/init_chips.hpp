@@ -1,13 +1,9 @@
 #ifndef INIT_PINS_HPP
 #define INIT_PINS_HPP
 
-
-
 #include <Arduino.h>
 #include <SPI.h>
 
-#include "utilities.hpp"
-#include "SPISlave.h"
 
 /*** 
  * ADC input channel selection 
@@ -21,7 +17,6 @@
  * Count ADC sampling rate with interrupt 
  */
 // #define COUNT_SAMPLE_RATE
-#include "SPIMaster.h"
 
 /***
  * Clock frequency
@@ -93,5 +88,9 @@
  */
 void init_chips();
 
-void set_fastio_pin(uint8_t);
+/**
+ * @brief Change pin driver settings for high slew rate and better impedance matching 
+ * this will generally help to provide a better signal integrity on the board 
+ */
+void set_fastio_pin(uint8_t pin);
 #endif

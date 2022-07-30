@@ -4,12 +4,12 @@
 /**
  * @brief Fast spi transfer16, cf. SPI.h implementation
  *
- * @param data
- * @return uint16_t
+ * @param data: 16-bit data word to transfer  
+ * @return uint16_t ADC chip readback 
  */
 uint16_t transfer16(uint16_t data)
 {
-    IMXRT_LPSPI_t* spim_regs = &IMXRT_LPSPI4_S;
+    static IMXRT_LPSPI_t* spim_regs = &IMXRT_LPSPI4_S;
     spim_regs->TDR           = data;
     while ((spim_regs -> RSR & LPSPI_RSR_RXEMPTY)) ;
     return spim_regs->RDR;
@@ -18,31 +18,19 @@ uint16_t transfer16(uint16_t data)
 
 uint16_t read_ain0()
 {
-    uint32_t ret = 0;
-    for (int j = 0; j < SAMPLE; ++j)
-        ret += ain0;
-    return (ret >> SAMPLE_LOG);
+    return ain0; 
 }
 uint16_t read_ain1()
 {
-    uint32_t ret = 0;
-    for (int j = 0; j < SAMPLE; ++j)
-        ret += ain1;
-    return (ret >> SAMPLE_LOG);
+    return ain1; 
 }
 uint16_t read_bin0()
 {
-    uint32_t ret = 0;
-    for (int j = 0; j < SAMPLE; ++j)
-        ret += bin0;
-    return (ret >> SAMPLE_LOG);
+    return bin0; 
 }
 uint16_t read_bin1()
 {
-    uint32_t ret = 0;
-    for (int j = 0; j < SAMPLE; ++j)
-        ret += bin1;
-    return (ret >> SAMPLE_LOG);
+    return bin1; 
 }
 
 

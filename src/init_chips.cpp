@@ -1,5 +1,9 @@
 #include "init_chips.hpp"
 
+#include "utilities.hpp"
+#include "SPISlave.h"
+#include "SPIMaster.h"
+
 #define FAST_IO IOMUXC_PAD_DSE(4) | IOMUXC_PAD_SPEED(3) | IOMUXC_PAD_SRE
 
 void set_fastio_pin(uint8_t pin_num) {
@@ -18,7 +22,6 @@ static void prepare_fast_spi_transfer24(){
     // set_fastio_pin(1);
     IMXRT_LPSPI_t* spi_regs = &IMXRT_LPSPI3_S;
 
-    // running at 36MHz
     uint16_t div = 720000000 / MAX_DAC_FCLK_PRAC;
     spi_regs -> CCR = LPSPI_CCR_SCKDIV(div-2) | LPSPI_CCR_DBT(20) | LPSPI_CCR_PCSSCK(1)  | LPSPI_CCR_SCKPCS(1);
     
@@ -27,15 +30,7 @@ static void prepare_fast_spi_transfer24(){
     spi_regs->CFGR1 |= LPSPI_CFGR1_PINCFG(1);
 }
 
-#include "bit_mangler.h"
-#include "write.hpp"
-static void calibrate_DAC1() {
-    uint64_t new_dac_num = insert_zeros(((((uint32_t)((2 & 3) | DAC_OFFSET_REG)) << 16) | (uint8_t)(-11)));
-    transfer_dac24(new_dac_num << 1);
 
-    new_dac_num = insert_zeros(((((uint32_t)((2 & 3) | DAC_FGAIN_REG)) << 16) | (uint8_t)(-20)));
-    transfer_dac24(new_dac_num << 1);
-}
 static void init_DAC1()
 {
     SPI1.begin();
@@ -64,6 +59,11 @@ static void init_ADC()
 
 void init_chips()
 {
+    // This will set a higher IPG root clock
+    CCM_CBCDR = (CCM_CBCDR & ~CCM_CBCDR_IPG_PODF_MASK) | CCM_CBCDR_IPG_PODF(1);
+    // increase CPU clock speed to 800MHz 
+    set_arm_clock_cpp(800000000);
+
     init_DAC1();
     init_DAC2();
     pinMode(RST_DAC, OUTPUT);
@@ -71,11 +71,17 @@ void init_chips()
 
     digitalWrite(LDAC1, LOW);
     digitalWrite(LDAC2, LOW);
+
+    delay(20); // wait for chips start-up 
+    
     init_ADC();
     
     prepare_fast_spi_transfer24();
 
-    calibrate_DAC1();
+    // calibration of dac starts from here 
+
+    
+    delay(200);
 }
 
 

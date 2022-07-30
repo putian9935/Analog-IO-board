@@ -1,9 +1,7 @@
 #ifndef SPIMASTER_H
 #define SPIMASTER_H
 
-#include <DMAChannel.h>
-#include <SPI.h>
-#include "init_chips.hpp"
+#include <Arduino.h>
 
 #ifdef COUNT_SAMPLE_RATE 
 extern volatile uint32_t cnt_r, cnt_t;

@@ -1,8 +1,6 @@
 #ifndef UTILITIES_H
 #define UTILITIES_H
 
-#include "init_chips.hpp"
-#include <SPI.h>
 #include <Arduino.h>
 
 #define ASSERT_ADC digitalWriteFast(CS, LOW)
@@ -15,6 +13,8 @@
 #define DEASSERT_DAC2 digitalWriteFast(DAC_SYNC2, HIGH)
 
 extern uint16_t transfer16(uint16_t);
+extern uint32_t set_arm_clock_cpp(uint32_t); 
+
 #define ADC_TRANSFER_NOP ASSERT_ADC;transfer16(ADC_NOP);DEASSERT_ADC
 
 
@@ -41,6 +41,17 @@ void adc_set_ch1();
 void adc_set_seq();
 void adc_unset_seq();
 
-
+/**
+ * @brief Reset ADC 
+ */
 void adc_reset();
+
+/**
+ * @brief Calibrate DAC channel ch with offset and fgain 
+ * 
+ * @note see section "OFFSET AND GAIN ADJUSTMENT WORKED EXAMPLE" of the datasheet 
+ * @note this function should be called *after* prepare_fast_spi_transfer24
+ */
+void calibrate_dac(uint8_t ch, uint8_t offset, uint8_t fgain); 
+
 #endif
