@@ -18,7 +18,7 @@ uint16_t transfer16(uint16_t data)
 
 uint16_t read_ain0()
 {
-    return ain0; 
+    return ain0;
 }
 uint16_t read_ain1()
 {

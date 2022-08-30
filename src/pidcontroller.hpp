@@ -1,6 +1,10 @@
+// Library deprecated. use controller.cpp
+
+#if 0 
 #include <Arduino.h>
 #include "read.hpp"
 #include "write.hpp"
+
 
 // a reader function type, i.e. no parameter and return a uint16_t number
 typedef uint16_t (*read_func_t)();
@@ -61,9 +65,7 @@ struct PIDController
     void update()
     {
         error = (read() - reference) * 1. / 65535;
-
         int32_t dac_num = -(kp * error + ki * integral + kd * (error - last_error));
- 
         if (dac_num > 32000)
             dac_num = 32000; // ensure single side, and anti-windup
         else if (dac_num < 0)
@@ -74,3 +76,4 @@ struct PIDController
         last_error = error;
     }
 };
+#endif

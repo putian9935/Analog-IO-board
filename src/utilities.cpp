@@ -56,7 +56,7 @@ void adc_set_seq() {
     uint16_t old = adc_read_register(ADC_CFG1);
 
     ASSERT_ADC;
-    SPI.transfer16((uint16_t) (ADC_WRITE | ADC_CFG1 | old | ADC_CFG1_SEQ));
+    SPI.transfer16((uint16_t) (ADC_WRITE | ADC_CFG1 | old | ADC_CFG1_SEQ | (1 << 9) | (3 << 6)));
     DEASSERT_ADC; 
 
     // discard the result of first two transfers, see Figure 32
