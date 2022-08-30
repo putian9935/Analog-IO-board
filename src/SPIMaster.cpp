@@ -111,8 +111,9 @@ void initSPIMaster(uint8_t dataMode)
 
     spi_regs->CFGR1 = (LPSPI_CFGR1_SAMPLE | LPSPI_CFGR1_MASTER);
     spi_regs->DER   = LPSPI_DER_RDDE | LPSPI_DER_TDDE;
-    spi_regs->CR    = LPSPI_CR_MEN;
 
     initSPIMasterDMA();
+    delay(1);
+    spi_regs->CR    = LPSPI_CR_MEN;
 }
 
