@@ -113,7 +113,7 @@ void initSPIMaster(uint8_t dataMode)
     spi_regs->DER   = LPSPI_DER_RDDE | LPSPI_DER_TDDE;
 
     initSPIMasterDMA();
-    delay(1);
+    delay(10);
     spi_regs->CR    = LPSPI_CR_MEN;
 }
 
