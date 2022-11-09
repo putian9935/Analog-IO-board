@@ -40,14 +40,20 @@ struct IIRCascadeSimulator : public IIRCascadeController<len_zeroes, len_poles>
     }
 };
 
-template<int len_zeroes, int len_poles> 
-IIRCascadeSimulator<len_zeroes, len_poles> make_iir_cascade_simulator(read_func_t reader, double const (&zeroes)[len_zeroes], double const (&poles)[len_poles], double const overall_gain, func_t output_to_input, double const lower = -32768., double const upper = 32767.) {
-    return IIRCascadeSimulator<len_zeroes, len_poles>(reader, [](double x){}, zeroes, poles, overall_gain, lower, upper, output_to_input);
+
+
+template<int len_zeroes, int len_poles, typename T, typename U> 
+IIRCascadeSimulator<len_zeroes, len_poles> make_iir_cascade_simulator(T const (&zeroes)[len_zeroes], U const (&poles)[len_poles], double const overall_gain, func_t output_to_input, double const lower = -32768., double const upper = 32767.) {
+    static_assert(!is_int<T>::value, "Initialization of zeroes failed. Did you forget to put decimal point?\n(e.g. writing -1/3 instead of -1./3");
+    static_assert(!is_int<U>::value, "Initialization of poles failed. Did you forget to put decimal point?\n(e.g. writing -1/3 instead of -1./3");
+    return IIRCascadeSimulator<len_zeroes, len_poles>(read_simulator, [](double x){}, zeroes, poles, overall_gain, lower, upper, output_to_input);
 }
 
-template<int len_zeroes, int len_poles> 
-IIRCascadeSimulator<len_zeroes, len_poles> make_iir_cascade_simulator(double const (&zeroes)[len_zeroes], double const (&poles)[len_poles], double const overall_gain, func_t output_to_input, double const lower = -32768., double const upper = 32767.) {
-    return IIRCascadeSimulator<len_zeroes, len_poles>(read_simulator, [](double x){}, zeroes, poles, overall_gain, lower, upper, output_to_input);
+template<int len_zeroes, int len_poles, typename T, typename U> 
+IIRCascadeSimulator<len_zeroes, len_poles> make_iir_cascade_simulator(read_func_t reader, T const (&zeroes)[len_zeroes], U const (&poles)[len_poles], double const overall_gain, func_t output_to_input, double const lower = -32768., double const upper = 32767.) {
+    static_assert(!is_int<T>::value, "Initialization of zeroes failed. Did you forget to put decimal point?\n(e.g. writing -1/3 instead of -1./3");
+    static_assert(!is_int<U>::value, "Initialization of poles failed. Did you forget to put decimal point?\n(e.g. writing -1/3 instead of -1./3");
+    return IIRCascadeSimulator<len_zeroes, len_poles>(reader, [](double x){}, zeroes, poles, overall_gain, lower, upper, output_to_input);
 }
 
 template <typename Simulator>

@@ -6,6 +6,7 @@
 #include <vector> 
 #include <cmath> 
 #include <cstring>
+#include "is_int.cpp"
 
 typedef double (*read_func_t)();
 typedef void (*write_func_t)(double);
@@ -81,9 +82,12 @@ struct IIRCascadeController : public Controller {
     }
 };
 
+
 // wrapper for constructors 
-template<int len_zeroes, int len_poles> 
-IIRCascadeController<len_zeroes, len_poles> make_iir_cascade_controller(read_func_t reader, write_func_t writer, double const (&zeroes)[len_zeroes], double const (&poles)[len_poles], double const overall_gain, double const lower = -32768., double const upper = 32767.) {
+template<int len_zeroes, int len_poles, typename T, typename U> 
+IIRCascadeController<len_zeroes, len_poles> make_iir_cascade_controller(read_func_t reader, write_func_t writer, T const (&zeroes)[len_zeroes], U const (&poles)[len_poles], double const overall_gain, double const lower = -32768., double const upper = 32767.) {
+    static_assert(!is_int<T>::value, "Initialization error detected. Did you forget to put decimal point?\n(e.g. writing -1/3 instead of -1./3");
+    static_assert(!is_int<U>::value, "Initialization error detected. Did you forget to put decimal point?\n(e.g. writing -1/3 instead of -1./3");
     return IIRCascadeController<len_zeroes, len_poles>(reader, writer, zeroes, poles, overall_gain, lower, upper);
 }
 
