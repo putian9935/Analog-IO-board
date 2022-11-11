@@ -60,7 +60,7 @@ void init_chips()
     // This will set a higher IPG root clock
     CCM_CBCDR = (CCM_CBCDR & ~CCM_CBCDR_IPG_PODF_MASK) | CCM_CBCDR_IPG_PODF(1);
     // increase CPU clock speed to 800MHz 
-    set_arm_clock_cpp(720000000);
+    // set_arm_clock_cpp(720000000);
     
     init_DAC1();
     init_DAC2();

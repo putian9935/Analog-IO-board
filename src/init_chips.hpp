@@ -27,7 +27,7 @@
 #define MAX_DAC_FCLK 30000000
 #define MAX_DAC_FCLK_PRAC 50000000
 #define MAX_ADC_FCLK 80000000
-#define MAX_ADC_FCLK_PRAC 80000000
+#define MAX_ADC_FCLK_PRAC 1000000
 
 #define DAC_FCLK MAX_DAC_FCLK 
 #define ADC_FCLK MAX_ADC_FCLK
@@ -42,15 +42,11 @@
 /*****
  * Pin configuration
  */
-#define LDAC1 A4
-#define DAC_CLR1 A5
-#define DAC_SYNC1 A6
+#define LDAC1 A10
+#define DAC_CLR1 A11
 
-#define LDAC2 A7
-#define DAC_CLR2 A8
-#define DAC_SYNC2 A9
-
-#define RST_DAC 2
+#define LDAC2 29
+#define DAC_CLR2 30
 
 #define CS 10
 

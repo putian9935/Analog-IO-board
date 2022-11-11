@@ -6,22 +6,20 @@
 #include "write.hpp"
 #include "clockspeed.h"
 
-void adc_reset() {
-    ASSERT_ADC;
-    SPI.transfer16((uint16_t) (ADC_WRITE | ADC_CFG2 | ADC_CFG2_HRST));
-    DEASSERT_ADC; 
+extern void fourway_write(uint16_t);
 
-    ADC_TRANSFER_NOP; // discard the result of first two transfers
-    ADC_TRANSFER_NOP; 
+void adc_reset() {
+    fourway_write((uint16_t) (ADC_WRITE | ADC_CFG2 | ADC_CFG2_HRST));
+    fourway_write(0);
+    fourway_write(0);
 
     delay(1);
 }
 
 
 uint16_t adc_read_register(uint16_t c) {
-    ASSERT_ADC;
-    SPI.transfer16((uint16_t) c);
-    DEASSERT_ADC;
+    fourway_write((uint16_t) c);
+    
     ASSERT_ADC;
     uint16_t ret = SPI.transfer16(ADC_NOP);
     DEASSERT_ADC;
