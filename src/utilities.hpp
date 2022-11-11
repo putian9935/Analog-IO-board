@@ -18,33 +18,16 @@ extern uint32_t set_arm_clock_cpp(uint32_t);
 #define ADC_TRANSFER_NOP ASSERT_ADC;transfer16(ADC_NOP);DEASSERT_ADC
 
 
-/**
- * @brief read ADC register
- * 
- * @param c : should be one of ADC_XXX
- * @return uint16_t : the register value
- */
-uint16_t adc_read_register(uint16_t c);
-
-/**
- * @brief Choose channel
- * @note this will also turn off sequencer mode 
- */
-void adc_set_ch0();
-void adc_set_ch1();
-
-/**
- * @brief Turn on/off sequencer mode 
- * @note When turned off, the channel will be what is stored in CH bit 
- * see Table 20 for details
- */
-void adc_set_seq();
-void adc_unset_seq();
+#define FAST_IO IOMUXC_PAD_DSE(4) | IOMUXC_PAD_SPEED(3) | IOMUXC_PAD_SRE
 
 /**
  * @brief Reset ADC 
+ * 
+ * @note this function must be called before end_fourway
  */
 void adc_reset();
+
+void set_fastio_pin(uint8_t pin_num); 
 
 /**
  * @brief Calibrate DAC channel ch with offset and fgain 

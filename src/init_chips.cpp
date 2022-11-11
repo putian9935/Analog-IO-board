@@ -4,21 +4,19 @@
 #include "SPISlave.h"
 #include "SPIMaster.h"
 
-#define FAST_IO IOMUXC_PAD_DSE(4) | IOMUXC_PAD_SPEED(3) | IOMUXC_PAD_SRE
-
-void set_fastio_pin(uint8_t pin_num) {
-	// *(portControlRegister(pin_num)) = FAST_IO;
-}
-
 static void prepare_fast_spi_transfer24(){
+    SPI1.begin();
+    SPI1.beginTransaction(SPISettings(MAX_DAC_FCLK, MSBFIRST, SPI_MODE1));
+    set_fastio_pin(26);  // MOSI1
+    set_fastio_pin(27);  // SCK1
     pinMode(39, OUTPUT); // new MISO as output
     SPI1.setCS(0);
     set_fastio_pin(0);
     // new board 
     SPI1.setMISO(1);
     set_fastio_pin(1);
-    IMXRT_LPSPI_t* spi_regs = &IMXRT_LPSPI3_S;
 
+    IMXRT_LPSPI_t* spi_regs = &IMXRT_LPSPI3_S;
     uint16_t div = 720000000 / MAX_DAC_FCLK_PRAC;
     // spi_regs -> CCR = LPSPI_CCR_SCKDIV(div-2) | LPSPI_CCR_DBT(20) | LPSPI_CCR_PCSSCK(1)  | LPSPI_CCR_SCKPCS(1);
     spi_regs -> CCR = LPSPI_CCR_SCKDIV(div-2) | LPSPI_CCR_DBT(125) | LPSPI_CCR_PCSSCK(185)  | LPSPI_CCR_SCKPCS(0);
@@ -31,19 +29,16 @@ static void prepare_fast_spi_transfer24(){
 
 static void init_DAC1()
 {
-    SPI1.begin();
-    SPI1.beginTransaction(SPISettings(MAX_DAC_FCLK, MSBFIRST, SPI_MODE1));
     pinMode(LDAC1, OUTPUT);
+    digitalWrite(LDAC1, LOW);
     pinMode(DAC_CLR1, OUTPUT);
     digitalWrite(DAC_CLR1, HIGH); 
-
-    set_fastio_pin(26);  // MOSI1
-    set_fastio_pin(27);  // SCK1
 }
 
 static void init_DAC2()
 {
     pinMode(LDAC2, OUTPUT);
+    digitalWrite(LDAC2, LOW);
     pinMode(DAC_CLR2, OUTPUT);
     digitalWrite(DAC_CLR2, HIGH); 
 }
@@ -51,8 +46,6 @@ static void init_DAC2()
 
 static void init_ADC()
 {
-    initSPISlave(SPI_MODE2);
-    initSPIMaster(SPI_MODE2);
 }
 
 void init_chips()
@@ -64,9 +57,6 @@ void init_chips()
     
     init_DAC1();
     init_DAC2();
-
-    digitalWrite(LDAC1, LOW);
-    digitalWrite(LDAC2, LOW);
 
     delay(20); // wait for chips start-up 
     
