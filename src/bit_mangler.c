@@ -6,8 +6,7 @@ typedef union {
 } new_64;
 
 
-
-uint32_t insert_zeros_32(uint32_t num) {
+static uint32_t insert_zeros_32(uint32_t num) {
     // assuming high 16-bits are 0 
     num = (num & 0x000000FF) | ((num & 0x0000FF00) << 8);
     num = (num & 0x000F000F) | ((num & 0x00F000F0) << 4);
@@ -16,7 +15,7 @@ uint32_t insert_zeros_32(uint32_t num) {
     return num; 
 }
 
-uint32_t insert_zeros_32_high(uint32_t num) {
+static uint32_t insert_zeros_32_high(uint32_t num) {
     // assuming high 24-bits are 0 
     num = (num & 0x000F000F) | ((num & 0x00F000F0) << 4);
     num = (num & 0x03030303) | ((num & 0x0C0C0C0C) << 2);
@@ -32,17 +31,4 @@ uint64_t insert_zeros(uint32_t num) {
     ret.high = insert_zeros_32(ret.high);
     return ret.full;
 }
-
-uint64_t insert_zeros_old(uint64_t num) {
-    // assuming high 32-bits are 0 
-    // this version is slow in that the chip is 32-bit
-    num = (num & 0x000000000000FFFF) | ((num & 0x00000000FFFF0000) << 16);
-    num = (num & 0x000000FF000000FF) | ((num & 0x0000FF000000FF00) << 8);
-    num = (num & 0x000F000F000F000F) | ((num & 0x00F000F000F000F0) << 4);
-    num = (num & 0x0303030303030303) | ((num & 0x0C0C0C0C0C0C0C0C) << 2);
-    num = (num & 0x5555555555555555) | ((num & 0xAAAAAAAAAAAAAAAA) << 1);
-    return num;
-}
-
-
 
