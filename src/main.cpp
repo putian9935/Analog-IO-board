@@ -13,9 +13,9 @@ void setup()
     adc_init();
 }
 
-extern uint16_t adc_test(); 
 void loop()
 {
-    auto x = adc_test();
-    write(4, x);
+    // write(4, read_ain0());
+    write(4, 0);
+    write(4, 1);
 }

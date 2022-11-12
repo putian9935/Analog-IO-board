@@ -25,9 +25,9 @@
 #define OVERCLOCK_ON 
 
 #define MAX_DAC_FCLK 30000000
-#define MAX_DAC_FCLK_PRAC 50000000
+#define MAX_DAC_FCLK_PRAC 40000000
 #define MAX_ADC_FCLK 80000000
-#define MAX_ADC_FCLK_PRAC 20000000
+#define MAX_ADC_FCLK_PRAC 60000000
 
 #define DAC_FCLK MAX_DAC_FCLK 
 #define ADC_FCLK MAX_ADC_FCLK
@@ -39,16 +39,6 @@
 #define ADC_FCLK MAX_ADC_FCLK_PRAC
 #endif 
 
-/*****
- * Pin configuration
- */
-#define LDAC1 A10
-#define DAC_CLR1 A11
-
-#define LDAC2 29
-#define DAC_CLR2 30
-
-#define CS 10
 
 /***
  * Useful registers 

@@ -1,8 +1,7 @@
 import serial
 
 ser = serial.Serial("COM6", baudrate=200000)
-ser.write(b'?')
-# exit()
+
 ser.set_buffer_size(tx_size = 65536, rx_size=65536)
 f = open('from_teensy', 'wb')
 from time import sleep 
