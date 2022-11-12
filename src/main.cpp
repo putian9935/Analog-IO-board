@@ -1,7 +1,6 @@
 #include "init_chips.hpp"
 #include "read.hpp"
 #include "write.hpp"
-#include "simulator.cpp"
 
 extern void adc_init(); 
 
@@ -14,9 +13,9 @@ void setup()
     adc_init();
 }
 
-extern void adc_test(); 
+extern uint16_t adc_test(); 
 void loop()
 {
-    adc_test();
-    delay(1);
+    auto x = adc_test();
+    write(4, x);
 }

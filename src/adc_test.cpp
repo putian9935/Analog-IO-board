@@ -89,9 +89,6 @@ static void initSPIMasterDMA()
     tx.transferCount(1);
     txb = spi_regs->TCR | LPSPI_TCR_TXMSK;
 
-    CCM_CBCMR = (CCM_CBCMR & ~(CCM_CBCMR_LPSPI_PODF_MASK | CCM_CBCMR_LPSPI_CLK_SEL_MASK)) |
-                CCM_CBCMR_LPSPI_PODF(0) | CCM_CBCMR_LPSPI_CLK_SEL(1);
-
     rx.enable();
     tx.enable();
 }
@@ -138,9 +135,9 @@ std::pair<uint16_t, uint16_t> decode(uint32_t data)
     return std::pair<uint16_t, uint16_t>(decode_32_16(data), decode_32_16(data >> 1));
 }
 
-void adc_test()
+uint16_t adc_test()
 {
     auto res  = decode(ch0);
-    auto res2 = decode(ch1);
-    Serial.printf("%d %d %d %d\n", res.first, res.second, res2.first, res2.second);
+    // Serial.println(res.second);
+    return res.second;
 }
