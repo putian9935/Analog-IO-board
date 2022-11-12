@@ -6,7 +6,7 @@
 #include <vector> 
 #include <cmath> 
 #include <cstring>
-#include "is_int.cpp"
+#include "is_int.hpp"
 
 typedef double (*read_func_t)();
 typedef void (*write_func_t)(double);
