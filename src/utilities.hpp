@@ -33,7 +33,7 @@ void set_fastio_pin(uint8_t pin_num);
  * @brief Calibrate DAC channel ch with offset and fgain 
  * 
  * @note see section "OFFSET AND GAIN ADJUSTMENT WORKED EXAMPLE" of the datasheet 
- * @note this function should be called *after* prepare_fast_spi_transfer24
+ * @note this function should be called *after* init_DAC_spi
  */
 void calibrate_dac(uint8_t ch, uint8_t offset, uint8_t fgain); 
 

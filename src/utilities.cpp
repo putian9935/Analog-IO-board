@@ -18,7 +18,7 @@ void adc_reset() {
 
 
 void set_fastio_pin(uint8_t pin_num) {
-	// *(portControlRegister(pin_num)) = FAST_IO;
+	*(portControlRegister(pin_num)) = FAST_IO;
 }
 
 void calibrate_dac(uint8_t ch, uint8_t offset, uint8_t fgain)

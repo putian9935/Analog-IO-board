@@ -7,7 +7,6 @@
  * @brief Write num to channel ch
  */
 void write(uint8_t const ch, uint16_t const num);
-// void write(uint8_t const ch, double const num); 
 
 /**
  * @brief Update two channels simultaneously. 

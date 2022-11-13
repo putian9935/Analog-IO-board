@@ -49,8 +49,9 @@
 #define ADC_WRITE ((uint16_t)(1 << 15))
 
 #define ADC_CFG1 ((uint16_t)(1 << 12))
-#define ADC_CFG1_CH ((uint16_t)(1 << 11))
 #define ADC_CFG1_SEQ ((uint16_t)(1 << 10))
+#define ADC_CFG1_ROLLING ((uint16_t)(1 << 9))
+#define ADC_CFG1_OSR(x) ((uint16_t)((x) << 6))
 
 #define ADC_CFG2 ((uint16_t)(2 << 12))
 #define ADC_CFG2_SDO ((uint16_t)(1 << 8))
