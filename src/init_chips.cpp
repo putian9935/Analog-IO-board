@@ -49,7 +49,7 @@ static void init_DAC_pins()
     digitalWrite(DAC_CLR2, HIGH);
 }
 
-
+void init_chips() {
     // increase CPU clock speed to 800MHz
     set_arm_clock_cpp(800000000);
 
