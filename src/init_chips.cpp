@@ -42,36 +42,13 @@ static void init_DAC_pins()
     digitalWrite(LDAC1, LOW);
     pinMode(DAC_CLR1, OUTPUT);
     digitalWrite(DAC_CLR1, HIGH);
-<<<<<<< HEAD
-}
-
-static void init_DAC2()
-{
-=======
     
->>>>>>> new-board
     pinMode(LDAC2, OUTPUT);
     digitalWrite(LDAC2, LOW);
     pinMode(DAC_CLR2, OUTPUT);
     digitalWrite(DAC_CLR2, HIGH);
 }
 
-<<<<<<< HEAD
-static void init_ADC()
-{
-    initSPISlave(SPI_MODE2);
-    initSPIMaster(SPI_MODE2);
-}
-=======
-
->>>>>>> new-board
-
-void init_chips()
-{
-    // This will set a higher IPG root clock
-    CCM_CBCDR = (CCM_CBCDR & ~CCM_CBCDR_IPG_PODF_MASK) | CCM_CBCDR_IPG_PODF(1);
-
-    CCM_CBCMR = (CCM_CBCMR & ~(CCM_CBCMR_LPSPI_PODF_MASK | CCM_CBCMR_LPSPI_CLK_SEL_MASK)) | CCM_CBCMR_LPSPI_PODF(0) | CCM_CBCMR_LPSPI_CLK_SEL(1);
 
     // increase CPU clock speed to 800MHz
     set_arm_clock_cpp(800000000);
@@ -81,12 +58,7 @@ void init_chips()
     init_DAC_spi();
 
     init_ADC();
-<<<<<<< HEAD
-
-    prepare_fast_spi_transfer24();
-=======
     // calibration of dac starts from here
 
     delay(200);
->>>>>>> new-board
 }
