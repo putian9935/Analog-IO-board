@@ -1,22 +1,18 @@
 #include "write.hpp"
 
+#include "bit_mangler.h"
+
 static IMXRT_LPSPI_t* spi_regs = &IMXRT_LPSPI3_S;
 
-/*
- * @brief Fast spi transfer16 for DAC, cf. SPI.h implementation
- *
- * @param data
- * @return uint16_t
- */
 void transfer_dac24(uint64_t data)
 {
-    while ((spi_regs->FSR & 0xff) > 15)
+    while ((spi_regs->FSR & 0xff) > 14)
         ;
     spi_regs->TDR = data >> 16;
     spi_regs->TDR = (data & 0xFFFF);
 }
 
-void write(uint8_t ch, uint16_t num)
+void write(uint8_t const ch, uint16_t const num)
 {
     static uint64_t dac1_num_mangled, dac2_num_mangled;
 

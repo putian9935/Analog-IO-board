@@ -3,16 +3,14 @@
 #include "read.hpp"
 #include "write.hpp"
 
+
 void setup()
 {
-    // This will set a higher IPG root clock
-    CCM_CBCDR = (CCM_CBCDR & ~CCM_CBCDR_IPG_PODF_MASK) | CCM_CBCDR_IPG_PODF(1);
-    // while (!Serial)
-    ;
+    while (!Serial)
+        ;
     Serial.begin(115200);
-    set_arm_clock_cpp(800000000);
-
     init_chips();
+    pinMode(4, OUTPUT);
 }
 
 void loop()

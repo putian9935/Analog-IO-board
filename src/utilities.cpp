@@ -1,5 +1,6 @@
 #include "utilities.hpp"
 
+<<<<<<< HEAD
 void adc_reset()
 {
     ASSERT_ADC;
@@ -8,10 +9,25 @@ void adc_reset()
 
     ADC_TRANSFER_NOP; // discard the result of first two transfers
     ADC_TRANSFER_NOP;
+=======
+#include <SPI.h>
+#include "init_chips.hpp"
+#include "bit_mangler.h"
+#include "write.hpp"
+#include "clockspeed.h"
+
+extern void fourway_write(uint16_t);
+
+void adc_reset() {
+    fourway_write((uint16_t) (ADC_WRITE | ADC_CFG2 | ADC_CFG2_HRST));
+    fourway_write(0);
+    fourway_write(0);
+>>>>>>> new-board
 
     delay(1);
 }
 
+<<<<<<< HEAD
 uint16_t adc_read_register(uint16_t c)
 {
     ASSERT_ADC;
@@ -96,3 +112,24 @@ void calibrate_DAC1()
     new_dac_num = insert_zeros(((((uint32_t)((2 & 3) | DAC_FGAIN_REG)) << 16) | (uint8_t)(-20)));
     transfer_dac24(new_dac_num << 1);
 }
+=======
+
+void set_fastio_pin(uint8_t pin_num) {
+	*(portControlRegister(pin_num)) = FAST_IO;
+}
+
+void calibrate_dac(uint8_t ch, uint8_t offset, uint8_t fgain)
+{
+    uint64_t new_dac_num = insert_zeros(((((uint32_t)((ch & 3) | DAC_OFFSET_REG)) << 16) | offset));
+    if (ch < 4)
+        transfer_dac24(new_dac_num << 1);
+    else
+        transfer_dac24(new_dac_num); 
+
+    new_dac_num = insert_zeros(((((uint32_t)((ch & 3) | DAC_FGAIN_REG)) << 16) | fgain));
+    if (ch < 4)
+        transfer_dac24(new_dac_num << 1);
+    else
+        transfer_dac24(new_dac_num); 
+}
+>>>>>>> new-board

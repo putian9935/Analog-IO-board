@@ -1,72 +1,27 @@
 
 #include "read.hpp"
+#include "bit_mangler.h"
+#include "adc_dma.hpp"
 
-/**
- * @brief Fast spi transfer16, cf. SPI.h implementation
- *
- * @param data
- * @return uint16_t
- */
-uint16_t transfer16(uint16_t data)
+
+static std::pair<uint16_t, uint16_t> decode(uint32_t data)
 {
-    IMXRT_LPSPI_t* spim_regs = &IMXRT_LPSPI4_S;
-    spim_regs->TDR           = data;
-    while ((spim_regs -> RSR & LPSPI_RSR_RXEMPTY)) ;
-    return spim_regs->RDR;
+    return std::pair<uint16_t, uint16_t>(decode_32_16(data >> 1), decode_32_16(data));
 }
 
-#if 0
-uint16_t read()
+uint16_t read_ain0()
 {
-    ADC_TRANSFER_NOP;
-    return read_high_throughput();
+    return decode(ch0).first; 
 }
-
-uint16_t read_high_throughput()
+uint16_t read_ain1()
 {
-    ASSERT_ADC;
-    uint16_t ret = transfer16(ADC_NOP);
-    DEASSERT_ADC;
-    return ret;
+    return decode(ch1).first; 
 }
-
-pair read_pair()
+uint16_t read_bin0()
 {
-    ADC_TRANSFER_NOP;
-    return read_pair_high_throughput();
+    return decode(ch0).second; 
 }
-
-pair read_pair_high_throughput()
+uint16_t read_bin1()
 {
-    pair ret = {};
-    ASSERT_ADC;
-    prepare_slave_read();
-    ret.a = transfer16(ADC_NOP);
-    ret.b = slave_read();
-    DEASSERT_ADC;
-    return ret;
+    return decode(ch1).second; 
 }
-
-quad read_quad()
-{
-    ADC_TRANSFER_NOP;
-    ADC_TRANSFER_NOP;
-    return read_quad_high_throughput();
-}
-
-quad read_quad_high_throughput()
-{
-    quad ret = {};
-    ASSERT_ADC;
-    prepare_slave_read();
-    ret.a0 = transfer16(ADC_NOP);
-    ret.b0 = slave_read();
-    DEASSERT_ADC;
-    ASSERT_ADC;
-    prepare_slave_read();
-    ret.a1 = transfer16(ADC_NOP);
-    ret.b1 = slave_read();
-    DEASSERT_ADC;
-    return ret;
-}
-#endif

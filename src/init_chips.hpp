@@ -1,51 +1,48 @@
 #ifndef INIT_PINS_HPP
 #define INIT_PINS_HPP
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> new-board
 #include <Arduino.h>
 #include <SPI.h>
 
-#include "utilities.hpp"
-#include "SPISlave.h"
 
 /*** 
  * ADC input channel selection 
  * define at *most* one of the following
  */
-#define ADC_CH0_ON 
+// #define ADC_CH0_ON 
 // #define ADC_CH1_ON
-// #define ADC_SEQ_ON
+#define ADC_SEQ_ON
 
 /***
  * Count ADC sampling rate with interrupt 
  */
-#define COUNT_SAMPLE_RATE
-#include "SPIMaster.h"
+// #define COUNT_SAMPLE_RATE
 
 /***
  * Clock frequency
+ * Turning on overclock will increase phase margin to 210khz 
  */
+#define OVERCLOCK_ON 
+
 #define MAX_DAC_FCLK 30000000
-#define MAX_DAC_FCLK_PRAC 90000000
+#define MAX_DAC_FCLK_PRAC 40000000
 #define MAX_ADC_FCLK 80000000
-#define MAX_ADC_FCLK_PRAC 90000000
+#define MAX_ADC_FCLK_PRAC 60000000
 
-/*****
- * Pin configuration
- */
-#define LDAC1 A4
-#define DAC_CLR1 A5
+#define DAC_FCLK MAX_DAC_FCLK 
+#define ADC_FCLK MAX_ADC_FCLK
 
-#define LDAC2 A7
-#define DAC_CLR2 A8
+#ifdef OVERCLOCK_ON
+#undef DAC_FCLK
+#undef ADC_FCLK
+#define DAC_FCLK MAX_DAC_FCLK_PRAC
+#define ADC_FCLK MAX_ADC_FCLK_PRAC
+#endif 
 
-#define RST_DAC 2
-#define CS_DAC 0 
-
-#define DAC_DIN1 1 
-#define DAC_DIN2 26
-
-#define CS 10
 
 /***
  * Useful registers 
@@ -56,8 +53,9 @@
 #define ADC_WRITE ((uint16_t)(1 << 15))
 
 #define ADC_CFG1 ((uint16_t)(1 << 12))
-#define ADC_CFG1_CH ((uint16_t)(1 << 11))
 #define ADC_CFG1_SEQ ((uint16_t)(1 << 10))
+#define ADC_CFG1_ROLLING ((uint16_t)(1 << 9))
+#define ADC_CFG1_OSR(x) ((uint16_t)((x) << 6))
 
 #define ADC_CFG2 ((uint16_t)(2 << 12))
 #define ADC_CFG2_SDO ((uint16_t)(1 << 8))
@@ -81,5 +79,9 @@
  */
 void init_chips();
 
-void set_fastio_pin(uint8_t);
+/**
+ * @brief Change pin driver settings for high slew rate and better impedance matching 
+ * this will generally help to provide a better signal integrity on the board 
+ */
+void set_fastio_pin(uint8_t pin);
 #endif
