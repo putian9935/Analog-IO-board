@@ -1,10 +1,6 @@
 #ifndef INIT_PINS_HPP
 #define INIT_PINS_HPP
 
-<<<<<<< HEAD
-
-=======
->>>>>>> new-board
 #include <Arduino.h>
 #include <SPI.h>
 
