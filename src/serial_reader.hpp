@@ -2,6 +2,7 @@
 #define SERIAL_READER 
 
 #include <Arduino.h> 
+#include <cstring>
 
 struct SerialReader {
     static char buf[8];
