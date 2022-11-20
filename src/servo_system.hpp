@@ -6,16 +6,19 @@
 #include "reference.hpp"
 #include "sweep.hpp"
 
+
+template <int len_zeroes, int len_poles>
 struct ServoSystem {
-    Controller * const c;
+    using ControllerType = IIRCascadeController<len_zeroes, len_poles>;
+    ControllerType * const c;
     SweepController sc;
 
-    template <int len_zeroes, int len_poles>
-    ServoSystem(IIRCascadeController<len_zeroes, len_poles> *pc) : 
+    ServoSystem(ControllerType *pc) : 
         c(pc),
         sc() {}
 };
 
-extern ServoSystem master_410_servo;
+using PIServoSystem = ServoSystem<1, 2>;
+extern PIServoSystem master_410_servo;
 
 #endif 

@@ -37,3 +37,16 @@ double ReferencePath::get_reference() {
     // note, cur_slice is always one past
     return interp1d(time_data[cur_slice - 1], time_data[cur_slice], val_data[cur_slice - 1], val_data[cur_slice], cur_time);
 }
+
+#include "serial_reader.hpp"
+void ReferencePath:: set_data_from_serial()  {
+    uint32_t sz = SerialReader();
+    time_data.resize(sz,0);
+    val_data.resize(sz, 0);
+    auto it_time = time_data.begin();
+    auto it_val = val_data.begin();
+    while(sz--) {
+        *it_time++ = SerialReader();
+        *it_val++ = SerialReader();
+    }
+}

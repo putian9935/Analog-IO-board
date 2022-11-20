@@ -16,7 +16,7 @@ struct PowerReading {
     PowerReading() : vmin(0), vmax(1500), pmin(65535), pmax(0) {}
 };
 
-PowerReading get_best_power(ServoSystem* const sys);
+PowerReading get_best_power(PIServoSystem* const sys);
 
 void step_response();
 extern PIController ic_410_master;

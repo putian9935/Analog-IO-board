@@ -2,4 +2,4 @@
 
 extern PIController ic_410_master;
 
-ServoSystem master_410_servo(&ic_410_master);
+PIServoSystem master_410_servo(&ic_410_master);

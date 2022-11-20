@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <cstdlib>
 #include "intensity_servo_helper.hpp"
+#include "serial_reader.hpp"
 #include "servo_system.hpp"
 #include "tinyfsm.hpp"
 
@@ -28,28 +29,36 @@ struct ServoMachine : tinyfsm::Fsm<ServoMachine> {
 };
 
 void sweep_parser() {
-    char buf[2];
-    Serial.readBytes(buf, 2);
-    std::memcpy(&(master_410_servo.sc.lower), buf, 2);
-    Serial.readBytes(buf, 2);
-    std::memcpy(&(master_410_servo.sc.upper), buf, 2);
+    master_410_servo.sc.lower = SerialReader();
+    master_410_servo.sc.upper = SerialReader();
+}
+
+void servo_parser() {
+    // new corner
+    *(master_410_servo.c->controllers[0]) = IIRFirstOrderController(0, SerialReader());
+    // new overall gain
+    master_410_servo.c->overall_gain = SerialReader();
+    // new waveform
+    master_410_servo.c->reference = &ref_410_master;
+    master_410_servo.c->reference->set_data_from_serial();
 }
 
 struct Idle : ServoMachine {
     void entry() override {
-        Serial.println("Current state Idle");
     }
     void react(SerialEvent const&) override {
         uint8_t c = Serial.read();
         switch (c) {
-            case 1:
+            case 1: {
                 sweep_parser();
                 auto gp = get_best_power(&master_410_servo);
                 Serial.printf("Max power of %d at DAC number %d.\n", gp.pmax, gp.vmax);
                 Serial.printf("Min power of %d at DAC number %d.\n", gp.pmin, gp.vmin);
                 transit<Sweep>();
                 break;
+            }
             case 2:
+                servo_parser();
                 transit<Servo>();
                 break;
         }
@@ -58,7 +67,7 @@ struct Idle : ServoMachine {
 
 struct Servo : ServoMachine {
     void entry() override {
-        step_response();
+        // step_response();
     }
     void react(SerialEvent const&) override { transit<Idle>(); }
     void react(TurnOnServo const&) override { transit<Servo>(); }

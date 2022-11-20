@@ -58,7 +58,7 @@ template <int len_zeroes, int len_poles>
 struct IIRCascadeController : public Controller {
     static_assert(len_zeroes < len_poles, "There should be more poles than zeroes. ");
 
-    double const overall_gain, lower, upper;
+    double overall_gain, lower, upper;
     double last_out;
     ReferenceBase* reference;
     std::vector<IIRBaseController*> controllers;

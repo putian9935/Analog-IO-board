@@ -1,16 +1,8 @@
-#include "controller.cpp"
 #include "init_chips.hpp"
-#include "read.hpp"
-#include "reference.hpp"
-#include "tinyfsm.hpp"
-#include "write.hpp"
-#include <cstdlib>
-
 extern void init_fsm();
 extern void state_machine_loop();
 
-void setup()
-{
+void setup() {
     while (!Serial)
         ;
     Serial.begin(115200);
@@ -20,7 +12,6 @@ void setup()
     pinMode(37, INPUT);
 }
 
-void loop()
-{
+void loop() {
     state_machine_loop();
 }

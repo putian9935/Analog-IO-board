@@ -4,7 +4,7 @@
 #include "write.hpp"
 
 
-PowerReading get_best_power(ServoSystem* const sys) {
+PowerReading get_best_power(PIServoSystem* const sys) {
     PowerReading ret;
     auto * const c = sys->c;
     auto old  = c->reader;
