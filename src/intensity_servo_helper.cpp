@@ -1,37 +1,15 @@
 #include "intensity_servo_helper.hpp"
 #include <Arduino.h>
 #include "read.hpp"
-#include "reference.hpp"
 #include "write.hpp"
 
-void get_adc_reading_limits() {
-    write(4, 1015);
-    delay(1);
-    Serial.print(read_ain0());
-    Serial.print(' ');
-    write(4, 0);
-    delay(1);
 
-    Serial.print(read_ain0());
-    Serial.print(' ');
-    write(5, 917);
-    delay(1);
-
-    Serial.print(read_ain1());
-    Serial.print(' ');
-    write(5, 0);
-    delay(1);
-
-    Serial.print(read_ain1());
-    Serial.print('\n');
-    delay(1000);
-}
-
-PowerReading get_best_power(Controller* const c) {
+PowerReading get_best_power(ServoSystem* const sys) {
     PowerReading ret;
+    auto * const c = sys->c;
     auto old  = c->reader;
     c->reader = []() { return (double)read_ain0(); };
-    for (uint16_t i = 0; i < 1500; ++i) {
+    for (uint16_t i = sys->sc.lower; i < sys->sc.upper; ++i) {
         c->writer(i);
         delay(1);
         auto x = c->reader();

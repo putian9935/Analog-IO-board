@@ -16,6 +16,7 @@ void setup()
     Serial.begin(115200);
     init_chips();
     init_fsm();
+    Serial.println("Arduino is ready.");
     pinMode(37, INPUT);
 }
 

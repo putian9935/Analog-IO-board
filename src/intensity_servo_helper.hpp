@@ -2,8 +2,7 @@
 #define INTENSITY_SERVO_HELPER
 
 #include <stdint.h>
-#include "controller.cpp"
-#include "reference.hpp"
+#include "servo_system.hpp"
 
 typedef enum {
     CH1,
@@ -14,11 +13,11 @@ typedef enum {
 
 struct PowerReading {
     uint16_t vmin, vmax, pmin, pmax;
-
     PowerReading() : vmin(0), vmax(1500), pmin(65535), pmax(0) {}
 };
 
-PowerReading get_best_power(Controller* const);
+PowerReading get_best_power(ServoSystem* const sys);
+
 void step_response();
 extern PIController ic_410_master;
 
