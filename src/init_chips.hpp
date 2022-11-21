@@ -22,7 +22,7 @@
  * Clock frequency
  * Turning on overclock will increase phase margin to 210khz 
  */
-#define OVERCLOCK_ON 
+// #define OVERCLOCK_ON 
 
 #define MAX_DAC_FCLK 30000000
 #define MAX_DAC_FCLK_PRAC 40000000
