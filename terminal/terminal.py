@@ -11,12 +11,22 @@ def sweep_action(args):
     sweep(args.lower, args.upper)
 
 def servo_action(args):
+    # non-exising file
     try:
         open(args.fname)
     except FileNotFoundError as e:
         print('%s: %s' %(e.__class__.__name__,  e))
         return 
-    servo(args.f_I, args.G, get_wfm(args.fname))
+    
+    # wrong format f_I 
+    try:
+        f = float(eval(args.f_I.strip('"')))
+    except (SyntaxError, NameError, TypeError) as e:
+        print('%s: %s' %(e.__class__.__name__,  e))
+        return 
+    if f > 0:
+        f = -f 
+    servo(f, args.G, get_wfm(args.fname))
     
 def exit_action(args):
     exit(0)    

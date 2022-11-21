@@ -1,7 +1,6 @@
 from ports import setup_arduino_port
 import time 
 import struct
-from ast import literal_eval
 
 ser = setup_arduino_port('COM3')
 
@@ -13,7 +12,7 @@ def sweep(lower, upper):
         print(ser.readline())
 
 def servo(fi, g, wfm):
-    ser.write(struct.pack("<Bdd", 2, eval(fi.strip('"')), g))
+    ser.write(struct.pack("<Bdd", 2, fi, g))
     ser.write(wfm)
     while not ser.in_waiting:
         time.sleep(.5)
