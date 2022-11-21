@@ -67,7 +67,7 @@ struct Idle : ServoMachine {
 
 struct Servo : ServoMachine {
     void entry() override {
-        // step_response();
+        servo_loop(master_410_servo.c);
     }
     void react(SerialEvent const&) override { transit<Idle>(); }
     void react(TurnOnServo const&) override { transit<Servo>(); }

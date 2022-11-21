@@ -18,7 +18,7 @@ struct PowerReading {
 
 PowerReading get_best_power(PIServoSystem* const sys);
 
-void step_response();
+void servo_loop(PIController* p);
 extern PIController ic_410_master;
 
 #endif
