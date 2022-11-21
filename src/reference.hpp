@@ -4,26 +4,7 @@
 #include <Arduino.h>
 #include <vector>
 
-struct ReferenceBase;
-typedef double (ReferenceBase::*read_mfunc_t)();
-
-struct ReferenceBase {
-    virtual double get_reference() = 0;
-    virtual void set_data_from_serial() = 0; 
-};
-
-struct ReferenceConst : ReferenceBase {
-    double ref;
-    ReferenceConst(double const ref) : ref(ref) {}
-    double get_reference() override {
-        return ref;
-    }
-    void set_data_from_serial() override {};
-};
-
-extern ReferenceConst zero_reference;
-
-struct ReferencePath : ReferenceBase {
+struct ReferencePath {
     static elapsedMicros timer;
 
     size_t cur_slice, tot;
@@ -42,12 +23,12 @@ struct ReferencePath : ReferenceBase {
 
     static void clear_timer();
     void clear_reference();
-    double get_reference() override;
+    double get_reference();
     bool is_terminated() const;
-    void set_data_from_serial() override;
+    void set_data_from_serial();
 };
 
-extern ReferencePath ref_410_master;
+extern ReferencePath zero_reference;
 
 template <int N>
 ReferencePath make_reference_from_array(double const (&time)[N], double const (&val)[N]) {

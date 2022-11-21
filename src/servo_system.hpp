@@ -1,7 +1,6 @@
 #ifndef SERVO_SYSTEM_H
 #define SERVO_SYSTEM_H
 
-#include <memory>
 #include "controller.cpp"
 #include "reference.hpp"
 #include "sweep.hpp"
@@ -20,5 +19,6 @@ struct ServoSystem {
 
 using PIServoSystem = ServoSystem<1, 2>;
 extern PIServoSystem master_410_servo;
+extern ReferencePath ref_410_master;
 
 #endif 

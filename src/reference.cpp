@@ -1,7 +1,7 @@
 #include "reference.hpp"
+#include "serial_reader.hpp"
 
-ReferenceConst zero_reference(0);
-ReferencePath ref_410_master;
+ReferencePath zero_reference;
 static inline double interp1d(double x1, double x2, double y1, double y2, double x) {
     return (y2 - y1) / (x2 - x1) * (x - x1) + y1;
 }
@@ -38,9 +38,10 @@ double ReferencePath::get_reference() {
     return interp1d(time_data[cur_slice - 1], time_data[cur_slice], val_data[cur_slice - 1], val_data[cur_slice], cur_time);
 }
 
-#include "serial_reader.hpp"
 void ReferencePath:: set_data_from_serial()  {
     uint32_t sz = SerialReader();
+    sz /= 6;
+    tot = sz;
     time_data.resize(sz,0);
     val_data.resize(sz, 0);
     auto it_time = time_data.begin();
@@ -49,4 +50,5 @@ void ReferencePath:: set_data_from_serial()  {
         *it_time++ = SerialReader();
         *it_val++ = SerialReader();
     }
+    idle_val = val_data[0];
 }

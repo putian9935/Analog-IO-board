@@ -39,8 +39,8 @@ void servo_parser() {
     // new overall gain
     master_410_servo.c->overall_gain = SerialReader();
     // new waveform
-    master_410_servo.c->reference = &ref_410_master;
     master_410_servo.c->reference->set_data_from_serial();
+    Serial.printf("Read %d datapoints\n", master_410_servo.c->reference->tot);
 }
 
 struct Idle : ServoMachine {
@@ -90,7 +90,7 @@ void init_fsm() {
 void state_machine_loop() {
     if (Serial.available())
         fsm_handle::dispatch(ser);
-    if (digitalReadFast(37) == HIGH)
+    // if (digitalReadFast(37) == HIGH)
         fsm_handle::dispatch(servo);
     fsm_handle::dispatch(sweep);
 }

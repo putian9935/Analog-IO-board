@@ -9,7 +9,6 @@
 #include "is_int.hpp"
 #include "reference.hpp"
 #include "sweep.hpp"
-#include <memory>
 
 typedef double (*read_func_t)();
 typedef void (*write_func_t)(double);
@@ -60,10 +59,10 @@ struct IIRCascadeController : public Controller {
 
     double overall_gain, lower, upper;
     double last_out;
-    ReferenceBase* reference;
+    ReferencePath* reference;
     std::vector<IIRBaseController*> controllers;
 
-    IIRCascadeController(read_func_t reader, write_func_t writer, double const (&zeroes)[len_zeroes], double const (&poles)[len_poles], double const overall_gain, double const lower, double const upper, ReferenceBase* reference) : Controller(reader, writer), overall_gain(overall_gain), lower(lower), upper(upper), last_out(0.), reference(reference) {
+    IIRCascadeController(read_func_t reader, write_func_t writer, double const (&zeroes)[len_zeroes], double const (&poles)[len_poles], double const overall_gain, double const lower, double const upper, ReferencePath* reference) : Controller(reader, writer), overall_gain(overall_gain), lower(lower), upper(upper), last_out(0.), reference(reference) {
         int i = 0;
         for (; i < len_zeroes; ++i)
             controllers.push_back(new IIRFirstOrderController(zeroes[i], poles[i]));
@@ -86,7 +85,7 @@ struct IIRCascadeController : public Controller {
 
 // wrapper for constructors
 template <int len_zeroes, int len_poles, typename T, typename U>
-IIRCascadeController<len_zeroes, len_poles> make_iir_cascade_controller(read_func_t reader, write_func_t writer, T const (&zeroes)[len_zeroes], U const (&poles)[len_poles], double const overall_gain, double const lower = -32768., double const upper = 32767., ReferenceBase* reference = &zero_reference) {
+IIRCascadeController<len_zeroes, len_poles> make_iir_cascade_controller(read_func_t reader, write_func_t writer, T const (&zeroes)[len_zeroes], U const (&poles)[len_poles], double const overall_gain, double const lower = -32768., double const upper = 32767., ReferencePath* reference = &zero_reference) {
     static_assert(!is_int<T>::value, "Initialization error detected. Did you forget to put decimal point?\n(e.g. writing -1/3 instead of -1./3");
     static_assert(!is_int<U>::value, "Initialization error detected. Did you forget to put decimal point?\n(e.g. writing -1/3 instead of -1./3");
     return IIRCascadeController<len_zeroes, len_poles>(reader, writer, zeroes, poles, overall_gain, lower, upper, reference);
