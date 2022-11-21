@@ -1,6 +1,5 @@
 #include "intensity_servo_helper.hpp"
 #include <Arduino.h>
-#include "read.hpp"
 
 PowerReading get_best_power(PIServoSystem* const sys) {
     PowerReading ret;
@@ -22,55 +21,28 @@ PowerReading get_best_power(PIServoSystem* const sys) {
             ret.vmin = i;
         }
     }
-    c->writer(sys->sc.lower); // set DAC to lowest after sweep
+    c->writer(sys->sc.lower);  // set DAC to lowest after sweep
     *(c->reference) = ref_old;
     return ret;
 }
 
-// void step_response() {
-//     static auto ic_410_slave = make_iir_cascade_controller(
-//         []() { return read_ain1() - reference_ic_410_slave; },
-//         [](double x) { write(5, x); },
-//         {-1 / 3.},
-//         {0., -1 / 2.},
-//         -0.015,
-//         0.,
-//         820.);
-
-//     reference_ic_410_master = 33050;
-//     reference_ic_410_slave  = 32900;
-//     for (int i = 0; i < 5000; ++i) {
-//         reference_ic_410_master += 0.116;
-//         ic_410_master.update();
-//         ic_410_slave.update();
-//     }
-
-//     reference_ic_410_master = 33630;
-//     for (int i = 0; i < 5000; ++i) {
-//         reference_ic_410_master -= 0.116;
-//         ic_410_master.update();
-//         ic_410_slave.update();
-//     }
-
-//     reference_ic_410_master = 33050;
-//     reference_ic_410_slave  = 33450;
-//     for (int i = 0; i < 5000; ++i) {
-//         ic_410_master.update();
-//         ic_410_slave.update();
-//     }
-
-//     reference_ic_410_master = 33630;
-//     for (int i = 0; i < 5000; ++i) {
-//         ic_410_master.update();
-//         ic_410_slave.update();
-//     }
-// }
-
-void servo_loop(PIController* p) {
+void servo_loop(uint8_t const mask) {
     ReferencePath::clear_timer();
-    p->reference->clear_reference();
-    while (!p->reference->is_terminated())
-        p->update();
+    for (int ch = 0; ch < 4; ++ch)
+        if (mask & (1 << ch))
+            servoes[ch].c->reference->clear_reference();
+    // as long as one channel does not terminate, the servo goes on
+    // the servo will run for at least 2 cycles 
+    for (bool end = false; !end; end = true) {
+        for (int ch = 0; ch < 4; ++ch)
+            if (mask & (1 << ch)) {
+                servoes[ch].c->update();
+                end &= servoes[ch].c->reference->is_terminated();
+            }
+    }
+    // clean up
     for (int i = 0; i < 10; ++i)
-        p->update();
+        for (int ch = 0; ch < 4; ++ch)
+            if (mask & (1 << ch))
+                servoes[ch].c->update();
 }

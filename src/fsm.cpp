@@ -21,6 +21,8 @@ struct Sweep;
 using fsm_handle = ServoMachine;
 
 struct ServoMachine : tinyfsm::Fsm<ServoMachine> {
+    static PIServoSystem* sweep_sys;
+    static uint8_t channel_on;
     virtual void react(SerialEvent const&) {}
     virtual void react(TurnOnServo const&) {}
     virtual void react(TurnOnSweep const&) {}
@@ -29,20 +31,33 @@ struct ServoMachine : tinyfsm::Fsm<ServoMachine> {
 };
 
 void sweep_parser() {
-    master_410_servo.sc.lower = SerialReader();
-    master_410_servo.sc.upper = SerialReader();
+    uint8_t ch           = SerialReader();
+    servoes[ch].sc.lower = SerialReader();
+    servoes[ch].sc.upper = SerialReader();
+    // update sweep_sys
+    ServoMachine::sweep_sys = servoes + ch;
 }
 
 void servo_parser() {
+    // channel index
+    uint8_t ch = SerialReader();
     // new corner
-    *(master_410_servo.c->controllers[0]) = IIRFirstOrderController(0, SerialReader());
+    *(servoes[ch].c->controllers[0]) = IIRFirstOrderController(0, SerialReader());
     // new overall gain
-    master_410_servo.c->overall_gain = SerialReader();
+    servoes[ch].c->overall_gain = SerialReader();
     // new waveform
-    master_410_servo.c->reference->set_data_from_serial();
-    Serial.printf("Read %d datapoints\n", master_410_servo.c->reference->tot);
+    servoes[ch].c->reference->set_data_from_serial();
+    Serial.printf("Read %d datapoints\n", servoes[ch].c->reference->tot);
+    ServoMachine::channel_on |= (1 << ch);
 }
 
+void channel_parser() {
+    uint8_t ch = SerialReader();
+    if (ch & (1 << 8)) 
+        ServoMachine::channel_on |= (1 << (ch & 3));
+    else
+        ServoMachine::channel_on &= ~(1 << (ch & 3));
+}
 struct Idle : ServoMachine {
     void entry() override {
     }
@@ -51,23 +66,29 @@ struct Idle : ServoMachine {
         switch (c) {
             case 1: {
                 sweep_parser();
-                auto gp = get_best_power(&master_410_servo);
+                auto gp = get_best_power(ServoMachine::sweep_sys);
                 Serial.printf("Max power of %d at DAC number %d.\n", gp.pmax, gp.vmax);
                 Serial.printf("Min power of %d at DAC number %d.\n", gp.pmin, gp.vmin);
                 transit<Sweep>();
                 break;
             }
-            case 2:
+            case 2: {
                 servo_parser();
                 transit<Servo>();
                 break;
+            }
+            case 3: {
+                channel_parser();
+                transit<Servo>();
+                break;
+            }
         }
     }
 };
 
 struct Servo : ServoMachine {
     void entry() override {
-        servo_loop(master_410_servo.c);
+        servo_loop(ServoMachine::channel_on);
     }
     void react(SerialEvent const&) override { transit<Idle>(); }
     void react(TurnOnServo const&) override { transit<Servo>(); }
@@ -75,7 +96,7 @@ struct Servo : ServoMachine {
 
 struct Sweep : ServoMachine {
     void entry() override {
-        get_best_power(&master_410_servo);
+        get_best_power(ServoMachine::sweep_sys);
     }
     void react(SerialEvent const&) override { transit<Idle>(); }
     void react(TurnOnSweep const&) override { transit<Sweep>(); }
@@ -91,6 +112,9 @@ void state_machine_loop() {
     if (Serial.available())
         fsm_handle::dispatch(ser);
     // if (digitalReadFast(37) == HIGH)
-        fsm_handle::dispatch(servo);
+    fsm_handle::dispatch(servo);
     fsm_handle::dispatch(sweep);
 }
+
+PIServoSystem* ServoMachine::sweep_sys = servoes;
+uint8_t ServoMachine::channel_on       = 0;

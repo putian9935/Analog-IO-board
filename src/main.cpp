@@ -1,6 +1,5 @@
 #include "init_chips.hpp"
-extern void init_fsm();
-extern void state_machine_loop();
+#include "fsm.hpp"
 
 void setup() {
     while (!Serial)

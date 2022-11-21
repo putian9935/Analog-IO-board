@@ -5,7 +5,6 @@
 #include "reference.hpp"
 #include "sweep.hpp"
 
-
 template <int len_zeroes, int len_poles>
 struct ServoSystem {
     using ControllerType = IIRCascadeController<len_zeroes, len_poles>;
@@ -18,7 +17,6 @@ struct ServoSystem {
 };
 
 using PIServoSystem = ServoSystem<1, 2>;
-extern PIServoSystem master_410_servo;
-extern ReferencePath ref_410_master;
+extern PIServoSystem servoes[];
 
 #endif 
