@@ -22,6 +22,7 @@ PowerReading get_best_power(PIServoSystem* const sys) {
             ret.vmin = i;
         }
     }
+    c->writer(sys->sc.lower); // set DAC to lowest after sweep
     *(c->reference) = ref_old;
     return ret;
 }
