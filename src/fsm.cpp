@@ -31,7 +31,8 @@ struct ServoMachine : tinyfsm::Fsm<ServoMachine> {
 };
 
 void sweep_parser() {
-    uint8_t ch           = SerialReader();
+    uint8_t ch = SerialReader();
+    // update bound
     servoes[ch].sc.lower = SerialReader();
     servoes[ch].sc.upper = SerialReader();
     // update sweep_sys
@@ -53,10 +54,13 @@ void servo_parser() {
 
 void channel_parser() {
     uint8_t ch = SerialReader();
-    if (ch & (1 << 8)) 
+    if (ch & (1 << 7))
         ServoMachine::channel_on |= (1 << (ch & 3));
     else
         ServoMachine::channel_on &= ~(1 << (ch & 3));
+    for(int i = 0; i < 4; ++i)
+        Serial.printf("CH%d: %s; ", i, (ServoMachine::channel_on & (1 << i))?"*":"o");
+    Serial.printf("\n");
 }
 struct Idle : ServoMachine {
     void entry() override {
