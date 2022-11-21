@@ -17,9 +17,10 @@ def servo_action(args):
         print(e)
     servo(args.f_I, args.G, get_wfm(args.fname))
     
-    
+def quit_action(args):
+    exit()    
 
-parser = argparse.ArgumentParser('', description="Intesnity servo terminal", add_help=False, epilog="Use 'help command name' to see how to use each command.", exit_on_error=False)
+parser = argparse.ArgumentParser('', description="Intesnity servo terminal", add_help=False, epilog="Use 'help <command>' to see how to use each command.", exit_on_error=False)
 subparsers = parser.add_subparsers()
 
 sweep_parser = subparsers.add_parser("sweep", description="Start sweep", add_help=False, exit_on_error=False)
@@ -37,6 +38,10 @@ servo_parser.set_defaults(func=servo_action)
 stop_parser = subparsers.add_parser("stop", description="Stop current command", add_help=False, exit_on_error=False)
 stop_parser.set_defaults(func=stop)
 
+quit_parser = subparsers.add_parser("quit", description="Exit terminal", add_help=False, exit_on_error=False)
+quit_parser.set_defaults(func=quit_action)
+
+
 help_parser = subparsers.add_parser("help", 
 description='Display help for commands', add_help=False, exit_on_error=False)
 help_parser.add_argument('cmd', type=str, choices=subparsers.choices.keys(), help='command name')
@@ -47,6 +52,8 @@ parser.print_help()
 prompt = '>>> '
 while True:
     commands = input(prompt).split()
+    if not len(commands):
+        continue
     try:
         a = parser.parse_args(commands)
         a.func(a)
