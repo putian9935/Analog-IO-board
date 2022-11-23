@@ -20,11 +20,19 @@ static void init_DAC_spi()
     // clock frequency divisor
     uint16_t div = 720000000 / MAX_DAC_FCLK_PRAC;
 
+    #ifdef OVERCLOCK_ON
     spi_regs->CCR                   // clock configuration, p 2882
         = LPSPI_CCR_SCKDIV(div - 2) // clock freq divisor
           | LPSPI_CCR_DBT(55)       // delay between transfer
           | LPSPI_CCR_PCSSCK(35)    // pcs to sck
+          | LPSPI_CCR_SCKPCS(0);    // sck to pcs    
+    #else
+    spi_regs->CCR                   // clock configuration, p 2882
+        = LPSPI_CCR_SCKDIV(div - 2) // clock freq divisor
+          | LPSPI_CCR_DBT(5)       // delay between transfer
+          | LPSPI_CCR_PCSSCK(0)    // pcs to sck
           | LPSPI_CCR_SCKPCS(0);    // sck to pcs
+    #endif 
 
     spi_regs->TCR                      // transmit command, p 2886
         = (spi_regs->TCR & 0xfffff000) //

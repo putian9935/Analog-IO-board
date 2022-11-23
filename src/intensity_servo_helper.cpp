@@ -32,8 +32,9 @@ void servo_loop(uint8_t const mask) {
         if (mask & (1 << ch))
             servoes[ch].c->reference->clear_reference();
     // as long as one channel does not terminate, the servo goes on
-    // the servo will run for at least 2 cycles 
-    for (bool end = false; !end; end = true) {
+    // the servo will run for at least 2 cycles
+    for (bool end = false; !end;) {
+        end = true;
         for (int ch = 0; ch < 4; ++ch)
             if (mask & (1 << ch)) {
                 servoes[ch].c->update();

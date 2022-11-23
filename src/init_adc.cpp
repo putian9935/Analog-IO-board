@@ -36,10 +36,13 @@ static void end_fourway()
     spi_regs->CFGR1 &= ~LPSPI_CFGR1_PCSCFG;
     spi_regs->CFGR1 |= LPSPI_CFGR1_OUTCFG | LPSPI_CFGR1_SAMPLE | LPSPI_CFGR1_MASTER;
 
-    // uint32_t tcr  = spi_regs->TCR;
     spi_regs->TCR = ((spi_regs->TCR & 0xfff00000) | LPSPI_TCR_FRAMESZ(31) | LPSPI_TCR_WIDTH(1));
 
+    #ifdef OVERCLOCK_ON
     spi_regs->CCR =(spi_regs->CCR & 0x000000ff) | LPSPI_CCR_DBT(30) | LPSPI_CCR_PCSSCK(100) | LPSPI_CCR_SCKPCS(1);
+    #else
+    spi_regs->CCR =(spi_regs->CCR & 0x000000ff) | LPSPI_CCR_DBT(10) | LPSPI_CCR_PCSSCK(1) | LPSPI_CCR_SCKPCS(1);
+    #endif 
 }
 
 
@@ -83,8 +86,6 @@ void init_ADC()
     end_fourway();
     delay(10);
 
-    initSPIMasterDMA();
-    
     for(volatile int i = 0; i < 10000; ++i);
 }
 
