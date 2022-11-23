@@ -2,7 +2,6 @@
 
 #include "init_chips.hpp"
 #include "bit_mangler.h"
-#include "adc_dma.hpp"
 #include "pin_assignment.h"
 
 #define ALT2 2
@@ -85,7 +84,5 @@ void init_ADC()
     fourway_write(ADC_NOP);
     end_fourway();
     delay(10);
-
-    for(volatile int i = 0; i < 10000; ++i);
 }
 

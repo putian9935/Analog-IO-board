@@ -2,7 +2,7 @@ def binarise(x, y):
     return int(x).to_bytes(4, 'little', signed=False)+int(y).to_bytes(2, 'little', signed=False)
 
 def check_monoticity(arr):
-    return all(x < y for x, y in zip(arr[:-1], arr[1:]))
+    return all(int(x) < int(y) for x, y in zip(arr[:-1], arr[1:]))
 
 def get_wfm(fname):
     fin = open(fname)

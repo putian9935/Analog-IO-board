@@ -43,7 +43,8 @@ void servo_parser() {
     // channel index
     uint8_t ch = SerialReader();
     // new corner
-    *(servoes[ch].c->controllers[0]) = IIRFirstOrderController(0, SerialReader());
+    delete servoes[ch].c->controllers[0];
+    servoes[ch].c->controllers[0] = new IIRFirstOrderController(SerialReader(), 0);
     // new overall gain
     servoes[ch].c->overall_gain = SerialReader();
     // new waveform

@@ -19,6 +19,7 @@ struct Controller {
     write_func_t writer;
     Controller(read_func_t reader, write_func_t writer) : reader(reader), writer(writer) {}
     virtual void update() = 0;
+    virtual ~Controller(){};
 };
 
 // first order IIR controller base class
@@ -26,6 +27,7 @@ struct IIRBaseController {
     double le, lo;  // last error and last output
     IIRBaseController() : le{}, lo{} {}
     virtual double transfer(double const err) = 0;
+    virtual ~IIRBaseController(){};
 };
 
 // first order IIR controller with zero and pole
