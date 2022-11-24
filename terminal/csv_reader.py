@@ -6,7 +6,8 @@ def check_monoticity(arr):
 
 def get_wfm(fname):
     fin = open(fname)
-    time, val = zip(*(line.strip().split() for line in fin.readlines()))
+    # line comment start with #
+    time, val = zip(*(line.strip().split() for line in fin.readlines() if line.strip()[0] != '#'))
     idx = list(range(len(val)))
     if not check_monoticity(time):
         print("Warning: time in waveform data is not sorted. ")

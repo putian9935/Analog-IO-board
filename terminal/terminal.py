@@ -2,6 +2,7 @@ import argparse
 
 from backend import sweep, servo, stop, channel
 from csv_reader import get_wfm 
+from json_load import load_settings 
 
 def help_action(args):
     subparsers.choices[args.cmd].print_help()
@@ -34,6 +35,24 @@ def channel_action(args):
     else:
         channel(args.ch, False)
 
+def load_action(args):
+    # non-exising file
+    try:
+        open(args.f)
+    except FileNotFoundError as e:
+        print('%s: %s' %(e.__class__.__name__,  e))
+        return 
+    
+    try: 
+        s = load_settings(args.f) 
+    except ValueError as e:
+        print('%s: %s' %(e.__class__.__name__,  e))
+        return 
+
+    for arg in s:
+        a = servo_parser.parse_args(arg)
+        a.func(a)
+
 
 def exit_action(args):
     exit(0)    
@@ -61,6 +80,10 @@ on_off = channel_parser.add_mutually_exclusive_group(required=True)
 on_off.add_argument('--on', action='store_true')
 on_off.add_argument('--off', action='store_true')
 channel_parser.set_defaults(func=channel_action)
+
+load_parser = subparsers.add_parser("load", description="Load and run configuration from file", add_help=False)
+load_parser.add_argument('-f', metavar='fname', type=str, help='Configuration file name', required=False,default='config.json', nargs='?')
+load_parser.set_defaults(func=load_action)
 
 stop_parser = subparsers.add_parser("stop", description="Stop current command", add_help=False, )
 stop_parser.set_defaults(func=stop)

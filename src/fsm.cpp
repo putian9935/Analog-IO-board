@@ -79,7 +79,12 @@ struct Idle : ServoMachine {
             }
             case 2: {
                 servo_parser();
-                transit<Servo>();
+                // delay for continuous update 
+                delay(200);
+                if(Serial.available())        
+                    fsm_handle::dispatch(ser);
+                else
+                    transit<Servo>();
                 break;
             }
             case 3: {
@@ -116,7 +121,7 @@ void init_fsm() {
 void state_machine_loop() {
     if (Serial.available())
         fsm_handle::dispatch(ser);
-    // if (digitalReadFast(37) == HIGH)
+    if (digitalReadFast(37) == HIGH)
     fsm_handle::dispatch(servo);
     fsm_handle::dispatch(sweep);
 }

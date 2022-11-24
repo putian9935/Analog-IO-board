@@ -6,7 +6,7 @@ ser = setup_arduino_port('COM3')
 
 def readback():
     while not ser.in_waiting:
-        time.sleep(.5)
+        time.sleep(.1)
     while ser.in_waiting:
         print(ser.readline())
 
