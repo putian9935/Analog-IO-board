@@ -1,3 +1,10 @@
+/**
+ * @file servo_system.hpp
+ * @brief ServoSystem class 
+ * @date 2022-11-28
+ * 
+ * 
+ */
 #ifndef SERVO_SYSTEM_H
 #define SERVO_SYSTEM_H
 

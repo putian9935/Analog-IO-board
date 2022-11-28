@@ -1,3 +1,10 @@
+/**
+ * @file serial_reader.hpp
+ * @brief Serial reader helper class. 
+ * @date 2022-11-28
+ * 
+ * 
+ */
 #ifndef SERIAL_READER
 #define SERIAL_READER 
 

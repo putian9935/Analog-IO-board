@@ -1,3 +1,10 @@
+/**
+ * @file fsm.hpp
+ * @brief Finite state machine for intensity servo 
+ * @date 2022-11-28
+ * 
+ * 
+ */
 #ifndef FSM_HPP
 #define FSM_HPP
 

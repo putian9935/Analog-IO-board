@@ -1,4 +1,9 @@
-
+/**
+ * @file read.cpp
+ * @brief Interface for getting ADC readings
+ * @date 2022-11-28
+ *
+ */
 #include "read.hpp"
 #include "bit_mangler.h"
 

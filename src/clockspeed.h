@@ -1,3 +1,10 @@
+/**
+ * @file clockspeed.h
+ * @brief Change Teensy CPU clock speed  
+ * @date 2022-11-28
+ * 
+ * 
+ */
 #ifndef CLOCKSPEED_H
 #define CLOCKSPEED_H
 

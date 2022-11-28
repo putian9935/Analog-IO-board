@@ -1,3 +1,10 @@
+/**
+ * @file intensity_servo_helper.hpp
+ * @brief Helper functions for intensity servo 
+ * @date 2022-11-28
+ * 
+ * 
+ */
 #ifndef INTENSITY_SERVO_HELPER
 #define INTENSITY_SERVO_HELPER
 

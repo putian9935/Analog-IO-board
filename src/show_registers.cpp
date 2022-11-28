@@ -1,4 +1,5 @@
 #include "show_registers.hpp"
+#include "show_byte.hpp"
 
 void show_ipg_clk() {
     static const uint32_t pre_periph_clk[] = {

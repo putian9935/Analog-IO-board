@@ -1,3 +1,9 @@
+/**
+ * @file utilities.hpp
+ * @brief Useful utilities
+ * @date 2022-11-28
+ * 
+ */
 #ifndef UTILITIES_H
 #define UTILITIES_H
 
@@ -12,13 +18,9 @@
 #define ASSERT_DAC2 digitalWriteFast(DAC_SYNC2, LOW)
 #define DEASSERT_DAC2 digitalWriteFast(DAC_SYNC2, HIGH)
 
-extern uint16_t transfer16(uint16_t);
 extern uint32_t set_arm_clock_cpp(uint32_t); 
 
 #define ADC_TRANSFER_NOP ASSERT_ADC;transfer16(ADC_NOP);DEASSERT_ADC
-
-
-#define FAST_IO IOMUXC_PAD_DSE(4) | IOMUXC_PAD_SPEED(3) | IOMUXC_PAD_SRE
 
 /**
  * @brief Reset ADC 
@@ -27,13 +29,17 @@ extern uint32_t set_arm_clock_cpp(uint32_t);
  */
 void adc_reset();
 
+
+/** GPIO driver setup for better SI at high frequencies. See section 12.3.1 on page 949  */
+#define FAST_IO IOMUXC_PAD_DSE(4) | IOMUXC_PAD_SPEED(3) | IOMUXC_PAD_SRE
+
 void set_fastio_pin(uint8_t pin_num); 
 
 /**
  * @brief Calibrate DAC channel ch with offset and fgain 
  * 
- * @note see section "OFFSET AND GAIN ADJUSTMENT WORKED EXAMPLE" of the datasheet 
- * @note this function should be called *after* init_DAC_spi
+ * see section "OFFSET AND GAIN ADJUSTMENT WORKED EXAMPLE" of the datasheet for how to calculate parameters
+ * @note this function must be called *after* init_chips
  */
 void calibrate_dac(uint8_t ch, uint8_t offset, uint8_t fgain); 
 

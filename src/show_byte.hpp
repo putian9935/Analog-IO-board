@@ -1,3 +1,10 @@
+/**
+ * @file show_byte.hpp
+ * @brief Helper macro and functions for print pretty-looking binary values 
+ * @date 2022-11-28
+ * 
+ * 
+ */
 #ifndef SHOW_BYTE_HPP
 #define SHOW_BYTE_HPP
 

@@ -1,3 +1,10 @@
+/**
+ * @file bit_mangler.h
+ * @brief Encode and decode bits for parallel SPI transfer
+ * @date 2022-11-28
+ * 
+ * 
+ */
 #ifndef BIT_MANGLER_H
 
 #include <Arduino.h> 

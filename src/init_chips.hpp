@@ -1,22 +1,16 @@
-#ifndef INIT_PINS_HPP
-#define INIT_PINS_HPP
+/**
+ * @file init_chips.hpp
+ * @brief Init board. 
+ * @date 2022-11-28
+ * 
+ */
+#ifndef INIT_CHIPS_HPP
+#define INIT_CHIPS_HPP
 
 #include <Arduino.h>
-#include <SPI.h>
 
 
-/*** 
- * ADC input channel selection 
- * define at *most* one of the following
- */
-// #define ADC_CH0_ON 
-// #define ADC_CH1_ON
 #define ADC_SEQ_ON
-
-/***
- * Count ADC sampling rate with interrupt 
- */
-// #define COUNT_SAMPLE_RATE
 
 /***
  * Clock frequency

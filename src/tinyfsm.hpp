@@ -22,6 +22,15 @@
  * THE SOFTWARE.
  */
 
+/**
+ * @file tinyfsm.hpp
+ * 
+ * @brief TinyFSM implementation 
+ * 
+ * The official TinyFSM website is located at:
+ * https://digint.ch/tinyfsm/
+ */
+
 /* ---------------------------------------------------------------------
  * Version: 0.3.3
  *

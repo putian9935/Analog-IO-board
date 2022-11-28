@@ -3,6 +3,8 @@
 #include "utilities.hpp"
 #include "init_adc.hpp"
 
+#include <SPI.h>
+
 static void init_DAC_spi()
 {
     SPI1.begin();

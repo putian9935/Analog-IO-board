@@ -1,3 +1,10 @@
+/**
+ * @file reference.hpp
+ * @brief Reference class for servo system. 
+ * @date 2022-11-28
+ * 
+ * 
+ */
 #ifndef REFERENCE_HPP
 #define REFERENCE_HPP
 

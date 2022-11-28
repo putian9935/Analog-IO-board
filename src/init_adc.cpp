@@ -1,8 +1,9 @@
 #include "init_adc.hpp"
-
 #include "init_chips.hpp"
 #include "bit_mangler.h"
 #include "pin_assignment.h"
+#include <SPI.h>
+#include <stdint.h>
 
 #define ALT2 2
 #define ALT5 5
