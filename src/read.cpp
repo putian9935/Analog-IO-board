@@ -8,7 +8,7 @@
 #include "bit_mangler.h"
 
 static std::pair<uint16_t, uint16_t> decode(uint32_t data) {
-    return std::pair<uint16_t, uint16_t>(decode_32_16(data >> 1), decode_32_16(data));
+    return {decode_32_16(data >> 1), decode_32_16(data)};
 }
 
 namespace {
