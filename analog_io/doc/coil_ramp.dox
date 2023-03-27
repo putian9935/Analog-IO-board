@@ -1,0 +1,5 @@
+/**
+\page ex_coil_ramp Case study: coil ramp 
+
+\todo simple serial communication, demonstrate usage of \ref SerialReader
+*/
