@@ -1,0 +1,20 @@
+/** 
+\date 2023-03-27
+\mainpage Analog IO board library support 
+
+\section index_board_desc Board description
+The analog IO board, version 1.0, consists of 
+1. Teensy 4.1 (720 MHz Cortex-M7-based MCU)
+2. Two AD5764 (4-channel 16-bit bipolar voltage output DAC) 
+3. One AD7386 (4-channel SAR ADC)
+
+\section index_install Installation 
+To use this library, either copy the files in the src directory to your project folder (I assume you are confident about linking), or follow the method described in @ref install to install in Arduino IDE. 
+
+\section index_quickstart Quickstart 
+Check out the \ref quickstart and learn about basic library use (analog read & write, digital read & write). 
+
+\section index_deepdive Deep dive 
+Check out the <a href="pages.html">Related Pages</a> for a series of other guides. 
+*/
+

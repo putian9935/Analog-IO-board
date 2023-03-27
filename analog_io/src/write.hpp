@@ -1,7 +1,7 @@
 /**
  * @file write.hpp
  * @brief Interface for writing to DAC
- * @date 2022-11-28
+ * @date 2023-03-25
  *
  */
 #ifndef WRITE_HPP
@@ -11,6 +11,9 @@
 
 /**
  * @brief Write num to channel ch
+ * 
+ * @note ch has to be from {0, 1, 2, 3, 4, 5, 6, 7}
+ * 
  */
 void write(uint8_t const ch, uint16_t const num);
 
@@ -25,5 +28,5 @@ void write_both(uint8_t const ch1, uint16_t const num1, uint8_t const ch2, uint1
  *
  * @param data 48-bit data to transmit: odd bits for DAC2; even bits for DAC1.
  */
-void transfer_dac24(uint64_t data);
+void transfer_dac24(uint64_t const data);
 #endif

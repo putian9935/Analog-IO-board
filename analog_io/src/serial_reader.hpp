@@ -14,7 +14,7 @@
 // We need a function that has overload resolution by return value;
 // this can be done by abusing the cast operation  
 struct SerialReader {
-    static char buf[8];
+    static char buf[16]; // Type "long double" is of size 16
     template <typename T, std::enable_if_t<std::is_arithmetic<T>::value, bool> = true>
     operator T() {
         T ret;
