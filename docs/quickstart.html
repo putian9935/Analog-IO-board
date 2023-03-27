@@ -78,10 +78,50 @@ $(function() {
 Analog write</h1>
 <p >The basic access to DAC is provided by <a class="el" href="analog__io_8h.html#a5c44562f0b91e66b94221d0ff78e1552">analogio_write</a>, a function that takes channel number <code>ch</code> (from 0 to 7) and an unsigned 16-bit DAC number <code>num</code> (from 0 to 65535) as input.</p>
 <dl class="section note"><dt>Note</dt><dd>The DAC interprets the number in the fashion of two's complement, so sending 65535 will generate a resulting voltage close to 0.</dd></dl>
-<p>Example: </p><div class="fragment"></div><!-- fragment --><h1><a class="anchor" id="qs_analog_read"></a>
+<p>Example: </p><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;<a class="code" href="analog__io_8h.html">analog_io.h</a>&quot;</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keywordtype">void</span> setup() {</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    <span class="keywordflow">while</span>(!Serial); </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    Serial.begin(9600); </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <span class="comment">// initialize the chips </span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    init_chips(); </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>}</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keywordtype">void</span> loop() {</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = -32768; i &lt; 32768; ++i) {</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>        <span class="comment">// write DAC number i to channel 0</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <a class="code hl_variable" href="analog__io_8h.html#a5c44562f0b91e66b94221d0ff78e1552">analogio_write</a>(0, i); </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        <span class="comment">// update channel 0 and channel 4 simultaneously </span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        <span class="comment">// analogio_write_both(0, i, 4, i); </span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    }</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>}</div>
+<div class="ttc" id="aanalog__io_8h_html"><div class="ttname"><a href="analog__io_8h.html">analog_io.h</a></div><div class="ttdoc">Master header for analog IO library.</div></div>
+<div class="ttc" id="aanalog__io_8h_html_a5c44562f0b91e66b94221d0ff78e1552"><div class="ttname"><a href="analog__io_8h.html#a5c44562f0b91e66b94221d0ff78e1552">analogio_write</a></div><div class="ttdeci">auto &amp; analogio_write</div><div class="ttdoc">Alias of write.</div><div class="ttdef"><b>Definition:</b> analog_io.h:82</div></div>
+</div><!-- fragment --><h1><a class="anchor" id="qs_analog_read"></a>
 Analog read</h1>
 <p >The basic access to ADC is provided by <a class="el" href="analog__io_8h.html">analogio_read</a>, a function that takes channel (either of AIN0, AIN1, BIN0, and BIN1) as input and returns an unsigned 16-bit ADC number of that channel.</p>
-<p >Example: </p><div class="fragment"></div><!-- fragment --><h1><a class="anchor" id="qs_digital_pins"></a>
+<p >Example: </p><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;<a class="code" href="analog__io_8h.html">analog_io.h</a>&quot;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keywordtype">void</span> setup() {</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <span class="keywordflow">while</span> (!Serial)</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>        ;</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    Serial.begin(9600);</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="comment">// initialize the chips</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    init_chips();</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>}</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="keywordtype">void</span> loop() {</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    Serial.printf(<span class="stringliteral">&quot;ain0: %u ain1: %u bin0: %u bin1: %u\n&quot;</span>,</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>                  analogio_read(AIN0),</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>                  analogio_read(AIN1),</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>                  analogio_read(BIN0),</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>                  analogio_read(BIN1));</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>}</div>
+</div><!-- fragment --><h1><a class="anchor" id="qs_digital_pins"></a>
 Digital read and write</h1>
 <p >The digital pins are defined as DIOn where n is an integer from 1 to 8. You may use either Arduino-style <code>pinMode</code>, <code>digitalReadFast</code>, <code>digitalWriteFast</code> or our style <a class="el" href="analog__io_8h.html#a72dc2690c55b1e7adb2cbe3f72f61bde">digitalio_mode</a>, <a class="el" href="analog__io_8h.html#ad58c9b283a440af645b4fa47599e84b0">digitalio_read</a>, <a class="el" href="analog__io_8h.html#af871d492e1b757ea291a344093def92c">digitalio_write</a>. </p>
 </div></div><!-- contents -->
