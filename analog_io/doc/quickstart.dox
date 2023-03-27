@@ -1,0 +1,25 @@
+/**
+\page quickstart Quickstart Guide 
+
+A few examples to demonstrate the use.  
+
+\section qs_analog_write Analog write 
+
+The basic access to DAC is provided by \ref analogio_write, a function that takes channel number \p ch (from 0 to 7) and an unsigned 16-bit DAC number \p num (from 0 to 65535) as input. 
+
+\note The DAC interprets the number in the fashion of two's complement, so sending 65535 will generate a resulting voltage close to 0. 
+
+Example: 
+\include{lineno} analog_write.ino 
+
+\section qs_analog_read Analog read 
+
+The basic access to ADC is provided by \link analog_io.h analogio_read\endlink, a function that takes channel (either of AIN0, AIN1, BIN0, and BIN1) as input and returns an unsigned 16-bit ADC number of that channel.
+
+Example: 
+\include{lineno} analog_read.ino 
+
+\section qs_digital_pins Digital read and write 
+
+The digital pins are defined as DIOn where n is an integer from 1 to 8. You may use either Arduino-style \c pinMode, \c digitalReadFast, \c digitalWriteFast or our style \ref digitalio_mode, \ref digitalio_read, \ref digitalio_write. 
+*/
