@@ -39,4 +39,4 @@ jobs:
           author_email: pl35@u.nus.edu
           message: "Update docs"
           branch: gh-pages
-          add: '["docDir/doxygen/C/html/*"]'
+          add: '["docDir/html/*"]'
