@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['init_5fadc_2ehpp_0',['init_adc.hpp',['../init__adc_8hpp.html',1,'']]],
-  ['init_5fchips_2ehpp_1',['init_chips.hpp',['../init__chips_8hpp.html',1,'']]]
+  ['digital_5frw_2eino_0',['digital_rw.ino',['../digital__rw_8ino.html',1,'']]]
 ];
