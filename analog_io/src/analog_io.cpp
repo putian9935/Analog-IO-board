@@ -25,3 +25,9 @@ std::pair<uint16_t, uint16_t> analogio_read_both(uint8_t const ch) {
     }
 #endif
 }
+
+decltype(write_both)& analogio_write_both   = write_both;
+decltype(write)& analogio_write             = write;
+decltype(digitalReadFast)& digitalio_read   = digitalReadFast;
+decltype(digitalWriteFast)& digitalio_write = digitalWriteFast;
+decltype(pinMode)& digitalio_mode           = pinMode;

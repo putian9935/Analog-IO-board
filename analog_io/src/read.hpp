@@ -8,31 +8,23 @@
 #define READ_HPP
 
 #include <stdint.h>
+#include "init_chips.hpp"
 
-#ifndef READ_LIFE 
-#define READ_LIFE 1
-#endif 
+#ifndef READ_LIFE
+#    define READ_LIFE 1
+#endif
 
 /**
- * @name ADC reader functions 
- * 
+ * @name ADC reader functions
+ *
  */
-
 
 /** @{ */
 
-
 /**
- * @brief 
- * 
- * @return uint16_t 
- */
-// uint16_t read();
-
-/**
- * @brief 
- * 
- * @return uint16_t 
+ * @brief
+ *
+ * @return uint16_t
  */
 uint16_t read_both();
 
@@ -54,7 +46,7 @@ uint16_t read_ain0();
  */
 uint16_t read_bin0();
 
-#ifdef ADC_FOUR_CHANNEL 
+#ifdef ADC_FOUR_CHANNEL
 /**
  * @brief Read ain1 from cache
  *
@@ -71,6 +63,6 @@ uint16_t read_ain1();
  * For how cache works, refer to read.cpp
  */
 uint16_t read_bin1();
-#endif 
+#endif
 /**@}*/
 #endif
