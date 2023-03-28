@@ -4,5 +4,7 @@
 
 1. Go to <a href="https://github.com/putian9935/Analog-IO-board/tree/core">here</a> and download the latest version of this branch. 
 2. In Arduino IDE, go to "Sketch" > "Include Library" > "ADD .ZIP Library", locate the folder just downloaded and go to "analog_io" directory before clicking "Open". 
-3. If an error of "A library named analog_io already exists" is issued, go to the sketchbook location (found in "File" > "Preferences") and locate the "libraries" folder, delete the "analog_io" folder and try step 2 again.  
+3. If an error of "A library named analog_io already exists" is issued, go to the sketchbook location (found in "File" > "Preferences") and locate the "libraries" folder, turn of the Arduino IDE, delete the "analog_io" folder and try step 2 again.  
+
+To validate the installation, in "File" > "Examples" > "AnalogIO", there should be example files present; open either one and click the "Verify" button, there should be no error raised. 
 */

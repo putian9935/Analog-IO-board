@@ -1,11 +1,19 @@
 /**
 \page quickstart Quickstart guide 
 
-A few examples to demonstrate the use.  
+A few examples to demonstrate the use. The mnemonic of function names is 
+
+(analog|digital)io_<verb>[_both]
+
+the verbs for 
+- the analog realm are "read" and "write";
+- the digital realm are "read", "write", and "mode".
+
+The suffix "_both" only exists in the analog realm. 
 
 \section qs_analog_write Analog write 
 
-The basic access to DAC is provided by \ref analogio_write, a function that takes channel number \p ch (from 0 to 7) and an unsigned 16-bit DAC number \p num (from 0 to 65535) as input. 
+The basic access to DAC is provided by \link analog_io.h analogio_write\endlink, a function that takes channel number \p ch (from 0 to 7) and an unsigned 16-bit DAC number \p num (from 0 to 65535) as input. 
 
 \note The DAC interprets the number in the fashion of two's complement, so sending 65535 will generate a resulting voltage close to 0. 
 
@@ -21,5 +29,9 @@ Example:
 
 \section qs_digital_pins Digital read and write 
 
-The digital pins are defined as DIOn where n is an integer from 1 to 8. You may use either Arduino-style \c pinMode, \c digitalReadFast, \c digitalWriteFast or our style \ref digitalio_mode, \ref digitalio_read, \ref digitalio_write. 
+The digital pins are defined as DIOn where n is an integer from 1 to 8. You may use either Arduino-style \c pinMode, \c digitalReadFast, \c digitalWriteFast or our style \link analog_io.h digitalio_mode\endlink, \link analog_io.h digitalio_read\endlink, \link analog_io.h digitalio_write\endlink. 
+
+Example: 
+\include{lineno} digital_rw.ino 
+
 */
