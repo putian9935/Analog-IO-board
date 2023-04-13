@@ -1,11 +1,8 @@
 /**
  * @file analog_read.ino
- * @author your name (you@domain.com)
- * @brief
- * @version 0.1
+ * @author Li Putian
+ * @brief Basic use of analog read
  * @date 2023-03-27
- *
- * @copyright Copyright (c) 2023
  *
  */
 

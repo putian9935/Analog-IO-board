@@ -1,5 +1,5 @@
 /** 
-\date 2023-03-27
+\date 2023-04-14
 \mainpage Analog IO board library support 
 
 \section index_board_desc Board description
@@ -7,6 +7,9 @@ The analog IO board, version 1.0, consists of
 1. Teensy 4.1 (720 MHz Cortex-M7-based MCU)
 2. Two AD5764 (4-channel 16-bit bipolar voltage output DAC) 
 3. One AD7386 (4-channel SAR ADC)
+
+\section index_download Download 
+Follow this <a href="https://github.com/putian9935/Analog-IO-board/zipball/core/">link</a> to download the latest version.  
 
 \section index_install Installation 
 To use this library, either copy the files in the src directory to your project folder (I assume you are confident about linking), or follow the method described in @ref install to install in Arduino IDE. 
