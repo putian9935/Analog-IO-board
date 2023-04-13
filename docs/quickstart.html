@@ -107,43 +107,43 @@ Analog write</h1>
 Analog read</h1>
 <p >The basic access to ADC is provided by <a class="el" href="analog__io_8h.html">analogio_read</a>, a function that takes channel (either of AIN0, AIN1, BIN0, and BIN1) as input and returns an unsigned 16-bit ADC number of that channel.</p>
 <p >Example: </p><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;tuple&gt;</span>  <span class="comment">// for std::tie</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="analog__io_8h.html">analog_io.h</a>&quot;</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keywordtype">void</span> setup() {</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="keywordflow">while</span> (!Serial)</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        ;</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    Serial.begin(9600);</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="comment">// initialize the chips</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    init_chips();</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>}</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="keywordtype">void</span> loop() {</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="comment">// single read</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    Serial.printf(<span class="stringliteral">&quot;ain0: %u ain1: %u bin0: %u bin1: %u\n&quot;</span>,</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>                  analogio_read(AIN0),</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>                  analogio_read(AIN1),</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>                  analogio_read(BIN0),</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>                  analogio_read(BIN1));</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="comment">// pair read</span></div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="comment">// in case the Teensy-bundled compiler upgrades in the future, </span></div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="comment">// or you may build with your latest arm toolchain</span></div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="preprocessor">#ifdef __cpp_structured_bindings</span></div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keyword">auto</span> [ain0, bin0] = analogio_read_both(CH0);</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keyword">auto</span> [ain1, bin1] = analogio_read_both(CH1);</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="preprocessor">#else</span></div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    uint16_t ain0, bin0, ain1, bin1;</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    std::tie(ain0, bin0) = analogio_read_both(CH0);</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    std::tie(ain1, bin1) = analogio_read_both(CH1);</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    Serial.printf(<span class="stringliteral">&quot;ain0: %u ain1: %u bin0: %u bin1: %u\n&quot;</span>,</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>                  ain0,</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>                  ain1,</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>                  bin0,</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>                  bin1);</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>}</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;tuple&gt;</span>  <span class="comment">// for std::tie</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;<a class="code" href="analog__io_8h.html">analog_io.h</a>&quot;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="keywordtype">void</span> setup() {</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <span class="keywordflow">while</span> (!Serial)</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>        ;</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    Serial.begin(9600);</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="comment">// initialize the chips</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    init_chips();</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>}</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="keywordtype">void</span> loop() {</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="comment">// single read</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    Serial.printf(<span class="stringliteral">&quot;ain0: %u ain1: %u bin0: %u bin1: %u\n&quot;</span>,</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>                  analogio_read(AIN0),</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>                  analogio_read(AIN1),</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>                  analogio_read(BIN0),</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>                  analogio_read(BIN1));</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <span class="comment">// pair read</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="comment">// in case the Teensy-bundled compiler upgrades in the future, </span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="comment">// or you may build with your latest arm toolchain</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">#ifdef __cpp_structured_bindings</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keyword">auto</span> [ain0, bin0] = analogio_read_both(CH0);</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keyword">auto</span> [ain1, bin1] = analogio_read_both(CH1);</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="preprocessor">#else</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    uint16_t ain0, bin0, ain1, bin1;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    std::tie(ain0, bin0) = analogio_read_both(CH0);</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    std::tie(ain1, bin1) = analogio_read_both(CH1);</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    Serial.printf(<span class="stringliteral">&quot;ain0: %u ain1: %u bin0: %u bin1: %u\n&quot;</span>,</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>                  ain0,</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>                  ain1,</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>                  bin0,</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>                  bin1);</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>}</div>
 </div><!-- fragment --><h1><a class="anchor" id="qs_digital_pins"></a>
 Digital read and write</h1>
 <p >The digital pins are defined as DIOn where n is an integer from 1 to 8. You may use either Arduino-style <code>pinMode</code>, <code>digitalReadFast</code>, <code>digitalWriteFast</code> or our style <a class="el" href="analog__io_8h.html">digitalio_mode</a>, <a class="el" href="analog__io_8h.html">digitalio_read</a>, <a class="el" href="analog__io_8h.html">digitalio_write</a>.</p>

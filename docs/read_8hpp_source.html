@@ -81,7 +81,7 @@ $(function() {
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#define READ_HPP</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;stdint.h&gt;</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;<a class="code" href="init__chips_8hpp.html">init_chips.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;<a class="code" href="init__chips_8hpp.html">init_chips.hpp</a>&quot;</span> </div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#ifndef READ_LIFE</span></div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#    define READ_LIFE 1</span></div>
@@ -96,8 +96,10 @@ $(function() {
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="preprocessor">#ifdef ADC_FOUR_CHANNEL</span></div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>uint16_t <a class="code hl_function" href="read_8hpp.html#aa62b29b328a23a09a57f5735ba41ac34">read_ain1</a>();</div>
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>uint16_t <a class="code hl_function" href="read_8hpp.html#a00058a893daa6e08ff6a83f580906ba3">read_bin1</a>();</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="preprocessor">#else </span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="preprocessor">#warning ADC_FOUR_CHANNEL is not defined!</span></div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="ainit__chips_8hpp_html"><div class="ttname"><a href="init__chips_8hpp.html">init_chips.hpp</a></div><div class="ttdoc">Init board.</div></div>
 <div class="ttc" id="aread_8hpp_html_a00058a893daa6e08ff6a83f580906ba3"><div class="ttname"><a href="read_8hpp.html#a00058a893daa6e08ff6a83f580906ba3">read_bin1</a></div><div class="ttdeci">uint16_t read_bin1()</div><div class="ttdoc">Read bin1 from cache.</div><div class="ttdef"><b>Definition:</b> read.cpp:82</div></div>
 <div class="ttc" id="aread_8hpp_html_a195fc011464385e201399a9dad173e9c"><div class="ttname"><a href="read_8hpp.html#a195fc011464385e201399a9dad173e9c">read_ain0</a></div><div class="ttdeci">uint16_t read_ain0()</div><div class="ttdoc">Read ain0 from cache.</div><div class="ttdef"><b>Definition:</b> read.cpp:54</div></div>
