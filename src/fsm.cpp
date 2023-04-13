@@ -82,7 +82,12 @@ struct Idle : ServoMachine {
                 auto gp = get_best_power(ServoMachine::sweep_sys);
                 Serial.printf("Max power of %d at DAC number %d.\n", gp.pmax, gp.vmax);
                 Serial.printf("Min power of %d at DAC number %d.\n", gp.pmin, gp.vmin);
-                transit<Sweep>();
+                // delay for continuous update 
+                delay(200);
+                if(Serial.available())        
+                    fsm_handle::dispatch(ser);
+                else
+                    transit<Sweep>();
                 break;
             }
             case 2: {

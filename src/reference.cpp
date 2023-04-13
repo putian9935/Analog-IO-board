@@ -17,21 +17,20 @@ void ReferencePath::clear_reference() {
 bool ReferencePath::is_terminated() const {
     return cur_slice >= tot;
 }
-#include "write.hpp"
+
 double ReferencePath::get_reference() {
     if (trigged) {
         trigged = false;  // clear trigger flag
-        if(timer > 20) {
-          timer   = 0;
-          cur_slice += 1;
-          cur_slice %= tot;
+        if (timer > 20) {
+            timer = 0;
+            cur_slice += 1;
+            cur_slice %= tot;
         }
     }
     unsigned long cur_time = timer;
 
     size_t cur = cur_slice;
     if (cur_time > time_data[cur]) {
-        //write(0, val_data[cur] - 32767);
         return val_data[cur];
     }
     // note, cur_slice is always one past
@@ -40,14 +39,14 @@ double ReferencePath::get_reference() {
         ret = interp1d(0, time_data[cur], val_data[tot - 1], val_data[cur], cur_time);
     else
         ret = interp1d(0, time_data[cur], val_data[cur - 1], val_data[cur], cur_time);
-        // write(0, ret - 32767);
-    
+
     return ret;
 }
 
 void ReferencePath::set_data_from_serial() {
     uint32_t sz = SerialReader();
-    sz /= 6;
+    sz /= (sizeof(decltype(time_data)::value_type) +
+           sizeof(decltype(val_data)::value_type));
     tot = sz;
     time_data.resize(sz, 0);
     val_data.resize(sz, 0);
