@@ -9,6 +9,10 @@
 #ifndef PIN_ASSIGNMENT_H
 #define PIN_ASSIGNMENT_H
 
+
+#define GLOBAL_ENABLE_PIN 35
+extern uint16_t hold_output[];
+
 /**
  * @name ADC SPI communication pins 
  */

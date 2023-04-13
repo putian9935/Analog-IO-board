@@ -41,7 +41,7 @@ static void end_fourway()
     #ifdef OVERCLOCK_ON
     spi_regs->CCR =(spi_regs->CCR & 0x000000ff) | LPSPI_CCR_DBT(30) | LPSPI_CCR_PCSSCK(100) | LPSPI_CCR_SCKPCS(1);
     #else
-    spi_regs->CCR =(spi_regs->CCR & 0x000000ff) | LPSPI_CCR_DBT(10) | LPSPI_CCR_PCSSCK(1) | LPSPI_CCR_SCKPCS(1);
+    spi_regs->CCR =(spi_regs->CCR & 0x000000ff) | LPSPI_CCR_DBT(20) | LPSPI_CCR_PCSSCK(10) | LPSPI_CCR_SCKPCS(10);
     #endif 
 }
 
@@ -86,4 +86,3 @@ void init_ADC()
     end_fourway();
     delay(10);
 }
-

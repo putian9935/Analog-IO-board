@@ -1,7 +1,7 @@
+#include <Arduino.h>
 #include <stdint.h>
 #include "imxrt.h"
 #include "wiring.h"
-#include <Arduino.h>
 
 // A brief explanation of F_CPU_ACTUAL vs F_CPU
 //  https://forum.pjrc.com/threads/57236?p=212642&viewfull=1#post212642
@@ -164,4 +164,3 @@ uint32_t set_arm_clock_cpp(uint32_t frequency)
 
 	return frequency;
 }
-

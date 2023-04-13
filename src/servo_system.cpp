@@ -11,8 +11,8 @@ PIController controllers[] = {
         {-1 / 3.},
         {0., -1 / 2.},
         -0.015,
-        0.,
-        1100.,
+        0.,    // min output DAC number
+        1100., // max output DAC number
         &refs[0]),
     make_iir_cascade_controller(
         []() { return (double)read_ain1(); },

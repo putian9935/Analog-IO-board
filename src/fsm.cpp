@@ -4,6 +4,7 @@
 #include "serial_reader.hpp"
 #include "servo_system.hpp"
 #include "tinyfsm.hpp"
+#include "pin_assignment.h" 
 
 struct SerialEvent : tinyfsm::Event {};
 struct TurnOnSweep : tinyfsm::Event {};
@@ -35,6 +36,8 @@ void sweep_parser() {
     // update bound
     servoes[ch].sc.lower = SerialReader();
     servoes[ch].sc.upper = SerialReader();
+    servoes[ch].c -> lower = servoes[ch].sc.lower;
+    servoes[ch].c -> upper = servoes[ch].sc.upper;
     // update sweep_sys
     ServoMachine::sweep_sys = servoes + ch;
 }
@@ -50,6 +53,9 @@ void servo_parser() {
     // new waveform
     servoes[ch].c->reference->set_data_from_serial();
     Serial.printf("Read %d datapoints\n", servoes[ch].c->reference->tot);
+    // clear everything 
+    servoes[ch].c->reference -> clear_reference();
+    servoes[ch].c->reference -> clear_timer();
     ServoMachine::channel_on |= (1 << ch);
 }
 
@@ -92,6 +98,17 @@ struct Idle : ServoMachine {
                 transit<Servo>();
                 break;
             }
+            case 4: {
+              for(int ch = 0; ch < 4; ++ ch) {
+                hold_output[ch] = SerialReader(); 
+              }
+              Serial.printf("New hold setpoint: %u, %u, %u, %u.\n", 
+                hold_output[0], 
+                hold_output[1], 
+                hold_output[2], 
+                hold_output[3]
+              ); 
+            }
         }
     }
 };
@@ -121,7 +138,6 @@ void init_fsm() {
 void state_machine_loop() {
     if (Serial.available())
         fsm_handle::dispatch(ser);
-    if (digitalReadFast(37) == HIGH)
     fsm_handle::dispatch(servo);
     fsm_handle::dispatch(sweep);
 }

@@ -1,5 +1,9 @@
 #include "intensity_servo_helper.hpp"
 #include <Arduino.h>
+#include "pin_assignment.h"
+#include "write.hpp" 
+
+uint16_t hold_output[4] = {0}; 
 
 PowerReading get_best_power(PIServoSystem* const sys) {
     PowerReading ret;
@@ -27,23 +31,14 @@ PowerReading get_best_power(PIServoSystem* const sys) {
 }
 
 void servo_loop(uint8_t const mask) {
-    ReferencePath::clear_timer();
-    for (int ch = 0; ch < 4; ++ch)
-        if (mask & (1 << ch))
-            servoes[ch].c->reference->clear_reference();
-    // as long as one channel does not terminate, the servo goes on
-    // the servo will run for at least 2 cycles
-    for (bool end = false; !end;) {
-        end = true;
-        for (int ch = 0; ch < 4; ++ch)
-            if (mask & (1 << ch)) {
-                servoes[ch].c->update();
-                end &= servoes[ch].c->reference->is_terminated();
-            }
+    if (digitalReadFast(GLOBAL_ENABLE_PIN)){ 
+      for (int ch = 0; ch < 4; ++ch)
+          if (mask & (1 << ch)) 
+            write(ch + 4, hold_output[ch]); 
+        return;
     }
-    // clean up
-    for (int i = 0; i < 10; ++i)
-        for (int ch = 0; ch < 4; ++ch)
-            if (mask & (1 << ch))
-                servoes[ch].c->update();
+     
+    for (int ch = 0; ch < 4; ++ch)
+        if (mask & (1 << ch)) 
+            servoes[ch].c->update();
 }
