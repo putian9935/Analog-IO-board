@@ -1,7 +1,6 @@
 #include "intensity_servo_helper.hpp"
 #include <Arduino.h>
-#include "pin_assignment.h"
-#include "write.hpp" 
+#include "analog_io.h"
 
 uint16_t hold_output[4] = {0}; 
 

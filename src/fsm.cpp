@@ -6,6 +6,8 @@
 #include "tinyfsm.hpp"
 #include "pin_assignment.h" 
 
+extern uint16_t hold_output[]; 
+
 struct SerialEvent : tinyfsm::Event {};
 struct TurnOnSweep : tinyfsm::Event {};
 struct TurnOnServo : tinyfsm::Event {};

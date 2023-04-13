@@ -1,6 +1,5 @@
 #include "servo_system.hpp"
-#include "read.hpp"
-#include "write.hpp"
+#include "analog_io.h"
 
 ReferencePath refs[4] = {ReferencePath(), ReferencePath(), ReferencePath(), ReferencePath()};
 

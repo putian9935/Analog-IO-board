@@ -1,7 +1,7 @@
 /**
  * @file intensity_servo_helper.hpp
  * @brief Helper functions for intensity servo 
- * @date 2022-11-28
+ * @date 2023-04-14
  * 
  * 
  */
@@ -10,6 +10,7 @@
 
 #include <stdint.h>
 #include "servo_system.hpp"
+#include "trigger.h"
 
 struct PowerReading {
     uint16_t vmin, vmax, pmin, pmax;
