@@ -14,6 +14,7 @@
 #    define ADC_FOUR_CHANNEL
 #endif
 
+#define ADC_SEQ_ON
 
 /***
  * Clock frequency
@@ -22,9 +23,9 @@
 // #define OVERCLOCK_ON 
 
 #define MAX_DAC_FCLK 30000000
-#define MAX_DAC_FCLK_PRAC 40000000
+#define MAX_DAC_FCLK_PRAC 80000000
 #define MAX_ADC_FCLK 80000000
-#define MAX_ADC_FCLK_PRAC 60000000
+#define MAX_ADC_FCLK_PRAC 80000000
 
 #define DAC_FCLK MAX_DAC_FCLK 
 #define ADC_FCLK MAX_ADC_FCLK

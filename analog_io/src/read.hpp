@@ -8,7 +8,7 @@
 #define READ_HPP
 
 #include <stdint.h>
-#include "init_chips.hpp"
+#include "init_chips.hpp" 
 
 #ifndef READ_LIFE
 #    define READ_LIFE 1
@@ -63,6 +63,8 @@ uint16_t read_ain1();
  * For how cache works, refer to read.cpp
  */
 uint16_t read_bin1();
+#else 
+#warning ADC_FOUR_CHANNEL is not defined!
 #endif
 /**@}*/
 #endif

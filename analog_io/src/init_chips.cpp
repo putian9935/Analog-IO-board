@@ -60,7 +60,7 @@ static void init_DAC_pins()
 }
 
 void init_chips() {
-    // increase CPU clock speed to 800MHz
+    // increase CPU clock speed to 720MHz
     set_arm_clock_cpp(720000000);
 
     init_DAC_pins();
