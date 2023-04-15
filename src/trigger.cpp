@@ -1,13 +1,13 @@
 #include "trigger.h"
 #include "analog_io.h"
-#include "servo_system.hpp"
+#include "servo/servo_system.hpp"
 
 #define TRIG_A0 37
 
 static void trig_isr() {
     // set trigger flag for each channel 
     for (int i = 0; i < 4; ++i) 
-        servoes[i]->reference->clear_reference();
+        servoes[i]->reference->trigged = true;
 }
 
 void init_trigger() {

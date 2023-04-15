@@ -28,7 +28,7 @@ def sweep_r(ch, lower, upper):
 
 
 def servo(ch, fi, g, wfm):
-    ser.write(struct.pack("<BBdd", 2, ch, fi, g))
+    ser.write(struct.pack("<BBddd", 2, ch, fi, 0, g))
     ser.write(wfm)
     readback()
 

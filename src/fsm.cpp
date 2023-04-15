@@ -1,12 +1,11 @@
 #include <cstdlib>
 #include "analog_io.h"
-#include "intensity_servo_helper.hpp"
-#include "pi_controller.hpp"
+#include "servo/intensity_servo_helper.hpp"
+#include "servo/controllers/iir_controller.hpp"
 #include "serial_reader.hpp"
-#include "servo_system.hpp"
+#include "servo/servo_system.hpp"
 #include "tinyfsm.hpp"
 #include "trigger.h"
-#include "serial_command.hpp"
 
 struct SerialEvent : tinyfsm::Event {};
 struct TurnOnSweep : tinyfsm::Event {};
@@ -40,7 +39,6 @@ static void servo_loop() {
         return;
     }
     for (int ch = 0; ch < 4; ++ch) {
-        Serial.println(ch);
         if (servoes[ch]->on)
             servoes[ch]->update();
     }
