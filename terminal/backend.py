@@ -41,6 +41,10 @@ def hsp(*sp):
     readback()
     channel(3, True) 
 
+def show(ch):
+    ser.write(struct.pack("<BB", 5, ch)) 
+    readback()
+    
 def stop(args):
     ser.write(b'\x00')
 

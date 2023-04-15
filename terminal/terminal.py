@@ -1,6 +1,6 @@
 import argparse
 import numpy as np
-from backend import sweep, servo, stop, channel, sweep_r, hsp
+from backend import sweep, servo, stop, channel, sweep_r, hsp, show
 from csv_reader import get_wfm, tran_wfm
 # from json_load import load_settings
 
@@ -132,6 +132,11 @@ update_hsp_parser.add_argument('sp1', type=int, help='16-bit number of hold setp
 update_hsp_parser.add_argument('sp2', type=int, help='16-bit number of hold setpoint for ch2')
 update_hsp_parser.add_argument('sp3', type=int, help='16-bit number of hold setpoint for ch3')
 update_hsp_parser.set_defaults(func=hsp_action)
+
+show_parser = subparsers.add_parser("show", description="Show the contents of the controller", add_help=False, )
+show_parser.add_argument('ch', type=int, choices=[0,1,2,3], help='Channel number')
+show_parser.set_defaults(func=lambda args:show(args.ch))
+
 
 stop_parser = subparsers.add_parser("stop", description="Stop current command", add_help=False, )
 stop_parser.set_defaults(func=stop)

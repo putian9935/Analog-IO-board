@@ -1,14 +1,13 @@
 #include "trigger.h"
-#include <Arduino.h>
+#include "analog_io.h"
 #include "servo_system.hpp"
-#include "pin_assignment.h" 
 
 #define TRIG_A0 37
 
 static void trig_isr() {
     // set trigger flag for each channel 
     for (int i = 0; i < 4; ++i) 
-        servoes[i].c->reference->trigged = true;
+        servoes[i]->reference->clear_reference();
 }
 
 void init_trigger() {

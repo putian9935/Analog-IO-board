@@ -1,12 +1,12 @@
-#include <Arduino.h>
 #include <cstdlib>
+#include "analog_io.h"
 #include "intensity_servo_helper.hpp"
+#include "pi_controller.hpp"
 #include "serial_reader.hpp"
 #include "servo_system.hpp"
 #include "tinyfsm.hpp"
-#include "pin_assignment.h" 
-
-extern uint16_t hold_output[]; 
+#include "trigger.h"
+#include "serial_command.hpp"
 
 struct SerialEvent : tinyfsm::Event {};
 struct TurnOnSweep : tinyfsm::Event {};
@@ -24,97 +24,74 @@ struct Sweep;
 using fsm_handle = ServoMachine;
 
 struct ServoMachine : tinyfsm::Fsm<ServoMachine> {
-    static PIServoSystem* sweep_sys;
-    static uint8_t channel_on;
-    virtual void react(SerialEvent const&) {}
-    virtual void react(TurnOnServo const&) {}
-    virtual void react(TurnOnSweep const&) {}
+    static Controller *sweep_c;
+    virtual void react(SerialEvent const &) {}
+    virtual void react(TurnOnServo const &) {}
+    virtual void react(TurnOnSweep const &) {}
     virtual void entry(void) {} /* entry actions in some states */
     void exit(void) {}          /* no exit actions */
 };
 
-void sweep_parser() {
-    uint8_t ch = SerialReader();
-    // update bound
-    servoes[ch].sc.lower = SerialReader();
-    servoes[ch].sc.upper = SerialReader();
-    servoes[ch].c -> lower = servoes[ch].sc.lower;
-    servoes[ch].c -> upper = servoes[ch].sc.upper;
-    // update sweep_sys
-    ServoMachine::sweep_sys = servoes + ch;
+static void servo_loop() {
+    if (digitalReadFast(GLOBAL_ENABLE_PIN)) {
+        for (int ch = 0; ch < 4; ++ch)
+            if (servoes[ch]->on)
+                servoes[ch]->writer(servoes[ch]->hold_output);
+        return;
+    }
+    for (int ch = 0; ch < 4; ++ch) {
+        Serial.println(ch);
+        if (servoes[ch]->on)
+            servoes[ch]->update();
+    }
 }
 
-void servo_parser() {
-    // channel index
-    uint8_t ch = SerialReader();
-    // new corner
-    delete servoes[ch].c->controllers[0];
-    servoes[ch].c->controllers[0] = new IIRFirstOrderController(SerialReader(), 0);
-    // new overall gain
-    servoes[ch].c->overall_gain = SerialReader();
-    // new waveform
-    servoes[ch].c->reference->set_data_from_serial();
-    Serial.printf("Read %d datapoints\n", servoes[ch].c->reference->tot);
-    // clear everything 
-    servoes[ch].c->reference -> clear_reference();
-    servoes[ch].c->reference -> clear_timer();
-    ServoMachine::channel_on |= (1 << ch);
-}
-
-void channel_parser() {
-    uint8_t ch = SerialReader();
+static void channel_parser(uint8_t ch) {
     if (ch & (1 << 7))
-        ServoMachine::channel_on |= (1 << (ch & 3));
+        servoes[ch & 3]->on = true;
     else
-        ServoMachine::channel_on &= ~(1 << (ch & 3));
-    for(int i = 0; i < 4; ++i)
-        Serial.printf("CH%d: %s; ", i, (ServoMachine::channel_on & (1 << i))?"*":"o");
+        servoes[ch & 3]->on = false;
+    for (int i = 0; i < 4; ++i)
+        Serial.printf("CH%d: %s; ", i, (servoes[i]->on) ? "*" : "o");
     Serial.printf("\n");
 }
+
 struct Idle : ServoMachine {
     void entry() override {
     }
-    void react(SerialEvent const&) override {
-        uint8_t c = Serial.read();
+    void react(SerialEvent const &) override {
+        uint8_t c  = SerialReader();
+        uint8_t ch = SerialReader();
         switch (c) {
-            case 1: {
-                sweep_parser();
-                auto gp = get_best_power(ServoMachine::sweep_sys);
-                Serial.printf("Max power of %d at DAC number %d.\n", gp.pmax, gp.vmax);
-                Serial.printf("Min power of %d at DAC number %d.\n", gp.pmin, gp.vmin);
-                // delay for continuous update 
-                delay(200);
-                if(Serial.available())        
-                    fsm_handle::dispatch(ser);
-                else
-                    transit<Sweep>();
-                break;
-            }
-            case 2: {
-                servo_parser();
-                // delay for continuous update 
-                delay(200);
-                if(Serial.available())        
-                    fsm_handle::dispatch(ser);
-                else
-                    transit<Servo>();
-                break;
-            }
-            case 3: {
-                channel_parser();
+            case CHANNEL: {
+                channel_parser(ch);
                 transit<Servo>();
                 break;
             }
-            case 4: {
-              for(int ch = 0; ch < 4; ++ ch) {
-                hold_output[ch] = SerialReader(); 
-              }
-              Serial.printf("New hold setpoint: %u, %u, %u, %u.\n", 
-                hold_output[0], 
-                hold_output[1], 
-                hold_output[2], 
-                hold_output[3]
-              ); 
+            case HSP: {
+                for (int ch = 0; ch < 4; ++ch) {
+                    servoes[ch]->hold_output = SerialReader();
+                }
+                Serial.printf("New hold setpoint: %u, %u, %u, %u.\n",
+                              servoes[0]->hold_output,
+                              servoes[1]->hold_output,
+                              servoes[2]->hold_output,
+                              servoes[3]->hold_output);
+            }
+            default: {
+                servoes[ch]->read_from_serial(c);
+                // delay for continuous update
+                delay(200);
+                if (Serial.available())
+                    fsm_handle::dispatch(ser);
+                else {
+                    if (c == 1) {
+                        ServoMachine::sweep_c = servoes[ch];
+                        transit<Sweep>();
+                    } else if (c == 2)
+                        transit<Servo>();
+                }
+                break;
             }
         }
     }
@@ -122,18 +99,18 @@ struct Idle : ServoMachine {
 
 struct Servo : ServoMachine {
     void entry() override {
-        servo_loop(ServoMachine::channel_on);
+        servo_loop();
     }
-    void react(SerialEvent const&) override { transit<Idle>(); }
-    void react(TurnOnServo const&) override { transit<Servo>(); }
+    void react(SerialEvent const &) override { transit<Idle>(); }
+    void react(TurnOnServo const &) override { transit<Servo>(); }
 };
 
 struct Sweep : ServoMachine {
     void entry() override {
-        get_best_power(ServoMachine::sweep_sys);
+        get_best_power(ServoMachine::sweep_c);
     }
-    void react(SerialEvent const&) override { transit<Idle>(); }
-    void react(TurnOnSweep const&) override { transit<Sweep>(); }
+    void react(SerialEvent const &) override { transit<Idle>(); }
+    void react(TurnOnSweep const &) override { transit<Sweep>(); }
 };
 
 FSM_INITIAL_STATE(ServoMachine, Idle)
@@ -149,5 +126,4 @@ void state_machine_loop() {
     fsm_handle::dispatch(sweep);
 }
 
-PIServoSystem* ServoMachine::sweep_sys = servoes;
-uint8_t ServoMachine::channel_on       = 0;
+Controller *ServoMachine::sweep_c;
