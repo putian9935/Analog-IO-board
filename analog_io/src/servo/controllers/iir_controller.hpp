@@ -83,9 +83,10 @@ struct IIRCascadeController : public Controller {
 
 template <int a, int b>
 void sweep_parser(IIRCascadeController<a, b>* c) {
-    c->lower = (uint16_t)SerialReader();
-    c->upper = (uint16_t)SerialReader();
-    auto gp = get_best_power(c);
+    c->lower = (int16_t)SerialReader();
+    c->upper = (int16_t)SerialReader();
+    uint16_t step = SerialReader();
+    auto gp = get_best_power(c, step);
     Serial.printf("Max power of %d at DAC number %d.\n", gp.pmax, gp.vmax);
     Serial.printf("Min power of %d at DAC number %d.\n", gp.pmin, gp.vmin);
 }
@@ -124,6 +125,10 @@ void servo_parser(IIRCascadeController<a, b>* c) {
     }
     // new overall gain
     c->overall_gain = SerialReader();
+}
+
+template <int a, int b>
+void ref_parser(IIRCascadeController<a, b>* c) {
     // new waveform
     c->reference->set_data_from_serial();
     Serial.printf("Read %d datapoints\n", c->reference->tot);
@@ -144,6 +149,9 @@ IIRCascadeController<a, b>::read_from_serial(uint8_t const c) {
         }
         case SERVO: {
             servo_parser(this);
+        }
+        case REF: {
+            ref_parser(this);
             break;
         }
         case SHOW: {

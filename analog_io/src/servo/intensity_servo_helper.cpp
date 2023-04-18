@@ -2,13 +2,13 @@
 #include "analog_io.h"
 
 
-PowerReading get_best_power(Controller* const c) {
+PowerReading get_best_power(Controller* const c, uint16_t const step) {
     PowerReading ret;
     static ReferencePath ref_old;
     ref_old = *(c->reference);
 
     *(c->reference) = zero_reference;
-    for (uint16_t i = c->lower; i < c->upper; ++i) {
+    for (int16_t i = c->lower; i < c->upper; i += step) {
         c->writer(i);
         delay(1);
         auto x = c->reader();
@@ -19,6 +19,9 @@ PowerReading get_best_power(Controller* const c) {
         if (x < ret.pmin) {
             ret.pmin = x;
             ret.vmin = i;
+        }
+        if(Serial.available()) {
+            break;
         }
     }
     c->writer(c->lower);  // set DAC to lowest after sweep

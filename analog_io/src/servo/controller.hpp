@@ -20,7 +20,7 @@
 
 struct Controller;
 
-enum Command : uint8_t { SWEEP = 1, SERVO, CHANNEL, HSP, SHOW };
+enum Command : uint8_t { SWEEP = 1, SERVO, CHANNEL, HSP, SHOW, REF };
 
 typedef double (*read_func_t)();
 typedef void (*write_func_t)(double);

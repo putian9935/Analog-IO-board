@@ -12,9 +12,10 @@
 #include "controller.hpp"
 
 struct PowerReading {
-    uint16_t vmin, vmax, pmin, pmax;
+    int16_t vmin, vmax;
+    uint16_t pmin, pmax;
     PowerReading() : vmin(0), vmax(1500), pmin(65535), pmax(0) {}
 };
 
-PowerReading get_best_power(Controller* const c);
+PowerReading get_best_power(Controller* const c, uint16_t const=1);
 #endif
