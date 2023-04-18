@@ -18,17 +18,22 @@ def readback_val():
         mess_buffer += [ser.readline()]
     return mess_buffer
 
-def sweep(ch, lower, upper):
-    ser.write(struct.pack("<BBHH", 1, ch, lower, upper))
+def sweep(ch, lower, upper, step):
+    ser.write(struct.pack("<BBhhH", 1, ch, lower, upper, step))
     readback()
 
-def sweep_r(ch, lower, upper):
-    ser.write(struct.pack("<BBHH", 1, ch, lower, upper))
+def sweep_r(ch, lower, upper, step):
+    ser.write(struct.pack("<BBhhH", 1, ch, lower, upper, step))
     return readback_val()
 
 
 def servo(ch, fi, g, wfm):
     ser.write(struct.pack("<BBddd", 2, ch, fi, 0, g))
+    ser.write(wfm)
+    readback()
+
+def ref(ch, wfm):
+    ser.write(struct.pack("<BB", 6, ch))
     ser.write(wfm)
     readback()
 

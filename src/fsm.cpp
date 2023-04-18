@@ -1,8 +1,8 @@
 #include <cstdlib>
 #include "analog_io.h"
-#include "servo/intensity_servo_helper.hpp"
-#include "servo/controllers/iir_controller.hpp"
 #include "serial_reader.hpp"
+#include "servo/controllers/iir_controller.hpp"
+#include "servo/intensity_servo_helper.hpp"
 #include "servo/servo_system.hpp"
 #include "tinyfsm.hpp"
 #include "trigger.h"
@@ -49,6 +49,8 @@ static void channel_parser(uint8_t ch) {
         servoes[ch & 3]->on = true;
     else
         servoes[ch & 3]->on = false;
+    servoes[ch & 3]->reference->clear_reference();
+    servoes[ch & 3]->reference->clear_timer();
     for (int i = 0; i < 4; ++i)
         Serial.printf("CH%d: %s; ", i, (servoes[i]->on) ? "*" : "o");
     Serial.printf("\n");

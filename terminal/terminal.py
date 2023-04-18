@@ -1,6 +1,6 @@
 import argparse
 import numpy as np
-from backend import sweep, servo, stop, channel, sweep_r, hsp, show
+from backend import sweep, servo, stop, channel, sweep_r, hsp, show, ref
 from csv_reader import get_wfm, tran_wfm
 # from json_load import load_settings
 
@@ -8,7 +8,7 @@ def help_action(args):
     subparsers.choices[args.cmd].print_help()
 
 def sweep_action(args):
-    sweep(args.ch, args.lower, args.upper)
+    sweep(args.ch, args.lower, args.upper, args.step)
 
 def sweep_r_action(args):
     global max_pd, min_pd
@@ -17,7 +17,7 @@ def sweep_r_action(args):
     min_ar = np.zeros(avg_lens)
     for _ in range(avg_lens):
         print('Sweep', _)
-        a = sweep_r(args.ch, args.lower, args.upper)
+        a = sweep_r(args.ch, args.lower, args.upper, args.step)
         max_ar[_] = int(str(a[0]).split(' ')[3])
         min_ar[_] = int(str(a[1]).split(' ')[3])
 
@@ -49,6 +49,16 @@ def servo_p_action(args):
         f = -f
     servo(args.ch, f, args.G, tran_wfm(args.fname, max_pd[args.ch], min_pd[args.ch]))
 
+def ref_p_action(args):
+    global max_pd, min_pd
+    # non-exising file
+    try:
+        open(args.fname)
+    except FileNotFoundError as e:
+        print('%s: %s' %(e.__class__.__name__,  e))
+        return
+
+    ref(args.ch, tran_wfm(args.fname, max_pd[args.ch], min_pd[args.ch]))
 
 def servo_action(args):
     # non-exising file
@@ -68,6 +78,15 @@ def servo_action(args):
         f = -f
     servo(args.ch, f, args.G, get_wfm(args.fname))
 
+def ref_action(args):
+    # non-exising file
+    try:
+        open(args.fname)
+    except FileNotFoundError as e:
+        print('%s: %s' %(e.__class__.__name__,  e))
+        return
+
+    ref(args.ch, get_wfm(args.fname))
 
 def channel_action(args):
     if args.on:
@@ -97,12 +116,14 @@ sweep_parser = subparsers.add_parser("sweep", description="Start sweep", add_hel
 sweep_parser.add_argument('ch', type=int, choices=[0,1,2,3], help='Channel number')
 sweep_parser.add_argument('--lower', type=int, required=False, default=0, help='Lower limit of DAC number. Default is 0. ')
 sweep_parser.add_argument('--upper', type=int, required=False, default=1500, help='Upper limit of DAC number. Default is 1500')
+sweep_parser.add_argument('--step', type=int, required=False, default=1, help='Step size of sweep. Default is 1')
 sweep_parser.set_defaults(func=sweep_action)
 
 sweep_r_parser = subparsers.add_parser("sweep_r", description="Start sweep and return averaged low and high PD readings", add_help=False, )
 sweep_r_parser.add_argument('ch', type=int, choices=[0,1,2,3], help='Channel number')
 sweep_r_parser.add_argument('--lower', type=int, required=False, default=0, help='Lower limit of DAC number. Default is 0. ')
 sweep_r_parser.add_argument('--upper', type=int, required=False, default=1500, help='Upper limit of DAC number. Default is 1500')
+sweep_r_parser.add_argument('--step', type=int, required=False, default=1, help='Step size of sweep. Default is 1')
 sweep_r_parser.set_defaults(func=sweep_r_action)
 
 servo_parser = subparsers.add_parser("servo", description="Start PI servo", add_help=False, )
@@ -112,6 +133,11 @@ servo_parser.add_argument('G', metavar='G', type=float, help='Overall gain')
 servo_parser.add_argument('fname', metavar='fname', type=str, help='Reference waveform file')
 servo_parser.set_defaults(func=servo_action)
 
+ref_parser = subparsers.add_parser("ref", description="Update reference", add_help=False, )
+ref_parser.add_argument('ch', type=int, choices=[0,1,2,3], help='Channel number')
+ref_parser.add_argument('fname', metavar='fname', type=str, help='Reference waveform file')
+ref_parser.set_defaults(func=ref_action)
+
 servo_p_parser = subparsers.add_parser("servo_p", description="Start PI servo, when triggered, ramp according to csv file", add_help=False, )
 servo_p_parser.add_argument('ch', type=int, choices=[0,1,2,3], help='Channel number')
 servo_p_parser.add_argument('f_I', metavar='f_I', type=str, help='I corner in the unit of Nyquist frequency.')
@@ -119,7 +145,12 @@ servo_p_parser.add_argument('G', metavar='G', type=float, help='Overall gain')
 servo_p_parser.add_argument('fname', metavar='fname', type=str, help='Reference percentage waveform file')
 servo_p_parser.set_defaults(func=servo_p_action)
 
-channel_parser = subparsers.add_parser("channel", description="Control channel on/off", add_help=False, )
+refp_parser = subparsers.add_parser("ref_p", description="Update reference with percentage", add_help=False, )
+refp_parser.add_argument('ch', type=int, choices=[0,1,2,3], help='Channel number')
+refp_parser.add_argument('fname', metavar='fname', type=str, help='Reference waveform file')
+refp_parser.set_defaults(func=ref_p_action)
+
+channel_parser = subparsers.add_parser("channel", description="Control channel on/off; always clears step count", add_help=False, )
 channel_parser.add_argument('ch', type=int, choices=[0,1,2,3], help='Channel number')
 on_off = channel_parser.add_mutually_exclusive_group(required=True)
 on_off.add_argument('--on', action='store_true')
