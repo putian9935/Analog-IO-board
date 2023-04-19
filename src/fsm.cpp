@@ -85,10 +85,10 @@ struct Idle : ServoMachine {
                 if (Serial.available())
                     fsm_handle::dispatch(ser);
                 else {
-                    if (c == 1) {
+                    if (c == SWEEP) {
                         ServoMachine::sweep_c = servoes[ch];
                         transit<Sweep>();
-                    } else if (c == 2)
+                    } else if (c == SERVO || c == REF)
                         transit<Servo>();
                 }
                 break;
