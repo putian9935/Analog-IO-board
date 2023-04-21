@@ -1,4 +1,5 @@
 import argparse
+from ast import literal_eval 
 import numpy as np
 from backend import sweep, servo, stop, channel, sweep_r, hsp, show, ref
 from csv_reader import get_wfm, tran_wfm
@@ -12,6 +13,14 @@ def is_file_exists(fname):
         print('%s: %s' %(e.__class__.__name__,  e))
         return False 
     return True 
+
+def parse_fraction(frac_str):
+    try:
+        ret = float(literal_eval(frac_str))
+    except (SyntaxError, NameError, TypeError) as e:
+        print('%s: %s' %(e.__class__.__name__,  e))
+        return None
+    return ret
 
 def help_action(args):
     subparsers.choices[args.cmd].print_help()
@@ -39,22 +48,6 @@ def sweep_r_action(args):
     print("Min PD mean: {}, Min PD err: {}".format(min_pd,round(min_pd_err,1)))
 
 
-def servo_p_action(args):
-    global max_pd, min_pd
-
-    if not is_file_exists(args.fname):
-        return 
-
-    # wrong format f_I
-    try:
-        f = float(eval(args.f_I.strip('"')))
-    except (SyntaxError, NameError, TypeError) as e:
-        print('%s: %s' %(e.__class__.__name__,  e))
-        return
-    if f > 0:
-        f = -f
-    servo(args.ch, f, args.G, tran_wfm(args.fname, max_pd[args.ch], min_pd[args.ch]))
-
 def ref_p_action(args):
     global max_pd, min_pd
     # non-exising file
@@ -68,14 +61,26 @@ def servo_action(args):
         return 
 
     # wrong format f_I
-    try:
-        f = float(eval(args.f_I.strip('"')))
-    except (SyntaxError, NameError, TypeError) as e:
-        print('%s: %s' %(e.__class__.__name__,  e))
-        return
+    f = parse_fraction(args.f_I.strip('"'))
+    if f is None: 
+        return 
     if f > 0:
         f = -f
     servo(args.ch, f, args.G, get_wfm(args.fname))
+
+def servo_p_action(args):
+    global max_pd, min_pd
+
+    if not is_file_exists(args.fname):
+        return 
+
+    # wrong format f_I
+    f = parse_fraction(args.f_I.strip('"'))
+    if f is None: 
+        return 
+    if f > 0:
+        f = -f
+    servo(args.ch, f, args.G, tran_wfm(args.fname, max_pd[args.ch], min_pd[args.ch]))
 
 def ref_action(args):
     # non-exising file
@@ -86,9 +91,11 @@ def ref_action(args):
 
 def channel_action(args):
     if args.on:
-        channel(args.ch, True)
+        for ch in args.ch:
+            channel(ch, True)
     else:
-        channel(args.ch, False)
+        for ch in args.ch:
+            channel(args.ch, False)
 
 def hsp_action(args):
     for i, sp in enumerate([args.sp0, args.sp1, args.sp2, args.sp3]):
@@ -143,7 +150,7 @@ ref_parser.add_argument('-r', help='Raw if set', action='store_true')
 ref_parser.set_defaults(func=lambda args: ref_action(args) if args.r else ref_p_action(args))
 
 channel_parser = subparsers.add_parser("channel", description="Control channel on/off; always clears step count", add_help=False, )
-channel_parser.add_argument('ch', type=int, choices=[0,1,2,3], help='Channel number')
+channel_parser.add_argument('ch', type=int, choices=[0,1,2,3], help='Channel number', nargs='+')
 on_off = channel_parser.add_mutually_exclusive_group(required=True)
 on_off.add_argument('--on', action='store_true')
 on_off.add_argument('--off', action='store_true')
