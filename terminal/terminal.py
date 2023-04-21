@@ -60,7 +60,6 @@ def ref_p_action(args):
     # non-exising file
     if not is_file_exists(args.fname):
         return 
-
     ref(args.ch, tran_wfm(args.fname, max_pd[args.ch], min_pd[args.ch]))
 
 def servo_action(args):
@@ -98,12 +97,17 @@ def hsp_action(args):
             return 
     hsp(args.sp0, args.sp1, args.sp2, args.sp3)
 
-def run_action(args):    
+def run_action(args : argparse.Namespace):    
+    if not is_file_exists(os.path.join(args.exp, 'mot_repumper.csv')):
+        return 
+    if not is_file_exists(os.path.join(args.exp, 'bfield.csv')):
+        return 
+    
     for ch in [0,1,2,3]:
         if ch != 2:
-            ref(ch, get_wfm(os.path.join(args.exp, 'mot_repumper.csv')))
+            ref(ch, tran_wfm(os.path.join(args.exp, 'mot_repumper.csv'), max_pd[ch], min_pd[ch]))
         else:
-            ref(ch, get_wfm(os.path.join(args.exp, 'bfield.csv')))
+            ref(ch, tran_wfm(os.path.join(args.exp, 'bfield.csv'), max_pd[ch], min_pd[ch]))
 
 
 def exit_action(args):
@@ -120,8 +124,8 @@ sweep_parser.add_argument('ch', type=int, choices=[0,1,2,3], help='Channel numbe
 sweep_parser.add_argument('--lower', type=int, required=False, default=0, help='Lower limit of DAC number. Default is 0. ')
 sweep_parser.add_argument('--upper', type=int, required=False, default=1500, help='Upper limit of DAC number. Default is 1500')
 sweep_parser.add_argument('--step', type=int, required=False, default=1, help='Step size of sweep. Default is 1')
-sweep_parser.add_argument('-s', '--single', action='store_true', help='Step size of sweep. Default is 1')
-sweep_parser.set_defaults(func=lambda args: sweep_action(args) if args.r else sweep_r_action(args))
+sweep_parser.add_argument('-s', '--single', action='store_true', help='Single or average')
+sweep_parser.set_defaults(func=lambda args: sweep_action(args) if args.single else sweep_r_action(args))
 
 
 servo_parser = subparsers.add_parser("servo", description="Start PI servo", add_help=False, )
@@ -130,7 +134,7 @@ servo_parser.add_argument('f_I', metavar='f_I', type=str, help='I corner in the 
 servo_parser.add_argument('G', metavar='G', type=float, help='Overall gain')
 servo_parser.add_argument('fname', metavar='fname', type=str, help='Reference waveform file')
 servo_parser.add_argument('-r', help='Raw if set', action='store_true')
-servo_parser.set_defaults(func=lambda args: ref_action(args) if args.r else ref_p_action(args))
+servo_parser.set_defaults(func=lambda args: servo_action(args) if args.r else servo_p_action(args))
 
 ref_parser = subparsers.add_parser("ref", description="Update reference", add_help=False, )
 ref_parser.add_argument('ch', type=int, choices=[0,1,2,3], help='Channel number')
@@ -157,7 +161,7 @@ show_parser.add_argument('ch', type=int, choices=[0,1,2,3], help='Channel number
 show_parser.set_defaults(func=lambda args:show(args.ch))
 
 run_parser = subparsers.add_parser("run", description="Upload experiment sequence", add_help=False, )
-run_parser.add_argument('exp', type=int, choices=[0,1,2,3], help='Folder to experiment, must contain mot_repumper.csv and bfield.csv')
+run_parser.add_argument('exp', type=str, help='Folder to experiment, must contain mot_repumper.csv and bfield.csv')
 run_parser.set_defaults(func=run_action)
 
 stop_parser = subparsers.add_parser("stop", description="Stop current command", add_help=False, )
