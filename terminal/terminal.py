@@ -2,7 +2,16 @@ import argparse
 import numpy as np
 from backend import sweep, servo, stop, channel, sweep_r, hsp, show, ref
 from csv_reader import get_wfm, tran_wfm
+import os.path 
 # from json_load import load_settings
+
+def is_file_exists(fname):
+    try:
+        open(fname)
+    except FileNotFoundError as e:
+        print('%s: %s' %(e.__class__.__name__,  e))
+        return False 
+    return True 
 
 def help_action(args):
     subparsers.choices[args.cmd].print_help()
@@ -32,12 +41,9 @@ def sweep_r_action(args):
 
 def servo_p_action(args):
     global max_pd, min_pd
-    # non-exising file
-    try:
-        open(args.fname)
-    except FileNotFoundError as e:
-        print('%s: %s' %(e.__class__.__name__,  e))
-        return
+
+    if not is_file_exists(args.fname):
+        return 
 
     # wrong format f_I
     try:
@@ -52,21 +58,15 @@ def servo_p_action(args):
 def ref_p_action(args):
     global max_pd, min_pd
     # non-exising file
-    try:
-        open(args.fname)
-    except FileNotFoundError as e:
-        print('%s: %s' %(e.__class__.__name__,  e))
-        return
+    if not is_file_exists(args.fname):
+        return 
 
     ref(args.ch, tran_wfm(args.fname, max_pd[args.ch], min_pd[args.ch]))
 
 def servo_action(args):
     # non-exising file
-    try:
-        open(args.fname)
-    except FileNotFoundError as e:
-        print('%s: %s' %(e.__class__.__name__,  e))
-        return
+    if not is_file_exists(args.fname):
+        return 
 
     # wrong format f_I
     try:
@@ -80,11 +80,8 @@ def servo_action(args):
 
 def ref_action(args):
     # non-exising file
-    try:
-        open(args.fname)
-    except FileNotFoundError as e:
-        print('%s: %s' %(e.__class__.__name__,  e))
-        return
+    if not is_file_exists(args.fname):
+        return 
 
     ref(args.ch, get_wfm(args.fname))
 
@@ -101,6 +98,12 @@ def hsp_action(args):
             return 
     hsp(args.sp0, args.sp1, args.sp2, args.sp3)
 
+def run_action(args):    
+    for ch in [0,1,2,3]:
+        if ch != 2:
+            ref(ch, get_wfm(os.path.join(args.exp, 'mot_repumper.csv')))
+        else:
+            ref(ch, get_wfm(os.path.join(args.exp, 'bfield.csv')))
 
 
 def exit_action(args):
@@ -112,43 +115,28 @@ min_pd = np.zeros(4)
 parser = argparse.ArgumentParser('', description="Intesnity servo terminal", add_help=False, epilog="Use 'help <command>' to see how to use each command.", )
 subparsers = parser.add_subparsers()
 
-sweep_parser = subparsers.add_parser("sweep", description="Start sweep", add_help=False, )
+sweep_parser = subparsers.add_parser("sweep", description="Start sweep and return averaged low and high PD readings", add_help=False, )
 sweep_parser.add_argument('ch', type=int, choices=[0,1,2,3], help='Channel number')
 sweep_parser.add_argument('--lower', type=int, required=False, default=0, help='Lower limit of DAC number. Default is 0. ')
 sweep_parser.add_argument('--upper', type=int, required=False, default=1500, help='Upper limit of DAC number. Default is 1500')
 sweep_parser.add_argument('--step', type=int, required=False, default=1, help='Step size of sweep. Default is 1')
-sweep_parser.set_defaults(func=sweep_action)
+sweep_parser.add_argument('-s', '--single', action='store_true', help='Step size of sweep. Default is 1')
+sweep_parser.set_defaults(func=lambda args: sweep_action(args) if args.r else sweep_r_action(args))
 
-sweep_r_parser = subparsers.add_parser("sweep_r", description="Start sweep and return averaged low and high PD readings", add_help=False, )
-sweep_r_parser.add_argument('ch', type=int, choices=[0,1,2,3], help='Channel number')
-sweep_r_parser.add_argument('--lower', type=int, required=False, default=0, help='Lower limit of DAC number. Default is 0. ')
-sweep_r_parser.add_argument('--upper', type=int, required=False, default=1500, help='Upper limit of DAC number. Default is 1500')
-sweep_r_parser.add_argument('--step', type=int, required=False, default=1, help='Step size of sweep. Default is 1')
-sweep_r_parser.set_defaults(func=sweep_r_action)
 
 servo_parser = subparsers.add_parser("servo", description="Start PI servo", add_help=False, )
 servo_parser.add_argument('ch', type=int, choices=[0,1,2,3], help='Channel number')
 servo_parser.add_argument('f_I', metavar='f_I', type=str, help='I corner in the unit of Nyquist frequency.')
 servo_parser.add_argument('G', metavar='G', type=float, help='Overall gain')
 servo_parser.add_argument('fname', metavar='fname', type=str, help='Reference waveform file')
-servo_parser.set_defaults(func=servo_action)
+servo_parser.add_argument('-r', help='Raw if set', action='store_true')
+servo_parser.set_defaults(func=lambda args: ref_action(args) if args.r else ref_p_action(args))
 
 ref_parser = subparsers.add_parser("ref", description="Update reference", add_help=False, )
 ref_parser.add_argument('ch', type=int, choices=[0,1,2,3], help='Channel number')
 ref_parser.add_argument('fname', metavar='fname', type=str, help='Reference waveform file')
-ref_parser.set_defaults(func=ref_action)
-
-servo_p_parser = subparsers.add_parser("servo_p", description="Start PI servo, when triggered, ramp according to csv file", add_help=False, )
-servo_p_parser.add_argument('ch', type=int, choices=[0,1,2,3], help='Channel number')
-servo_p_parser.add_argument('f_I', metavar='f_I', type=str, help='I corner in the unit of Nyquist frequency.')
-servo_p_parser.add_argument('G', metavar='G', type=float, help='Overall gain')
-servo_p_parser.add_argument('fname', metavar='fname', type=str, help='Reference percentage waveform file')
-servo_p_parser.set_defaults(func=servo_p_action)
-
-refp_parser = subparsers.add_parser("ref_p", description="Update reference with percentage", add_help=False, )
-refp_parser.add_argument('ch', type=int, choices=[0,1,2,3], help='Channel number')
-refp_parser.add_argument('fname', metavar='fname', type=str, help='Reference waveform file')
-refp_parser.set_defaults(func=ref_p_action)
+ref_parser.add_argument('-r', help='Raw if set', action='store_true')
+ref_parser.set_defaults(func=lambda args: ref_action(args) if args.r else ref_p_action(args))
 
 channel_parser = subparsers.add_parser("channel", description="Control channel on/off; always clears step count", add_help=False, )
 channel_parser.add_argument('ch', type=int, choices=[0,1,2,3], help='Channel number')
@@ -168,6 +156,9 @@ show_parser = subparsers.add_parser("show", description="Show the contents of th
 show_parser.add_argument('ch', type=int, choices=[0,1,2,3], help='Channel number')
 show_parser.set_defaults(func=lambda args:show(args.ch))
 
+run_parser = subparsers.add_parser("run", description="Upload experiment sequence", add_help=False, )
+run_parser.add_argument('exp', type=int, choices=[0,1,2,3], help='Folder to experiment, must contain mot_repumper.csv and bfield.csv')
+run_parser.set_defaults(func=run_action)
 
 stop_parser = subparsers.add_parser("stop", description="Stop current command", add_help=False, )
 stop_parser.set_defaults(func=stop)
