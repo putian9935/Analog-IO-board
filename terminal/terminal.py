@@ -1,5 +1,4 @@
 import argparse
-from ast import literal_eval 
 import numpy as np
 from backend import sweep, servo, stop, channel, sweep_r, hsp, show, ref
 from csv_reader import get_wfm, tran_wfm
@@ -13,14 +12,6 @@ def is_file_exists(fname):
         print('%s: %s' %(e.__class__.__name__,  e))
         return False 
     return True 
-
-def parse_fraction(frac_str):
-    try:
-        ret = float(literal_eval(frac_str))
-    except (SyntaxError, NameError, TypeError) as e:
-        print('%s: %s' %(e.__class__.__name__,  e))
-        return None
-    return ret
 
 def help_action(args):
     subparsers.choices[args.cmd].print_help()
@@ -48,6 +39,22 @@ def sweep_r_action(args):
     print("Min PD mean: {}, Min PD err: {}".format(min_pd,round(min_pd_err,1)))
 
 
+def servo_p_action(args):
+    global max_pd, min_pd
+
+    if not is_file_exists(args.fname):
+        return 
+
+    # wrong format f_I
+    try:
+        f = float(eval(args.f_I.strip('"')))
+    except (SyntaxError, NameError, TypeError) as e:
+        print('%s: %s' %(e.__class__.__name__,  e))
+        return
+    if f > 0:
+        f = -f
+    servo(args.ch, f, args.G, tran_wfm(args.fname, max_pd[args.ch], min_pd[args.ch]))
+
 def ref_p_action(args):
     global max_pd, min_pd
     # non-exising file
@@ -61,26 +68,14 @@ def servo_action(args):
         return 
 
     # wrong format f_I
-    f = parse_fraction(args.f_I.strip('"'))
-    if f is None: 
-        return 
+    try:
+        f = float(eval(args.f_I.strip('"')))
+    except (SyntaxError, NameError, TypeError) as e:
+        print('%s: %s' %(e.__class__.__name__,  e))
+        return
     if f > 0:
         f = -f
     servo(args.ch, f, args.G, get_wfm(args.fname))
-
-def servo_p_action(args):
-    global max_pd, min_pd
-
-    if not is_file_exists(args.fname):
-        return 
-
-    # wrong format f_I
-    f = parse_fraction(args.f_I.strip('"'))
-    if f is None: 
-        return 
-    if f > 0:
-        f = -f
-    servo(args.ch, f, args.G, tran_wfm(args.fname, max_pd[args.ch], min_pd[args.ch]))
 
 def ref_action(args):
     # non-exising file
@@ -91,11 +86,9 @@ def ref_action(args):
 
 def channel_action(args):
     if args.on:
-        for ch in args.ch:
-            channel(ch, True)
+        channel(args.ch, True)
     else:
-        for ch in args.ch:
-            channel(args.ch, False)
+        channel(args.ch, False)
 
 def hsp_action(args):
     for i, sp in enumerate([args.sp0, args.sp1, args.sp2, args.sp3]):
@@ -124,6 +117,7 @@ max_pd = np.zeros(4)
 min_pd = np.zeros(4)
 
 parser = argparse.ArgumentParser('', description="Intesnity servo terminal", add_help=False, epilog="Use 'help <command>' to see how to use each command.", )
+parser.add_argument('-q', action='store_true', help='Suppress output')
 subparsers = parser.add_subparsers()
 
 sweep_parser = subparsers.add_parser("sweep", description="Start sweep and return averaged low and high PD readings", add_help=False, )
@@ -150,7 +144,7 @@ ref_parser.add_argument('-r', help='Raw if set', action='store_true')
 ref_parser.set_defaults(func=lambda args: ref_action(args) if args.r else ref_p_action(args))
 
 channel_parser = subparsers.add_parser("channel", description="Control channel on/off; always clears step count", add_help=False, )
-channel_parser.add_argument('ch', type=int, choices=[0,1,2,3], help='Channel number', nargs='+')
+channel_parser.add_argument('ch', type=int, choices=[0,1,2,3], help='Channel number')
 on_off = channel_parser.add_mutually_exclusive_group(required=True)
 on_off.add_argument('--on', action='store_true')
 on_off.add_argument('--off', action='store_true')
@@ -183,19 +177,29 @@ description='Display help for commands', add_help=False, )
 help_parser.add_argument('cmd', type=str, choices=subparsers.choices.keys(), help='command name')
 help_parser.set_defaults(func=help_action)
 
-parser.print_help()
+if __name__ == '__main__':
+    suppress = parser.parse_args().q
+    if not suppress:
+        parser.print_help()
 
-prompt = '>>> '
-while True:
-    commands = input(prompt).split()
-    if not len(commands):
-        continue
-    try:
-        a = parser.parse_args(commands)
-        a.func(a)
-    except argparse.ArgumentError as e:
-        print(e)
-    except SystemExit as e:
-        if not e.code:
+    prompt = '>>> ' if not suppress else ''
+    while True:
+        try:
+            commands = input(prompt).split()
+        except EOFError:
             exit(0)
-        pass
+        except KeyboardInterrupt:
+            print('Use "exit" command to exit this program!')
+            continue
+        
+        if not len(commands):
+            continue
+        try:
+            a = parser.parse_args(commands)
+            a.func(a)
+        except argparse.ArgumentError as e:
+            print(e)
+        except SystemExit as e:
+            if not e.code:
+                exit(0)
+            pass
