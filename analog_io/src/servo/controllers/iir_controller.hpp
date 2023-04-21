@@ -177,6 +177,8 @@ IIRCascadeController<len_zeroes, len_poles> make_iir_cascade_controller(
     return IIRCascadeController<len_zeroes, len_poles>(
         reader, writer, zeroes, poles, overall_gain, lower, upper, reference);
 }
+
+using ReferenceFollower = IIRCascadeController<0, 0>; 
 using PIController = IIRCascadeController<1, 2>;
 using PIDController = IIRCascadeController<2, 3>;
 
