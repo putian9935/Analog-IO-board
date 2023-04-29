@@ -76,7 +76,8 @@ struct Idle : ServoMachine {
                               servoes[0]->hold_output,
                               servoes[1]->hold_output,
                               servoes[2]->hold_output,
-                              servoes[3]->hold_output);
+                              servoes[3]->hold_output); 
+                break;
             }
             default: {
                 servoes[ch]->read_from_serial(c);
