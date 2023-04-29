@@ -39,7 +39,6 @@ PIController
                 1100.,
                 &refs[3]};
 
-typedef Controller* const pController;
 
 extern __attribute__((weak)) pController
     pc0 = &controller0,

@@ -48,4 +48,6 @@ struct Controller {
     virtual ~Controller(){};
 };
 
+typedef Controller * const pController; 
+
 #endif  // CONTROLLER_HPP
