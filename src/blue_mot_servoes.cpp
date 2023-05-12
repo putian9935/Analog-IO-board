@@ -5,7 +5,7 @@
 
 static ReferencePath refs[4] = {ReferencePath(), ReferencePath(), ReferencePath(), ReferencePath()};
 
-PIController
+static PIController
     servo707{[]() { return (double)read_ain0(); },
              [](double x) { write(4, x); },
              {-1 / 3.},
@@ -40,7 +40,7 @@ PIController
              &refs[3]};
 
 // overwrite the weak symbols 
-pController
+extern pController
     pc0 = &servo679,
     pc1 = &servo707,
     pc2 = &servoCoil,

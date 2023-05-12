@@ -27,10 +27,9 @@ class CachedPort:
 def setup_arduino_port(port, baud=115200, timeout=1):
     """ Returns an unopened port. """
     ser = serial.Serial(port, baudrate=baud, timeout=timeout)
-    ser.dtr = False 
-    # ser.port = port
     ser.close()
-    time.sleep(1)
+    # use this line for the suppression of Arduino auto-restart 
+    # ser.dtr = False 
     return ser
 
 def arduino_transaction(ser):
