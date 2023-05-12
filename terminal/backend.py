@@ -1,4 +1,4 @@
-from ports import setup_arduino_port
+from ports import setup_arduino_port, arduino_transaction
 import time
 import struct
 
@@ -18,40 +18,47 @@ def readback_val():
         mess_buffer += [ser.readline()]
     return mess_buffer
 
+@arduino_transaction(ser)
 def sweep(ch, lower, upper, step):
     ser.write(struct.pack("<BBhhH", 1, ch, lower, upper, step))
     readback()
 
+@arduino_transaction(ser)
 def sweep_r(ch, lower, upper, step):
     ser.write(struct.pack("<BBhhH", 1, ch, lower, upper, step))
     return readback_val()
 
-
+@arduino_transaction(ser)
 def servo(ch, fi, g, wfm):
     ser.write(struct.pack("<BBddd", 2, ch, fi, 0, g))
     ser.write(wfm)
     readback()
 
+@arduino_transaction(ser)
 def ref(ch, wfm):
     ser.write(struct.pack("<BB", 6, ch))
     ser.write(wfm)
     readback()
 
+@arduino_transaction(ser)
 def channel(ch, on):
     ser.write(struct.pack("<BB", 3, ch + (1 << 7) * on))
     readback()
 
+@arduino_transaction(ser)
 def hsp(*sp):
-    ser.write(struct.pack("<BHHHH", 4, *sp))
+    ser.write(struct.pack("<BBHHHH", 4, 0, *sp))
     readback()
     channel(3, True) 
 
+@arduino_transaction(ser)
 def show(ch):
     ser.write(struct.pack("<BB", 5, ch)) 
     readback()
-    
+
+@arduino_transaction(ser)
 def stop(args):
     ser.write(b'\x00')
 
 if __name__ == '__main__':
-    print(sweep(2, 1500))
+    print(sweep(2, 0, 1500, 1))

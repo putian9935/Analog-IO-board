@@ -25,6 +25,20 @@ class CachedPort:
 
 @CachedPort
 def setup_arduino_port(port, baud=115200, timeout=1):
-    ser = serial.Serial(port, baud, timeout=timeout)
+    """ Returns an unopened port. """
+    ser = serial.Serial(port, baudrate=baud, timeout=timeout)
+    ser.dtr = False 
+    # ser.port = port
+    ser.close()
     time.sleep(1)
     return ser
+
+def arduino_transaction(ser):
+    def ret(f):
+        def _inner(*args, **kwargs):
+            ser.open()
+            r = f(*args, **kwargs)
+            ser.close() 
+            return r
+        return _inner
+    return ret 

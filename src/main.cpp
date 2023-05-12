@@ -1,7 +1,6 @@
 #include "analog_io.h"
 #include "fsm.hpp"
 #include "trigger.h"
-#include "servo/servo_system.hpp"
 
 
 void setup() {
