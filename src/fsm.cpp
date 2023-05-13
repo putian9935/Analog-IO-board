@@ -69,10 +69,8 @@ struct Idle : ServoMachine {
                 break;
             }
             case HSP: {
-                for (int ch = 0; ch < 4; ++ch) {
-                    servoes[ch]->hold_output = SerialReader();
-                }
-                Serial.printf("New hold setpoint: %u, %u, %u, %u.\n",
+                servoes[ch]->hold_output = SerialReader();
+                Serial.printf("New hold setpoints: %u, %u, %u, %u.\n",
                               servoes[0]->hold_output,
                               servoes[1]->hold_output,
                               servoes[2]->hold_output,

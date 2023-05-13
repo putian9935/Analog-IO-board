@@ -46,10 +46,9 @@ def channel(ch, on):
     readback()
 
 @arduino_transaction(ser)
-def hsp(*sp):
-    ser.write(struct.pack("<BBHHHH", 4, 0, *sp))
+def hsp(ch, sp):
+    ser.write(struct.pack("<BBH", 4, ch, sp))
     readback()
-    channel(3, True) 
 
 @arduino_transaction(ser)
 def show(ch):

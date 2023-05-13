@@ -99,7 +99,10 @@ def hsp_action(args):
         if not 0 <= sp <= 1500:
             print("Setpoint for ch%d out of bound: 0 <= sp <= 1500" % i)
             return
-    hsp(args.sp0, args.sp1, args.sp2, args.sp3)
+    hsp(0, args.sp0)
+    hsp(1, args.sp1)
+    hsp(2, args.sp2)
+    hsp(3, args.sp3)
 
 
 def run_action(args: argparse.Namespace, max_pd, min_pd):
