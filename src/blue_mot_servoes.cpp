@@ -41,7 +41,7 @@ static PIController
 
 // overwrite the weak symbols 
 extern pController
-    pc0 = &servo679,
-    pc1 = &servo707,
+    pc0 = &servo707,
+    pc1 = &servo679,
     pc2 = &servoCoil,
     pc3 = &servoMOT;

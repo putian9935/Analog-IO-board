@@ -7,12 +7,10 @@ import os.path
 
 
 def is_file_exists(fname):
-    try:
-        open(fname)
-    except FileNotFoundError as e:
-        print('%s: %s' % (e.__class__.__name__,  e))
-        return False
-    return True
+    ret = os.path.exists(fname)
+    if not ret:
+        print('File not exist:', fname)
+    return ret 
 
 
 def help_action(args):
@@ -23,8 +21,7 @@ def sweep_action(args):
     sweep(args.ch, args.lower, args.upper, args.step)
 
 
-def sweep_r_action(args):
-    global max_pd, min_pd
+def sweep_r_action(args, max_pd, min_pd):
     avg_lens = 3
     max_ar = np.zeros(avg_lens)
     min_ar = np.zeros(avg_lens)
@@ -43,9 +40,7 @@ def sweep_r_action(args):
     print("Min PD mean: {}, Min PD err: {}".format(min_pd, round(min_pd_err, 1)))
 
 
-def servo_p_action(args):
-    global max_pd, min_pd
-
+def servo_p_action(args, max_pd, min_pd):
     if not is_file_exists(args.fname):
         return
 
@@ -61,8 +56,7 @@ def servo_p_action(args):
         args.fname, max_pd[args.ch], min_pd[args.ch]))
 
 
-def ref_p_action(args):
-    global max_pd, min_pd
+def ref_p_action(args, max_pd, min_pd):
     # non-exising file
     if not is_file_exists(args.fname):
         return
@@ -108,7 +102,7 @@ def hsp_action(args):
     hsp(args.sp0, args.sp1, args.sp2, args.sp3)
 
 
-def run_action(args: argparse.Namespace):
+def run_action(args: argparse.Namespace, max_pd, min_pd):
     if not is_file_exists(os.path.join(args.exp, 'mot_repumper.csv')):
         return
     if not is_file_exists(os.path.join(args.exp, 'bfield.csv')):
@@ -147,7 +141,7 @@ sweep_parser.add_argument('--step', type=int, required=False,
 sweep_parser.add_argument(
     '-s', '--single', action='store_true', help='Single or average')
 sweep_parser.set_defaults(func=lambda args: sweep_action(
-    args) if args.single else sweep_r_action(args))
+    args) if args.single else sweep_r_action(args, max_pd, min_pd))
 
 
 servo_parser = subparsers.add_parser(
@@ -161,7 +155,7 @@ servo_parser.add_argument('fname', metavar='fname',
                           type=str, help='Reference waveform file')
 servo_parser.add_argument('-r', help='Raw if set', action='store_true')
 servo_parser.set_defaults(func=lambda args: servo_action(
-    args) if args.r else servo_p_action(args))
+    args) if args.r else servo_p_action(args, max_pd, min_pd))
 
 ref_parser = subparsers.add_parser(
     "ref", description="Update reference", add_help=False, )
@@ -171,7 +165,7 @@ ref_parser.add_argument('fname', metavar='fname',
                         type=str, help='Reference waveform file')
 ref_parser.add_argument('-r', help='Raw if set', action='store_true')
 ref_parser.set_defaults(func=lambda args: ref_action(
-    args) if args.r else ref_p_action(args))
+    args) if args.r else ref_p_action(args, max_pd, min_pd))
 
 channel_parser = subparsers.add_parser(
     "channel", description="Control channel on/off; always clears step count", add_help=False, )
