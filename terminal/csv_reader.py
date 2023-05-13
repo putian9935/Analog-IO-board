@@ -4,18 +4,17 @@ def binarise(x, y):
 def fname2tv(fname):
     with open(fname) as fin:
         # line comment start with #
-        return zip(*(line.strip().split() for line in fin.readlines() if line.strip()[0] != '#'))
+        return zip(*(line.strip().split() for line in fin if len(line.strip()) and line.strip()[0] != '#'))
 
 def tv2wfm(time, val):
     """ Translate time and voltage to bitstream. """
-    idx = list(range(len(val)))
-    bs = b''.join(binarise(time[i], val[i]) for i in idx)
+    bs = b''.join(binarise(*_) for _ in zip(time, val))
     return len(bs).to_bytes(4, 'little') + bs
 
 def p2r(val, maxpd, minpd):
     """ Translate percentage to raw. """
     span = maxpd - minpd
-    return tuple(str(round(float(_)*span + minpd)) for _ in val)
+    return (int(float(_)*span + minpd) for _ in val)
 
 def tran_wfm(fname, maxpd, minpd):
     time, val = fname2tv(fname)
