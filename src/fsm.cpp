@@ -74,7 +74,8 @@ struct Idle : ServoMachine {
                               servoes[0]->hold_output,
                               servoes[1]->hold_output,
                               servoes[2]->hold_output,
-                              servoes[3]->hold_output); 
+                              servoes[3]->hold_output);
+                transit<Servo>(); 
                 break;
             }
             default: {
