@@ -62,6 +62,7 @@ struct Idle : ServoMachine {
     void react(SerialEvent const &) override {
         uint8_t c  = SerialReader();
         uint8_t ch = SerialReader();
+        Serial.printf("<command, ch> %d %d\n", c, ch);
         switch (c) {
             case CHANNEL: {
                 channel_parser(ch);
@@ -81,7 +82,7 @@ struct Idle : ServoMachine {
             default: {
                 servoes[ch]->read_from_serial(c);
                 // delay for continuous update
-                delay(200);
+                delay(4);
                 if (Serial.available())
                     fsm_handle::dispatch(ser);
                 else {
