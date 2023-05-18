@@ -34,8 +34,9 @@ struct ServoMachine : tinyfsm::Fsm<ServoMachine> {
 static void servo_loop() {
     if (digitalReadFast(GLOBAL_ENABLE_PIN)) {
         for (int ch = 0; ch < 4; ++ch)
-            if (servoes[ch]->on)
-                servoes[ch]->writer(servoes[ch]->hold_output);
+            if (servoes[ch]->on) {
+                servoes[ch]->writer(servoes[ch]->reference_hsp->get_reference());
+            }
         return;
     }
     for (int ch = 0; ch < 4; ++ch) {
