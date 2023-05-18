@@ -20,5 +20,5 @@ void init_trigger() {
     pinMode(TRIG_A0, INPUT_PULLUP);
     pinMode(GLOBAL_ENABLE_PIN, INPUT_PULLDOWN);
     attachInterrupt(TRIG_A0, trig_isr, RISING);
-    attachInterrupt(GLOBAL_ENABLE_PIN, trig_isr, RISING);
+    attachInterrupt(GLOBAL_ENABLE_PIN, trig_hsp_isr, RISING);
 }
