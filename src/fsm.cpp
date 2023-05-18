@@ -70,16 +70,6 @@ struct Idle : ServoMachine {
                 transit<Servo>();
                 break;
             }
-            case HSP: {
-                servoes[ch]->hold_output = SerialReader();
-                Serial.printf("New hold setpoints: %u, %u, %u, %u.\n",
-                              servoes[0]->hold_output,
-                              servoes[1]->hold_output,
-                              servoes[2]->hold_output,
-                              servoes[3]->hold_output);
-                transit<Servo>(); 
-                break;
-            }
             default: {
                 servoes[ch]->read_from_serial(c);
                 // delay for continuous update
@@ -90,7 +80,7 @@ struct Idle : ServoMachine {
                     if (c == SWEEP) {
                         ServoMachine::sweep_c = servoes[ch];
                         transit<Sweep>();
-                    } else if (c == SERVO || c == REF)
+                    } else if (c == SERVO || c == REF || c == HSP)
                         transit<Servo>();
                 }
                 break;

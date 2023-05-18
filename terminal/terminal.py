@@ -3,14 +3,13 @@ import numpy as np
 from backend import sweep, servo, stop, channel, sweep_r, hsp, show, ref
 from csv_reader import get_wfm, tran_wfm
 import os.path
-# from json_load import load_settings
 
 
 def is_file_exists(fname):
     ret = os.path.exists(fname)
     if not ret:
         print('File not exist:', fname)
-    return ret 
+    return ret
 
 
 def help_action(args):
@@ -39,11 +38,15 @@ def sweep_r_action(args, max_pd, min_pd):
     print("Max PD mean: {}, Max PD err: {}".format(max_pd, round(max_pd_err, 1)))
     print("Min PD mean: {}, Min PD err: {}".format(min_pd, round(min_pd_err, 1)))
 
+def check_file_in_arg(f):
+    def ret(args, *other, **kwds):
+        if not is_file_exists(args.fname):
+            return
+        return f(args, *other, **kwds)
+    return ret 
 
+@check_file_in_arg
 def servo_p_action(args, max_pd, min_pd):
-    if not is_file_exists(args.fname):
-        return
-
     # wrong format f_I
     try:
         f = float(eval(args.f_I.strip('"')))
@@ -55,19 +58,12 @@ def servo_p_action(args, max_pd, min_pd):
     servo(args.ch, f, args.G, tran_wfm(
         args.fname, max_pd[args.ch], min_pd[args.ch]))
 
-
+@check_file_in_arg
 def ref_p_action(args, max_pd, min_pd):
-    # non-exising file
-    if not is_file_exists(args.fname):
-        return
     ref(args.ch, tran_wfm(args.fname, max_pd[args.ch], min_pd[args.ch]))
 
-
+@check_file_in_arg
 def servo_action(args):
-    # non-exising file
-    if not is_file_exists(args.fname):
-        return
-
     # wrong format f_I
     try:
         f = float(eval(args.f_I.strip('"')))
@@ -78,12 +74,8 @@ def servo_action(args):
         f = -f
     servo(args.ch, f, args.G, get_wfm(args.fname))
 
-
+@check_file_in_arg
 def ref_action(args):
-    # non-exising file
-    if not is_file_exists(args.fname):
-        return
-
     ref(args.ch, get_wfm(args.fname))
 
 
@@ -93,16 +85,9 @@ def channel_action(args):
     else:
         channel(args.ch, False)
 
-
+@check_file_in_arg
 def hsp_action(args):
-    for i, sp in enumerate([args.sp0, args.sp1, args.sp2, args.sp3]):
-        if not 0 <= sp <= 1500:
-            print("Setpoint for ch%d out of bound: 0 <= sp <= 1500" % i)
-            return
-    hsp(0, args.sp0)
-    hsp(1, args.sp1)
-    hsp(2, args.sp2)
-    hsp(3, args.sp3)
+    hsp(args.ch, get_wfm(args.fname))
 
 
 def run_action(args: argparse.Namespace, max_pd, min_pd):
@@ -122,6 +107,7 @@ def run_action(args: argparse.Namespace, max_pd, min_pd):
 
 def exit_action(args):
     exit(0)
+
 
 max_pd = np.zeros(4)
 min_pd = np.zeros(4)
@@ -179,11 +165,12 @@ on_off.add_argument('--on', action='store_true')
 on_off.add_argument('--off', action='store_true')
 channel_parser.set_defaults(func=channel_action)
 
-update_hsp_parser = subparsers.add_parser("hsp", description="Update hold setpoint", add_help=False, ) 
-update_hsp_parser.add_argument('sp0', type=int, help='16-bit number of hold setpoint for ch0') 
-update_hsp_parser.add_argument('sp1', type=int, help='16-bit number of hold setpoint for ch1') 
-update_hsp_parser.add_argument('sp2', type=int, help='16-bit number of hold setpoint for ch2') 
-update_hsp_parser.add_argument('sp3', type=int, help='16-bit number of hold setpoint for ch3') 
+update_hsp_parser = subparsers.add_parser(
+    "hsp", description="Update hold setpoint", add_help=False, )
+update_hsp_parser.add_argument('ch', type=int, choices=[
+    0, 1, 2, 3], help='Channel number')
+update_hsp_parser.add_argument('fname', metavar='fname',
+                               type=str, help='Reference waveform file of RAW DAC number')
 update_hsp_parser.set_defaults(func=hsp_action)
 
 show_parser = subparsers.add_parser(
