@@ -2,7 +2,7 @@ from ports import setup_arduino_port, arduino_transaction
 import time
 import struct
 
-ser = setup_arduino_port('COM7')
+ser = setup_arduino_port('COM26')
 
 def readback():
     while not ser.in_waiting:

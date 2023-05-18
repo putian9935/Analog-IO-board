@@ -6,16 +6,16 @@ def binarise(*args):
     elif len(args) == 1:
         # hsp
         y, = args
-        return int(y).to_bytes(2, 'little', signed=False)
+        return int(1).to_bytes(4, 'little', signed=False)+int(y).to_bytes(2, 'little', signed=False)
 
 def fname2tv(fname):
     with open(fname) as fin:
         # line comment start with #
         return zip(*(line.strip().split() for line in fin if len(line.strip()) and line.strip()[0] != '#'))
 
-def tv2wfm(time, val):
+def tv2wfm(*args):
     """ Translate time and voltage to bitstream. """
-    bs = b''.join(binarise(*_) for _ in zip(time, val))
+    bs = b''.join(binarise(*_) for _ in zip(*args))
     return len(bs).to_bytes(4, 'little') + bs
 
 def p2r(val, maxpd, minpd):

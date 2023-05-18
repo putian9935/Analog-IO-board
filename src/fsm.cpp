@@ -63,7 +63,7 @@ struct Idle : ServoMachine {
     void react(SerialEvent const &) override {
         uint8_t c  = SerialReader();
         uint8_t ch = SerialReader();
-        Serial.printf("<command, ch> %d %d\n", c, ch);
+        // Serial.printf("<command, ch> %d %d\n", c, ch);
         switch (c) {
             case CHANNEL: {
                 channel_parser(ch);
