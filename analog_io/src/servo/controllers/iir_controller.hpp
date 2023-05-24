@@ -8,6 +8,10 @@
 struct IIRBaseController {
     double le, lo;  // last error and last output
     IIRBaseController() : le{}, lo{} {}
+    void clear() {
+        le = 0;
+        lo = 0;
+    }
     virtual double transfer(double const err) = 0;
     virtual void show() = 0;
     virtual ~IIRBaseController(){};
@@ -44,7 +48,8 @@ struct IIRSinglePoleController : public IIRBaseController {
 // IIR controller in cascade form
 template <int len_zeroes, int len_poles>
 struct IIRCascadeController : public Controller {
-    static_assert(len_zeroes < len_poles,
+    static_assert((len_zeroes == 0 && len_poles == 0) ||
+                      (len_zeroes < len_poles),
                   "There should be more poles than zeroes. ");
 
     double overall_gain;
@@ -55,8 +60,9 @@ struct IIRCascadeController : public Controller {
                          double const (&zeroes)[len_zeroes],
                          double const (&poles)[len_poles],
                          double const overall_gain, double const lower,
-                         double const upper, ReferencePath* reference)
-        : Controller(reader, writer, reference, lower, upper),
+                         double const upper, ReferencePath* reference,
+                         ReferencePath* reference_hsp)
+        : Controller(reader, writer, reference, reference_hsp, lower, upper),
           overall_gain(overall_gain),
           last_out(0.) {
         int i = 0;
@@ -70,6 +76,7 @@ struct IIRCascadeController : public Controller {
     void update() override {
         double new_out =
             reader() - reference->get_reference();  // start with an error
+
         for (auto p : controllers) new_out = p->transfer(new_out);
         new_out = max(min(overall_gain * new_out, upper), lower);
         if (abs(new_out - last_out) > 1.)  // lazy update
@@ -78,6 +85,15 @@ struct IIRCascadeController : public Controller {
             last_out = (int)new_out;
         }
     }
+
+    void clear() {
+        int i;
+        for (; i < len_zeroes; ++i)
+            controllers[i]->clear();
+        for (; i < len_poles; ++i)
+            controllers[i]->clear();
+    }
+
     void read_from_serial(uint8_t const) override;
 };
 
@@ -135,7 +151,20 @@ void ref_parser(IIRCascadeController<a, b>* c) {
     // clear everything
     c->reference->clear_reference();
     c->reference->clear_timer();
+    c->clear();
     // turn on the controller
+    c->on = true;
+}
+
+template <int a, int b>
+void hsp_parser(IIRCascadeController<a, b>* c) {
+    // new waveform
+    c->reference_hsp->set_data_from_serial();
+    Serial.printf("Read %d datapoints\n", c->reference_hsp->tot);
+    // clear everything
+    c->reference_hsp->clear_reference();
+    c->reference_hsp->clear_timer();
+    c->clear();
     c->on = true;
 }
 
@@ -152,6 +181,10 @@ IIRCascadeController<a, b>::read_from_serial(uint8_t const c) {
         }
         case REF: {
             ref_parser(this);
+            break;
+        }
+        case HSP: {
+            hsp_parser(this);
             break;
         }
         case SHOW: {
@@ -178,8 +211,8 @@ IIRCascadeController<len_zeroes, len_poles> make_iir_cascade_controller(
         reader, writer, zeroes, poles, overall_gain, lower, upper, reference);
 }
 
-using ReferenceFollower = IIRCascadeController<0, 0>; 
 using PIController = IIRCascadeController<1, 2>;
 using PIDController = IIRCascadeController<2, 3>;
+using ConstantController = IIRCascadeController<0, 0>;
 
 #endif
