@@ -88,17 +88,20 @@ Inheritance diagram for IIRCascadeController&lt; len_zeroes, len_poles &gt;:</di
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac7596bc1bbc8f294faf13e7fa005cacb"><td class="memItemLeft" align="right" valign="top"><a id="ac7596bc1bbc8f294faf13e7fa005cacb" name="ac7596bc1bbc8f294faf13e7fa005cacb"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>IIRCascadeController</b> (read_func_t reader, write_func_t writer, double const (&amp;zeroes)[len_zeroes], double const (&amp;poles)[len_poles], double const overall_gain, double const lower, double const upper, <a class="el" href="structReferencePath.html">ReferencePath</a> *reference)</td></tr>
-<tr class="separator:ac7596bc1bbc8f294faf13e7fa005cacb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a600903e3c86c8846c874c5aeaedb9fea"><td class="memItemLeft" align="right" valign="top"><a id="a600903e3c86c8846c874c5aeaedb9fea" name="a600903e3c86c8846c874c5aeaedb9fea"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>IIRCascadeController</b> (read_func_t reader, write_func_t writer, double const (&amp;zeroes)[len_zeroes], double const (&amp;poles)[len_poles], double const overall_gain, double const lower, double const upper, <a class="el" href="structReferencePath.html">ReferencePath</a> *reference, <a class="el" href="structReferencePath.html">ReferencePath</a> *reference_hsp)</td></tr>
+<tr class="separator:a600903e3c86c8846c874c5aeaedb9fea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab35369e4f2da0e2cb77653d0330a079d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structIIRCascadeController.html#ab35369e4f2da0e2cb77653d0330a079d">update</a> () override</td></tr>
 <tr class="separator:ab35369e4f2da0e2cb77653d0330a079d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3f247d2dfbf69980c0328d04cbb9b4e"><td class="memItemLeft" align="right" valign="top"><a id="af3f247d2dfbf69980c0328d04cbb9b4e" name="af3f247d2dfbf69980c0328d04cbb9b4e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
+<tr class="separator:af3f247d2dfbf69980c0328d04cbb9b4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1d49e9b020bf9c32fd8cc190a503bf1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structIIRCascadeController.html#aa1d49e9b020bf9c32fd8cc190a503bf1">read_from_serial</a> (uint8_t const) override</td></tr>
 <tr class="separator:aa1d49e9b020bf9c32fd8cc190a503bf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_structController"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_structController')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="structController.html">Controller</a></td></tr>
-<tr class="memitem:aaa92847b60a414010e2a183b04e11633 inherit pub_methods_structController"><td class="memItemLeft" align="right" valign="top"><a id="aaa92847b60a414010e2a183b04e11633" name="aaa92847b60a414010e2a183b04e11633"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Controller</b> (read_func_t reader, write_func_t writer, <a class="el" href="structReferencePath.html">ReferencePath</a> *ref, double const lower, double const upper)</td></tr>
-<tr class="separator:aaa92847b60a414010e2a183b04e11633 inherit pub_methods_structController"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a143a98081dfd1c7814ce713e1da40acf inherit pub_methods_structController"><td class="memItemLeft" align="right" valign="top"><a id="a143a98081dfd1c7814ce713e1da40acf" name="a143a98081dfd1c7814ce713e1da40acf"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Controller</b> (read_func_t reader, write_func_t writer, <a class="el" href="structReferencePath.html">ReferencePath</a> *ref, <a class="el" href="structReferencePath.html">ReferencePath</a> *ref_hsp, double const lower, double const upper)</td></tr>
+<tr class="separator:a143a98081dfd1c7814ce713e1da40acf inherit pub_methods_structController"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4aa89576f0889183fd4c7ac3c68062d inherit pub_methods_structController"><td class="memItemLeft" align="right" valign="top"><a id="aa4aa89576f0889183fd4c7ac3c68062d" name="aa4aa89576f0889183fd4c7ac3c68062d"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> ()=0</td></tr>
 <tr class="separator:aa4aa89576f0889183fd4c7ac3c68062d inherit pub_methods_structController"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -121,9 +124,6 @@ std::vector&lt; <a class="el" href="structIIRBaseController.html">IIRBaseControl
 <tr class="memitem:a9258cf2fa80fa7344dcafae509642bf7 inherit pub_attribs_structController"><td class="memItemLeft" align="right" valign="top"><a id="a9258cf2fa80fa7344dcafae509642bf7" name="a9258cf2fa80fa7344dcafae509642bf7"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>on</b></td></tr>
 <tr class="separator:a9258cf2fa80fa7344dcafae509642bf7 inherit pub_attribs_structController"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17ab8c0814c1b78645e1f14e28673e14 inherit pub_attribs_structController"><td class="memItemLeft" align="right" valign="top"><a id="a17ab8c0814c1b78645e1f14e28673e14" name="a17ab8c0814c1b78645e1f14e28673e14"></a>
-uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>hold_output</b></td></tr>
-<tr class="separator:a17ab8c0814c1b78645e1f14e28673e14 inherit pub_attribs_structController"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e4cc63948d6388cb999647c3e843044 inherit pub_attribs_structController"><td class="memItemLeft" align="right" valign="top"><a id="a8e4cc63948d6388cb999647c3e843044" name="a8e4cc63948d6388cb999647c3e843044"></a>
 read_func_t&#160;</td><td class="memItemRight" valign="bottom"><b>reader</b></td></tr>
 <tr class="separator:a8e4cc63948d6388cb999647c3e843044 inherit pub_attribs_structController"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -133,6 +133,9 @@ write_func_t&#160;</td><td class="memItemRight" valign="bottom"><b>writer</b></t
 <tr class="memitem:abc0ef109de18e6e987101911a14b0426 inherit pub_attribs_structController"><td class="memItemLeft" align="right" valign="top"><a id="abc0ef109de18e6e987101911a14b0426" name="abc0ef109de18e6e987101911a14b0426"></a>
 <a class="el" href="structReferencePath.html">ReferencePath</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>reference</b></td></tr>
 <tr class="separator:abc0ef109de18e6e987101911a14b0426 inherit pub_attribs_structController"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9d66ff704ab8b474a30ad8f4a958fea inherit pub_attribs_structController"><td class="memItemLeft" align="right" valign="top"><a id="ac9d66ff704ab8b474a30ad8f4a958fea" name="ac9d66ff704ab8b474a30ad8f4a958fea"></a>
+<a class="el" href="structReferencePath.html">ReferencePath</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>reference_hsp</b></td></tr>
+<tr class="separator:ac9d66ff704ab8b474a30ad8f4a958fea inherit pub_attribs_structController"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a7037856d30c190dcecf22bcac88d12 inherit pub_attribs_structController"><td class="memItemLeft" align="right" valign="top"><a id="a2a7037856d30c190dcecf22bcac88d12" name="a2a7037856d30c190dcecf22bcac88d12"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>lower</b></td></tr>
 <tr class="separator:a2a7037856d30c190dcecf22bcac88d12 inherit pub_attribs_structController"><td class="memSeparator" colspan="2">&#160;</td></tr>
