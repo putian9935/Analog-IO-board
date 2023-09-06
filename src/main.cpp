@@ -1,7 +1,7 @@
-#include "analog_io.h"
-#include "pin_assignment.h"
 #include "SPI.h"
+#include "analog_io.h"
 #include "init_adc.hpp"
+#include "pin_assignment.h"
 
 // #include "fsm.hpp"
 // #include "trigger.h"
@@ -13,14 +13,13 @@ static IMXRT_LPSPI_t* spi_regs = &IMXRT_LPSPI3_S;
 #include "utilities.hpp"
 
 void init_DAC() {
-    
     pinMode(DAC_LDAC, OUTPUT);
     digitalWrite(DAC_LDAC, LOW);
     pinMode(DAC_ENABLE, OUTPUT);
     digitalWrite(DAC_ENABLE, LOW);
 
     SPI1.begin();
-    SPI1.beginTransaction(SPISettings(120000000, MSBFIRST, SPI_MODE1));
+    SPI1.beginTransaction(SPISettings(MAX_DAC_FCLK_PRAC, MSBFIRST, SPI_MODE1));
     SPI1.setCS(CS1);
     SPI1.setMISO(MISO1);
 
@@ -40,12 +39,12 @@ void init_DAC() {
 
     spi_regs->TCR                       // transmit command, p 2886
         = (spi_regs->TCR & 0xfffff000)  //
-          | LPSPI_TCR_FRAMESZ(23);             // mask away received bits
+          | LPSPI_TCR_FRAMESZ(23);      // mask away received bits
 }
 void setup() {
     set_arm_clock_cpp(720000000);
     while (!Serial)
-    ;
+        ;
     Serial.begin(115200);
 
     init_ADC();
@@ -59,23 +58,44 @@ void setup() {
 }
 
 // void write(uint16_t value) {
-    
+
 // }
 
-void loop() {
+extern volatile uint32_t ain0, ain1;
 
+#include "bit_mangler.h"
+inline void test1() {
+    // delay test 
     while (1) {
-        auto x = read_ain0(); 
+        // Serial.printf("%u %u\n", decode_32_16(ain0>>1), decode_32_16(ain0));
+        // delay(500);
+        auto x = decode_32_16(ain0>>1);
         digitalWriteFast(40, x > 31500);
-    spi_regs->TDR = ((0x10u << 16) | x);
-    while((spi_regs->RSR & LPSPI_RSR_RXEMPTY));
-    spi_regs->RDR;
+        spi_regs->TDR = ((0x10u << 16) | x);
+        while ((spi_regs->RSR & LPSPI_RSR_RXEMPTY))
+            ;
+        spi_regs->RDR;
     }
+}
+
+inline void test2() {
+    // write speed 28.6Hz x 65535 = 1.9MHz
+    while (1) {
+        for(int x = 0; x < 65535; ++x) {
+            spi_regs->TDR = ((0x10u << 16) | x);
+            while ((spi_regs->RSR & LPSPI_RSR_RXEMPTY))
+                ;
+            spi_regs->RDR;
+        }
+    }
+}
+
+void loop() {
+    test2();
     // while ((spi_regs->FSR & 0xff) > 14)
     //     ;
     // spi_regs->TDR = (0x100100);
     // delay(1000);
     // Serial.printf("%u %u %u %u\n", read_ain0(), read_ain1(), read_bin0(), read_bin1());
     // Serial.printf("%u %u %u %u\n", read_ain0(), read_ain1(), read_bin0(), read_bin1());
-
 }
