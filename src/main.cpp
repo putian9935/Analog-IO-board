@@ -28,19 +28,12 @@ void init_DAC() {
     set_fastio_pin(MOSI1);
     set_fastio_pin(SCK1);
 
-    uint16_t div = 720000000 / MAX_DAC_FCLK_PRAC;
-
-    // // clock frequency divisor, single channel
-    // spi_regs->CCR                    // clock configuration, p 2882
-    //     = LPSPI_CCR_SCKDIV(div - 2)  // clock freq divisor
-    //       | LPSPI_CCR_DBT(1)         // delay between transfer
-    //       | LPSPI_CCR_PCSSCK(1)      // pcs to sck
-    //       | LPSPI_CCR_SCKPCS(0);     // sck to pcs
+    uint16_t div = 264000000 / MAX_DAC_FCLK_PRAC;
 
     // clock frequency divisor
     spi_regs->CCR                    // clock configuration, p 2882
-        = LPSPI_CCR_SCKDIV(div - 2)  // clock freq divisor
-          | LPSPI_CCR_DBT(1)         // delay between transfer
+        = LPSPI_CCR_SCKDIV(0)  // clock freq divisor
+          | LPSPI_CCR_DBT(0)         // delay between transfer
           | LPSPI_CCR_PCSSCK(1)      // pcs to sck
           | LPSPI_CCR_SCKPCS(0);     // sck to pcs
     spi_regs->TCR                       // transmit command, p 2886
@@ -82,7 +75,7 @@ inline void test1() {
     while (1) {
         // Serial.printf("%u %u\n", decode_32_16(ain0>>1), decode_32_16(ain0));
         // delay(500);
-        auto x = decode_32_16(ain0 >> 1);
+        auto x = read_ain0();
         digitalWriteFast(40, x > 31500);
         spi_regs->TDR = ((0x10u << 16) | x);
         while ((spi_regs->RSR & LPSPI_RSR_RXEMPTY))
@@ -103,24 +96,37 @@ inline void test2() {
     }
 }
 
-void test3() {
-    delay(1000);
-    Serial.printf("%u %u %u %u\n", decode_32_16(ain0 >> 1), decode_32_16(ain0), decode_32_16(ain1 >> 1), decode_32_16(ain1));
-}
+/**
+ * @brief Test correctness and crosstalk of ADC 
+ * 
+ * Setup: 
+ * 
+ * 1. connect 0.25Hz 10Vpp square wave to one of the ADC channel (AIN0, say); 
+ * 2. observe if the corresponding channel (AIN1) has different results; 
+ * 3. if the results differ between alternating states, increase DBT of SPI CCR register. 
+ */
+// void test3() {
+//     delay(1000);
+//     Serial.printf("%u %u %u %u\n", read_ain0(), read_bin0(),read_ain1(), read_bin1());
+// }
 
+/**
+ * @brief Bandwidth as a unit follower 
+ * 
+ */
 void test4() {
     while (1) {
-        auto x = decode_32_16(ain0 >> 1);
+        auto x = read_ain0();
         spi_regs->TDR = ((0x10u << 16) | x);
         while ((spi_regs->RSR & LPSPI_RSR_RXEMPTY))
             ;
         spi_regs->RDR;
-        decode_32_16(ain0);
+        read_bin0();
         spi_regs->TDR = ((0x12u << 16) | x);
         while ((spi_regs->RSR & LPSPI_RSR_RXEMPTY))
             ;
         spi_regs->RDR;
-        decode_32_16(ain0);
+        read_bin0();
         spi_regs->TDR = ((0x14u << 16) | x);
         while ((spi_regs->RSR & LPSPI_RSR_RXEMPTY))
             ;
@@ -128,51 +134,41 @@ void test4() {
     }
 }
 
-int16_t twosCompToDec(uint16_t two_compliment_val)
-{
-    // [0x0000; 0x7FFF] corresponds to [0; 32,767]
-    // [0x8000; 0xFFFF] corresponds to [-32,768; -1]
-    // int16_t has the range [-32,768; 32,767]
-
-    uint16_t sign_mask = 0x8000;
-
-    // if positive
-    if ( (two_compliment_val & sign_mask) == 0 ) {
-        return two_compliment_val;
-    //  if negative
-    } else {
-        // invert all bits, add one, and make negative
-        return two_compliment_val - 32768;
-    }
-}
 
 void test5(double gain) {
     // one/two channel 1.3; three channel 1.2 
 
     while (1) {
-        int16_t x = decode_32_16(ain0 >> 1);
+        int16_t x = read_ain0();
         int16_t err = (x - 32768) ; 
         spi_regs->TDR = ((0x10u << 16) | ((int16_t)(-(double)(err) * gain) + 32768));
         while ((spi_regs->RSR & LPSPI_RSR_RXEMPTY))
             ;
         spi_regs->RDR;
 
-
-        decode_32_16(ain0);
+        read_ain0(); 
         spi_regs->TDR = ((0x12u << 16) | x);
         while ((spi_regs->RSR & LPSPI_RSR_RXEMPTY))
             ;
         spi_regs->RDR;
-        decode_32_16(ain0);
+        read_ain0();
         spi_regs->TDR = ((0x14u << 16) | x);
         while ((spi_regs->RSR & LPSPI_RSR_RXEMPTY))
             ;
-        spi_regs->RDR;        
+        spi_regs->RDR;    
+        read_ain0();
+        spi_regs->TDR = ((0x14u << 16) | x);
+        while ((spi_regs->RSR & LPSPI_RSR_RXEMPTY))
+            ;
+        spi_regs->RDR;      
     }
 }
 
 void loop() {
-    test5(1.2);
+    // test1();
+    // test2();
+    // test3();
+    test5(1.3);
 
     // while ((spi_regs->FSR & 0xff) > 14)
     //     ;
