@@ -1,49 +1,42 @@
-#include <cstdlib>
+#include <DMAChannel.h>
 #include "analog_io.h"
+#include "fsm2.h"
 #include "serial_reader.hpp"
 #include "servo/controllers/iir_controller.hpp"
 #include "servo/intensity_servo_helper.hpp"
 #include "servo/servo_system.hpp"
-#include "tinyfsm.hpp"
-#include "trigger.h"
 
-struct SerialEvent : tinyfsm::Event {};
-struct TurnOnSweep : tinyfsm::Event {};
-struct TurnOnServo : tinyfsm::Event {};
-struct TurnReadLim : tinyfsm::Event {};
-
-SerialEvent ser;
-TurnOnServo servo;
-TurnOnSweep sweep;
-struct ServoMachine;
-
-struct Servo;
-struct Sweep;
-
-using fsm_handle = ServoMachine;
-
-struct ServoMachine : tinyfsm::Fsm<ServoMachine> {
-    static Controller *sweep_c;
-    virtual void react(SerialEvent const &) {}
-    virtual void react(TurnOnServo const &) {}
-    virtual void react(TurnOnSweep const &) {}
-    virtual void entry(void) {} /* entry actions in some states */
-    void exit(void) {}          /* no exit actions */
+enum class States {
+    Idle,
+    Servo,
+    Sweep
 };
 
+enum class Triggers { Heartbeat,
+                      SerialEvent,
+                      TurnOnSweep,
+                      TurnOnServo };
+
+using F = FSM::Fsm<States, States::Idle, Triggers>;
+F fsm;
+
+extern DMAChannel rx, tx;
+static Triggers next_trig = Triggers::Heartbeat;
+
 static void servo_loop() {
-    if (digitalReadFast(GLOBAL_ENABLE_PIN)) {
-        for (int ch = 0; ch < 4; ++ch)
-            if (servoes[ch]->on) {
-                servoes[ch]->writer(servoes[ch]->reference_hsp->get_reference());
-            }
-        return;
-    }
-    for (int ch = 0; ch < 4; ++ch) {
+    digitalWriteFast(40, HIGH);
+    auto gain  = 1.2;
+    double x   = read_ain0();
+    double err = (x - 32768.);
+    async_write(0, ((int16_t)(-(double)(err)*gain) + 32768));
+    digitalWriteFast(40, LOW);
+
+    for (int ch = 1; ch < 4; ++ch) {
         if (servoes[ch]->on)
             servoes[ch]->update();
     }
 }
+static Controller *sweep_c;
 
 static void channel_parser(uint8_t ch) {
     if (ch & (1 << 7))
@@ -57,65 +50,67 @@ static void channel_parser(uint8_t ch) {
     Serial.printf("\n");
 }
 
-struct Idle : ServoMachine {
-    void entry() override {
-    }
-    void react(SerialEvent const &) override {
-        uint8_t c  = SerialReader();
-        uint8_t ch = SerialReader();
-        // Serial.printf("<command, ch> %d %d\n", c, ch);
-        switch (c) {
-            case CHANNEL: {
-                channel_parser(ch);
-                transit<Servo>();
-                break;
+void sweep_loop() {
+    get_best_power(sweep_c);
+}
+
+void handle_serial() {
+    rx.enable();
+    tx.enable();
+    uint8_t c  = SerialReader();
+    uint8_t ch = SerialReader();
+
+    next_trig = Triggers::Heartbeat;
+    switch (c) {
+        case CHANNEL: {
+            channel_parser(ch);
+            next_trig = Triggers::TurnOnServo;
+            break;
+        }
+        default: {
+            servoes[ch]->read_from_serial(c);
+            // delay for continuous update
+            delay(4);
+            if (Serial.available())
+                next_trig = Triggers::SerialEvent;
+            else {
+                if (c == SWEEP) {
+                    sweep_c   = servoes[ch];
+                    next_trig = Triggers::TurnOnSweep;
+                } else if (c == SERVO || c == REF || c == HSP)
+                    next_trig = Triggers::TurnOnServo;
             }
-            default: {
-                servoes[ch]->read_from_serial(c);
-                // delay for continuous update
-                delay(4);
-                if (Serial.available())
-                    fsm_handle::dispatch(ser);
-                else {
-                    if (c == SWEEP) {
-                        ServoMachine::sweep_c = servoes[ch];
-                        transit<Sweep>();
-                    } else if (c == SERVO || c == REF || c == HSP)
-                        transit<Servo>();
-                }
-                break;
-            }
+            break;
         }
     }
-};
-
-struct Servo : ServoMachine {
-    void entry() override {
-        servo_loop();
+    if (!(next_trig == Triggers::TurnOnSweep || next_trig == Triggers::TurnOnServo)) {
+        rx.disable();
+        tx.disable();
     }
-    void react(SerialEvent const &) override { transit<Idle>(); }
-    void react(TurnOnServo const &) override { transit<Servo>(); }
-};
+}
 
-struct Sweep : ServoMachine {
-    void entry() override {
-        get_best_power(ServoMachine::sweep_c);
-    }
-    void react(SerialEvent const &) override { transit<Idle>(); }
-    void react(TurnOnSweep const &) override { transit<Sweep>(); }
-};
-
-FSM_INITIAL_STATE(ServoMachine, Idle)
+void reset_next_trig() {
+    next_trig = Triggers::Heartbeat;
+}
 
 void init_fsm() {
-    fsm_handle::start();
+    fsm.add_transitions({
+        {States::Idle, States::Idle, Triggers::Heartbeat, nullptr, reset_next_trig},
+        {States::Idle, States::Idle, Triggers::SerialEvent, nullptr, handle_serial},
+        {States::Idle, States::Servo, Triggers::TurnOnServo, nullptr, reset_next_trig},
+        {States::Idle, States::Sweep, Triggers::TurnOnSweep, nullptr, reset_next_trig},
+        {States::Servo, States::Servo, Triggers::Heartbeat, nullptr, servo_loop},
+        {States::Sweep, States::Sweep, Triggers::Heartbeat, nullptr, sweep_loop},
+        {States::Servo, States::Idle, Triggers::SerialEvent, nullptr, handle_serial},
+        {States::Sweep, States::Idle, Triggers::SerialEvent, nullptr, handle_serial},
+    });
 }
 
-void state_machine_loop() {
-    if (Serial.available())
-        fsm_handle::dispatch(ser);
-    fsm_handle::dispatch(servo);
-    fsm_handle::dispatch(sweep);
-}
+uint8_t do_not_check = 0;
 
-Controller *ServoMachine::sweep_c;
+void fsm_loop() {
+    if (!(do_not_check++) && Serial.available()) {
+        next_trig = Triggers::SerialEvent;
+    }
+    fsm.execute(next_trig);
+}

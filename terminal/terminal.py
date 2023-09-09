@@ -122,9 +122,9 @@ sweep_parser = subparsers.add_parser(
 sweep_parser.add_argument('ch', type=int, choices=[
                           0, 1, 2, 3], help='Channel number')
 sweep_parser.add_argument('--lower', type=int, required=False,
-                          default=0, help='Lower limit of DAC number. Default is 0. ')
+                          default=32768, help='Lower limit of DAC number. Default is 32768. ')
 sweep_parser.add_argument('--upper', type=int, required=False,
-                          default=1500, help='Upper limit of DAC number. Default is 1500')
+                          default=34300, help='Upper limit of DAC number. Default is 34300')
 sweep_parser.add_argument('--step', type=int, required=False,
                           default=1, help='Step size of sweep. Default is 1')
 sweep_parser.add_argument(
