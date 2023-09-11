@@ -18,6 +18,10 @@ def readback_val():
         mess_buffer += [ser.readline()]
     return mess_buffer
 
+def read_forever():
+    while True:
+        readback() 
+
 @arduino_transaction(ser)
 def sweep(ch, lower, upper, step):
     ser.write(struct.pack("<BBhhH", 1, ch, lower, upper, step))
@@ -26,11 +30,7 @@ def sweep(ch, lower, upper, step):
 @arduino_transaction(ser)
 def sweep_r(ch, lower, upper, step):
     ser.write(struct.pack("<BBHHH", 1, ch, lower, upper, step))
-    # while True:
-    #     while not ser.in_waiting:
-    #         time.sleep(1e-2)
-    #     while ser.in_waiting:
-    #         print(ser.readline())
+    # read_forever()
     return readback_val()
 
 @arduino_transaction(ser)
@@ -48,11 +48,6 @@ def ref(ch, wfm):
 @arduino_transaction(ser)
 def channel(ch, on):
     ser.write(struct.pack("<BB", 3, ch + (1 << 7) * on))
-    # while True:
-    #     while not ser.in_waiting:
-    #         time.sleep(1e-2)
-    #     while ser.in_waiting:
-    #         print(ser.readline())
     readback()
 
 @arduino_transaction(ser)

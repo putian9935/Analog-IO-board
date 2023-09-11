@@ -5,7 +5,7 @@
 #include "servo/controllers/iir_controller.hpp"
 #include "servo/intensity_servo_helper.hpp"
 #include "servo/servo_system.hpp"
-
+ 
 enum class States {
     Idle,
     Servo,
@@ -17,21 +17,20 @@ enum class Triggers { Heartbeat,
                       TurnOnSweep,
                       TurnOnServo };
 
-using F = FSM::Fsm<States, States::Idle, Triggers>;
+using F = FSM::Fsm<States, States::Idle, Triggers, 3, 4>;
 F fsm;
 
 extern DMAChannel rx, tx;
 static Triggers next_trig = Triggers::Heartbeat;
 
 static void servo_loop() {
-    digitalWriteFast(40, HIGH);
-    auto gain  = 1.2;
-    double x   = read_ain0();
-    double err = (x - 32768.);
-    async_write(0, ((int16_t)(-(double)(err)*gain) + 32768));
-    digitalWriteFast(40, LOW);
+    // digitalWriteFast(40, HIGH);
+    //         int32_t x   = read_ain0();
+    //     int32_t err = (x - 32768);
+    //     write(0, ((int16_t)(-(double)(err)*1.21) + 32768));
+    // digitalWriteFast(40, LOW);
 
-    for (int ch = 1; ch < 4; ++ch) {
+    for (int ch = 0; ch < 4; ++ch) {
         if (servoes[ch]->on)
             servoes[ch]->update();
     }
@@ -59,7 +58,6 @@ void handle_serial() {
     tx.enable();
     uint8_t c  = SerialReader();
     uint8_t ch = SerialReader();
-
     next_trig = Triggers::Heartbeat;
     switch (c) {
         case CHANNEL: {
@@ -95,20 +93,20 @@ void reset_next_trig() {
 
 void init_fsm() {
     fsm.add_transitions({
-        {States::Idle, States::Idle, Triggers::Heartbeat, nullptr, reset_next_trig},
-        {States::Idle, States::Idle, Triggers::SerialEvent, nullptr, handle_serial},
-        {States::Idle, States::Servo, Triggers::TurnOnServo, nullptr, reset_next_trig},
-        {States::Idle, States::Sweep, Triggers::TurnOnSweep, nullptr, reset_next_trig},
-        {States::Servo, States::Servo, Triggers::Heartbeat, nullptr, servo_loop},
-        {States::Sweep, States::Sweep, Triggers::Heartbeat, nullptr, sweep_loop},
-        {States::Servo, States::Idle, Triggers::SerialEvent, nullptr, handle_serial},
-        {States::Sweep, States::Idle, Triggers::SerialEvent, nullptr, handle_serial},
+        {States::Idle, States::Idle, Triggers::Heartbeat, reset_next_trig},
+        {States::Idle, States::Idle, Triggers::SerialEvent,  handle_serial},
+        {States::Idle, States::Servo, Triggers::TurnOnServo,  reset_next_trig},
+        {States::Idle, States::Sweep, Triggers::TurnOnSweep, reset_next_trig},
+        {States::Servo, States::Servo, Triggers::Heartbeat,  servo_loop},
+        {States::Sweep, States::Sweep, Triggers::Heartbeat, sweep_loop},
+        {States::Servo, States::Idle, Triggers::SerialEvent,  handle_serial},
+        {States::Sweep, States::Idle, Triggers::SerialEvent,  handle_serial},
     });
 }
 
-uint8_t do_not_check = 0;
+static uint8_t do_not_check = 0;
 
-void fsm_loop() {
+__attribute__((always_inline)) inline void fsm_loop() {
     if (!(do_not_check++) && Serial.available()) {
         next_trig = Triggers::SerialEvent;
     }

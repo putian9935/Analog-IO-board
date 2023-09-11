@@ -5,7 +5,7 @@
  * @brief Transition
  * 
  * before 131 ns
- * 
+ * after (static dispatch) 88 ns
  */
 
 
@@ -206,18 +206,16 @@ enum Fsm_Status {
 /**
  * An generic finite state machine (FSM) implementation.
  */
-template<class State, State Initial, class Trigger>
+template<class State, State Initial, class Trigger, int nStates, int nTriggers>
 class Fsm
 {
 
 public:
 	// Defines the function prototype for a guard function.
-	using guardFn = std::function<bool()>;
 	// Defines the function prototype for an action function.
-	using actionFn = std::function<void()>;
+	typedef void (*actionFn)(); 
 	// Defines the function prototype for a debug function.
 	// Parameters are: from_state, to_state, trigger
-	using debugFn = std::function<void(State, State, Trigger)>;
 
 	/**
 	 * Defines a transition between two states.
@@ -227,7 +225,6 @@ public:
 		State from_state;
 		State to_state;
 		Trigger trigger;
-		guardFn guard;
 		actionFn action;
 	};
 
@@ -236,16 +233,13 @@ private:
 	// For good performance on state machines with many transitions, transitions
 	// are stored for each `from_state`:
 	//   map<from_state, vector<Trans> >
-	using transition_elem_t = Trans;
-	using transitions_t = std::map<std::pair<State, Trigger>, transition_elem_t>;
-	transitions_t m_transitions;
+	Trans m_transitions[nStates][nTriggers]; 
 	// Current state.
 	State m_cs;
-	debugFn m_debug_fn;
 
 public:
 	// Constructor.
-	Fsm() : m_transitions(), m_cs(Initial), m_debug_fn(nullptr) {}
+	Fsm() : m_transitions(), m_cs(Initial) {}
 
 	/**
 	 * Sets the current state to the given state. Defaults to the Initial state.
@@ -269,7 +263,7 @@ public:
 		InputIt it = start;
 		for(; it != end; ++it) {
 			// Add element in the transition table
-			m_transitions[{it->from_state, it->trigger}]=*it;
+			m_transitions[static_cast<int>(it->from_state)][static_cast<int>(it->trigger)]=*it;
 		}
 	}
 
@@ -319,10 +313,7 @@ public:
 	 * runtime. In order to enable it, pass a valid function pointer. In order
 	 * to disable it, pass `nullptr` to this function.
 	 */
-	void add_debug_fn(debugFn fn)
-	{
-		m_debug_fn = fn;
-	}
+	
 
 	/**
 	 * Execute the given trigger according to the semantics defined for this
@@ -333,7 +324,8 @@ public:
 	Fsm_Status execute(Trigger trigger)
 	{
 		Fsm_Status err_code = Fsm_Success;
-		const auto & transition = m_transitions[{m_cs, trigger}]; 
+
+		const auto & transition =m_transitions[static_cast<int>(m_cs)][static_cast<int>(trigger)]; 
 		if(transition.action != 0) {
 			transition.action(); // execute action
 		}

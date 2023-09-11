@@ -6,11 +6,11 @@
 static ReferencePath refs[8] = {ReferencePath(), ReferencePath(), ReferencePath(), ReferencePath(), ReferencePath(), ReferencePath(), ReferencePath(), ReferencePath()};
 
 static PIController
-    servo326{[]() { return (double)read_ain0(); },
-             [](double x) { async_write(0, x); },
-             {-1 / 5.},
+    servo326{[]() { return (float)read_ain0(); },
+             [](uint16_t x) { write(0, x); },
+             {-1 / 7.},
              {0., -1 / 2.},
-             -0.03,
+             -0.04,
              32768.,     // min output DAC number
              34200.,  // max output DAC number
              &refs[0],
