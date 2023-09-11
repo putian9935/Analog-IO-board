@@ -12,7 +12,7 @@
 #include "controller.hpp"
 
 struct PowerReading {
-    int16_t vmin, vmax;
+    uint16_t vmin, vmax;
     uint16_t pmin, pmax;
     PowerReading() : vmin(0), vmax(1500), pmin(65535), pmax(0) {}
 };

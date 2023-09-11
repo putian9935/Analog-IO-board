@@ -3,7 +3,7 @@
  * @author Li Putian
  * @brief Master header for analog IO library
  * @version 0.1
- * @date 2023-03-27
+ * @date 2023-09-11
  *
  */
 
@@ -45,15 +45,6 @@ uint16_t analogio_read(uint8_t const ch);
 #define CH0 0
 #define CH1 1
 
-/**
- * @brief Read from a pair of channel ch
- *
- * @param ch ADC channel pair, must be either of CH0 (for AIN0, BIN0) or CH1 (for AIN1, BIN1)
- * @return std::pair<uint16_t, uint16_t>  the ADC number of the requested channels, with first element
- * being A and second element being B.
- *
- */
-std::pair<uint16_t, uint16_t> analogio_read_both(uint8_t const ch);
 // @}
 
 // @}
@@ -64,18 +55,11 @@ std::pair<uint16_t, uint16_t> analogio_read_both(uint8_t const ch);
  */
 
 /**
- * @brief Alias of \link write.hpp write_both\endlink.
+ * @brief Alias of \link write.hpp async_write\endlink.
  *
- * @copydoc write_both
+ * @copydoc async_write
  */
-extern decltype(write_both)& analogio_write_both;
-
-/**
- * @brief Alias of \link write.hpp write\endlink.
- *
- * @copydoc write
- */
-extern decltype(write)& analogio_write;
+extern decltype(async_write)& analogio_write;
 // @}
 
 /**

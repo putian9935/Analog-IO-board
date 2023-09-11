@@ -8,9 +8,11 @@ PowerReading get_best_power(Controller* const c, uint16_t const step) {
     ref_old = *(c->reference);
 
     *(c->reference) = zero_reference;
-    for (int16_t i = c->lower; i < c->upper; i += step) {
+    c->writer(c->lower);
+    delay(5);
+    for (auto i = c->lower; i < c->upper; i += step) {
         c->writer(i);
-        delay(1);
+        delayMicroseconds(500);
         auto x = c->reader();
         if (x > ret.pmax) {
             ret.pmax = x;

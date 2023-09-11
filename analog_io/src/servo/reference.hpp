@@ -32,7 +32,7 @@ struct ReferencePath {
 
     void clear_timer();
     void clear_reference();
-    double get_reference();
+    float get_reference();
     bool is_terminated() const;
     void set_data_from_serial();
 };

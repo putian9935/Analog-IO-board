@@ -1,7 +1,7 @@
 /**
  * @file pin_assignment.h
  * @brief Pin assignment.
- * @date 2022-11-28
+ * @date 2023-9-11
  *
  * Give names to pin numbers.
  */
@@ -34,25 +34,21 @@
  * @name DAC general communication pins 
  */
 /** @{ */
-#define LDAC1 A10
-#define DAC_CLR1 A11
-
-#define LDAC2 29
-#define DAC_CLR2 30
+#define DAC_LDAC 24
+#define DAC_ENABLE 25
 /** @} */
 
 /**
  * @name Digital IO pins
+ * @todo 
  */
 /** @{ */
-#define DIO1 37
-#define DIO2 35
-#define DIO3 34
-#define DIO4 33
+#define DIO1 41
+#define DIO2 40
+#define DIO3 39
+#define DIO4 38
 
-#define DIO5 41
-#define DIO6 40
-#define DIO7 39
-#define DIO8 38
+#define DIO5 37
+#define DIO6 36
 /** @} */
 #endif

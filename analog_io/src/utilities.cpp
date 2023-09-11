@@ -18,17 +18,3 @@ void adc_reset() {
 void set_fastio_pin(uint8_t const pin_num) {
     *(portControlRegister(pin_num)) = FAST_IO;
 }
-
-void calibrate_dac(uint8_t const ch, uint8_t const offset, uint8_t const fgain) {
-    uint64_t new_dac_num = insert_zeros(((((uint32_t)((ch & 3) | DAC_OFFSET_REG)) << 16) | offset));
-    if (ch < 4)
-        transfer_dac24(new_dac_num << 1);
-    else
-        transfer_dac24(new_dac_num);
-
-    new_dac_num = insert_zeros(((((uint32_t)((ch & 3) | DAC_FGAIN_REG)) << 16) | fgain));
-    if (ch < 4)
-        transfer_dac24(new_dac_num << 1);
-    else
-        transfer_dac24(new_dac_num);
-}

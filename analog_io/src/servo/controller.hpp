@@ -25,8 +25,8 @@ enum Command : uint8_t { SWEEP = 1,
                          SHOW,
                          REF };
 
-typedef double (*read_func_t)();
-typedef void (*write_func_t)(double);
+typedef float (*read_func_t)();
+typedef void (*write_func_t)(uint16_t);
 
 // controller base class
 struct Controller {
@@ -36,7 +36,7 @@ struct Controller {
     write_func_t writer;
     ReferencePath* reference;
     ReferencePath* reference_hsp;
-    double lower, upper;
+    float lower, upper;
 
     Controller(read_func_t reader, write_func_t writer, ReferencePath* ref, ReferencePath* ref_hsp,
                double const lower, double const upper)
