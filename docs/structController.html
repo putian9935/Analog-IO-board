@@ -91,8 +91,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a143a98081dfd1c7814ce713e1da40acf"><td class="memItemLeft" align="right" valign="top"><a id="a143a98081dfd1c7814ce713e1da40acf" name="a143a98081dfd1c7814ce713e1da40acf"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Controller</b> (read_func_t reader, write_func_t writer, <a class="el" href="structReferencePath.html">ReferencePath</a> *ref, <a class="el" href="structReferencePath.html">ReferencePath</a> *ref_hsp, double const lower, double const upper)</td></tr>
 <tr class="separator:a143a98081dfd1c7814ce713e1da40acf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4aa89576f0889183fd4c7ac3c68062d"><td class="memItemLeft" align="right" valign="top"><a id="aa4aa89576f0889183fd4c7ac3c68062d" name="aa4aa89576f0889183fd4c7ac3c68062d"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> ()=0</td></tr>
+<tr class="memitem:aa4aa89576f0889183fd4c7ac3c68062d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structController.html#aa4aa89576f0889183fd4c7ac3c68062d">update</a> ()=0</td></tr>
 <tr class="separator:aa4aa89576f0889183fd4c7ac3c68062d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1e4ff82546769feec4f09965b0c8c0c"><td class="memItemLeft" align="right" valign="top"><a id="ab1e4ff82546769feec4f09965b0c8c0c" name="ab1e4ff82546769feec4f09965b0c8c0c"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>read_from_serial</b> (uint8_t const)=0</td></tr>
@@ -115,13 +114,41 @@ write_func_t&#160;</td><td class="memItemRight" valign="bottom"><b>writer</b></t
 <tr class="memitem:ac9d66ff704ab8b474a30ad8f4a958fea"><td class="memItemLeft" align="right" valign="top"><a id="ac9d66ff704ab8b474a30ad8f4a958fea" name="ac9d66ff704ab8b474a30ad8f4a958fea"></a>
 <a class="el" href="structReferencePath.html">ReferencePath</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>reference_hsp</b></td></tr>
 <tr class="separator:ac9d66ff704ab8b474a30ad8f4a958fea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a7037856d30c190dcecf22bcac88d12"><td class="memItemLeft" align="right" valign="top"><a id="a2a7037856d30c190dcecf22bcac88d12" name="a2a7037856d30c190dcecf22bcac88d12"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>lower</b></td></tr>
-<tr class="separator:a2a7037856d30c190dcecf22bcac88d12"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8272ad0d8f1eab31c7ebaa5ce9ccd152"><td class="memItemLeft" align="right" valign="top"><a id="a8272ad0d8f1eab31c7ebaa5ce9ccd152" name="a8272ad0d8f1eab31c7ebaa5ce9ccd152"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>upper</b></td></tr>
-<tr class="separator:a8272ad0d8f1eab31c7ebaa5ce9ccd152"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0cffbc271f86424f36b4e9c183ccac2"><td class="memItemLeft" align="right" valign="top"><a id="ad0cffbc271f86424f36b4e9c183ccac2" name="ad0cffbc271f86424f36b4e9c183ccac2"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>lower</b></td></tr>
+<tr class="separator:ad0cffbc271f86424f36b4e9c183ccac2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c41e52faac28f4ac7cc085f5f9cc203"><td class="memItemLeft" align="right" valign="top"><a id="a6c41e52faac28f4ac7cc085f5f9cc203" name="a6c41e52faac28f4ac7cc085f5f9cc203"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>upper</b></td></tr>
+<tr class="separator:a6c41e52faac28f4ac7cc085f5f9cc203"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa4aa89576f0889183fd4c7ac3c68062d" name="aa4aa89576f0889183fd4c7ac3c68062d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4aa89576f0889183fd4c7ac3c68062d">&#9670;&#160;</a></span>update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Controller::update </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="structIIRCascadeController.html#ab35369e4f2da0e2cb77653d0330a079d">IIRCascadeController&lt; len_zeroes, len_poles &gt;</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>analog_io/src/servo/<a class="el" href="controller_8hpp_source.html">controller.hpp</a></li>
 </ul>

@@ -81,60 +81,28 @@ $(function() {
 
 <p>Interface for writing to DAC.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;<a class="el" href="init__chips_8hpp_source.html">init_chips.hpp</a>&quot;</code><br />
+<div class="textblock"><code>#include &lt;SPI.h&gt;</code><br />
 </div>
 <p><a href="write_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a84c1b000b013511f0021f0106bf7e14c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="write_8hpp.html#a84c1b000b013511f0021f0106bf7e14c">write</a> (uint8_t const ch, uint16_t const num)</td></tr>
-<tr class="memdesc:a84c1b000b013511f0021f0106bf7e14c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write num to channel ch.  <a href="write_8hpp.html#a84c1b000b013511f0021f0106bf7e14c">More...</a><br /></td></tr>
-<tr class="separator:a84c1b000b013511f0021f0106bf7e14c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11e88f9d1beea9abf3e391119e16299e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="write_8hpp.html#a11e88f9d1beea9abf3e391119e16299e">write_both</a> (uint8_t const ch1, uint16_t const num1, uint8_t const ch2, uint16_t const num2)</td></tr>
-<tr class="memdesc:a11e88f9d1beea9abf3e391119e16299e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update two channels simultaneously.  <a href="write_8hpp.html#a11e88f9d1beea9abf3e391119e16299e">More...</a><br /></td></tr>
-<tr class="separator:a11e88f9d1beea9abf3e391119e16299e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf02bd14dbaed6ab2bc63f978e2c0a48"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="write_8hpp.html#abf02bd14dbaed6ab2bc63f978e2c0a48">transfer_dac24</a> (uint64_t const data)</td></tr>
-<tr class="memdesc:abf02bd14dbaed6ab2bc63f978e2c0a48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Low-level fnction for DAC update.  <a href="write_8hpp.html#abf02bd14dbaed6ab2bc63f978e2c0a48">More...</a><br /></td></tr>
-<tr class="separator:abf02bd14dbaed6ab2bc63f978e2c0a48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9185a072b237023e7f1de4623789f8a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="write_8hpp.html#ac9185a072b237023e7f1de4623789f8a">async_write</a> (uint8_t const ch, uint16_t const num)</td></tr>
+<tr class="memdesc:ac9185a072b237023e7f1de4623789f8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write num to channel ch.  <a href="write_8hpp.html#ac9185a072b237023e7f1de4623789f8a">More...</a><br /></td></tr>
+<tr class="separator:ac9185a072b237023e7f1de4623789f8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Interface for writing to DAC. </p>
 <dl class="section date"><dt>Date</dt><dd>2023-03-25 </dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="abf02bd14dbaed6ab2bc63f978e2c0a48" name="abf02bd14dbaed6ab2bc63f978e2c0a48"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abf02bd14dbaed6ab2bc63f978e2c0a48">&#9670;&#160;</a></span>transfer_dac24()</h2>
+<a id="ac9185a072b237023e7f1de4623789f8a" name="ac9185a072b237023e7f1de4623789f8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9185a072b237023e7f1de4623789f8a">&#9670;&#160;</a></span>async_write()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void transfer_dac24 </td>
-          <td>(</td>
-          <td class="paramtype">uint64_t const&#160;</td>
-          <td class="paramname"><em>data</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Low-level fnction for DAC update. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">data</td><td>48-bit data to transmit: odd bits for DAC2; even bits for DAC1. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a84c1b000b013511f0021f0106bf7e14c" name="a84c1b000b013511f0021f0106bf7e14c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a84c1b000b013511f0021f0106bf7e14c">&#9670;&#160;</a></span>write()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void write </td>
+          <td class="memname">void async_write </td>
           <td>(</td>
           <td class="paramtype">uint8_t const&#160;</td>
           <td class="paramname"><em>ch</em>, </td>
@@ -155,49 +123,6 @@ Functions</h2></td></tr>
 
 <p>Write num to channel ch. </p>
 <dl class="section note"><dt>Note</dt><dd>ch has to be from {0, 1, 2, 3, 4, 5, 6, 7} </dd></dl>
-
-</div>
-</div>
-<a id="a11e88f9d1beea9abf3e391119e16299e" name="a11e88f9d1beea9abf3e391119e16299e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a11e88f9d1beea9abf3e391119e16299e">&#9670;&#160;</a></span>write_both()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void write_both </td>
-          <td>(</td>
-          <td class="paramtype">uint8_t const&#160;</td>
-          <td class="paramname"><em>ch1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint16_t const&#160;</td>
-          <td class="paramname"><em>num1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t const&#160;</td>
-          <td class="paramname"><em>ch2</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint16_t const&#160;</td>
-          <td class="paramname"><em>num2</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Update two channels simultaneously. </p>
-<dl class="section note"><dt>Note</dt><dd>ch1 has to be from {0, 1, 2, 3} and ch2 from {4, 5, 6, 7} </dd></dl>
 
 </div>
 </div>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['powerreading_0',['PowerReading',['../structPowerReading.html',1,'']]]
+  ['referencepath_0',['ReferencePath',['../structReferencePath.html',1,'']]]
 ];

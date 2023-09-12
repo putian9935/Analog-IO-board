@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['new_5f64_0',['new_64',['../unionnew__64.html',1,'']]]
+  ['powerreading_0',['PowerReading',['../structPowerReading.html',1,'']]]
 ];

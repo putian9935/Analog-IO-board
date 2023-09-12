@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['calibrate_5fdac_0',['calibrate_dac',['../utilities_8hpp.html#a14816f2e2f85e3f81a5e526743da0bd7',1,'utilities.cpp']]]
+  ['init_5fchips_0',['init_chips',['../init__chips_8hpp.html#af25ce3397d68d78d1ce9e5cbc263d804',1,'init_chips.cpp']]]
 ];

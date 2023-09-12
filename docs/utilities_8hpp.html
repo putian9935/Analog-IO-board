@@ -90,7 +90,7 @@ $(function() {
 Macros</h2></td></tr>
 <tr class="memitem:a2bce77d2465de0bb6f338f8aa729a808"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utilities_8hpp.html#a2bce77d2465de0bb6f338f8aa729a808">ADC_TRANSFER_NOP</a></td></tr>
 <tr class="separator:a2bce77d2465de0bb6f338f8aa729a808"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad330257613128aa8584201ccba35776a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utilities_8hpp.html#ad330257613128aa8584201ccba35776a">FAST_IO</a>&#160;&#160;&#160;IOMUXC_PAD_DSE(4) | IOMUXC_PAD_SPEED(3) | IOMUXC_PAD_SRE</td></tr>
+<tr class="memitem:ad330257613128aa8584201ccba35776a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utilities_8hpp.html#ad330257613128aa8584201ccba35776a">FAST_IO</a>&#160;&#160;&#160;IOMUXC_PAD_DSE(7) | IOMUXC_PAD_SPEED(3) | IOMUXC_PAD_SRE</td></tr>
 <tr class="separator:ad330257613128aa8584201ccba35776a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
@@ -105,13 +105,10 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>set_arm_clock_cpp
 void&#160;</td><td class="memItemRight" valign="bottom"><b>set_fastio_pin</b> (uint8_t const pin_num)</td></tr>
 <tr class="memdesc:a1f887ce7a99b8e3058437b34c569588a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change pin driver settings for high slew rate and better impedance matching this will generally help to provide a better signal integrity on the board. <br /></td></tr>
 <tr class="separator:a1f887ce7a99b8e3058437b34c569588a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a14816f2e2f85e3f81a5e526743da0bd7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utilities_8hpp.html#a14816f2e2f85e3f81a5e526743da0bd7">calibrate_dac</a> (uint8_t const ch, uint8_t const offset, uint8_t const fgain)</td></tr>
-<tr class="memdesc:a14816f2e2f85e3f81a5e526743da0bd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calibrate DAC channel ch with offset and fgain.  <a href="utilities_8hpp.html#a14816f2e2f85e3f81a5e526743da0bd7">More...</a><br /></td></tr>
-<tr class="separator:a14816f2e2f85e3f81a5e526743da0bd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Useful utilities. </p>
-<dl class="section date"><dt>Date</dt><dd>2022-11-28 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>2022-09-11 </dd></dl>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a2bce77d2465de0bb6f338f8aa729a808" name="a2bce77d2465de0bb6f338f8aa729a808"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2bce77d2465de0bb6f338f8aa729a808">&#9670;&#160;</a></span>ADC_TRANSFER_NOP</h2>
@@ -137,7 +134,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>set_fastio_pin</b> (u
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define FAST_IO&#160;&#160;&#160;IOMUXC_PAD_DSE(4) | IOMUXC_PAD_SPEED(3) | IOMUXC_PAD_SRE</td>
+          <td class="memname">#define FAST_IO&#160;&#160;&#160;IOMUXC_PAD_DSE(7) | IOMUXC_PAD_SPEED(3) | IOMUXC_PAD_SRE</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -164,43 +161,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>set_fastio_pin</b> (u
 
 <p>Reset ADC. </p>
 <dl class="section note"><dt>Note</dt><dd>this function must be called before end_fourway </dd></dl>
-
-</div>
-</div>
-<a id="a14816f2e2f85e3f81a5e526743da0bd7" name="a14816f2e2f85e3f81a5e526743da0bd7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a14816f2e2f85e3f81a5e526743da0bd7">&#9670;&#160;</a></span>calibrate_dac()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void calibrate_dac </td>
-          <td>(</td>
-          <td class="paramtype">uint8_t const&#160;</td>
-          <td class="paramname"><em>ch</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t const&#160;</td>
-          <td class="paramname"><em>offset</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t const&#160;</td>
-          <td class="paramname"><em>fgain</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Calibrate DAC channel ch with offset and fgain. </p>
-<p >see section "OFFSET AND GAIN ADJUSTMENT WORKED EXAMPLE" of the datasheet for how to calculate parameters </p><dl class="section note"><dt>Note</dt><dd>this function must be called <em>after</em> init_chips </dd></dl>
 
 </div>
 </div>

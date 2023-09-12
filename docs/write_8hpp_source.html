@@ -80,18 +80,12 @@ $(function() {
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#ifndef WRITE_HPP</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#define WRITE_HPP</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;<a class="code" href="init__chips_8hpp.html">init_chips.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;SPI.h&gt;</span></div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keywordtype">void</span> <a class="code hl_function" href="write_8hpp.html#a84c1b000b013511f0021f0106bf7e14c">write</a>(uint8_t <span class="keyword">const</span> ch, uint16_t <span class="keyword">const</span> num);</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keywordtype">void</span> <a class="code hl_function" href="write_8hpp.html#ac9185a072b237023e7f1de4623789f8a">async_write</a>(uint8_t <span class="keyword">const</span> ch, uint16_t <span class="keyword">const</span> num);</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="keywordtype">void</span> <a class="code hl_function" href="write_8hpp.html#a11e88f9d1beea9abf3e391119e16299e">write_both</a>(uint8_t <span class="keyword">const</span> ch1, uint16_t <span class="keyword">const</span> num1, uint8_t <span class="keyword">const</span> ch2, uint16_t <span class="keyword">const</span> num2);</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="keywordtype">void</span> <a class="code hl_function" href="write_8hpp.html#abf02bd14dbaed6ab2bc63f978e2c0a48">transfer_dac24</a>(uint64_t <span class="keyword">const</span> data);</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">#endif</span></div>
-<div class="ttc" id="ainit__chips_8hpp_html"><div class="ttname"><a href="init__chips_8hpp.html">init_chips.hpp</a></div><div class="ttdoc">Init board.</div></div>
-<div class="ttc" id="awrite_8hpp_html_a11e88f9d1beea9abf3e391119e16299e"><div class="ttname"><a href="write_8hpp.html#a11e88f9d1beea9abf3e391119e16299e">write_both</a></div><div class="ttdeci">void write_both(uint8_t const ch1, uint16_t const num1, uint8_t const ch2, uint16_t const num2)</div><div class="ttdoc">Update two channels simultaneously.</div><div class="ttdef"><b>Definition:</b> write.cpp:29</div></div>
-<div class="ttc" id="awrite_8hpp_html_a84c1b000b013511f0021f0106bf7e14c"><div class="ttname"><a href="write_8hpp.html#a84c1b000b013511f0021f0106bf7e14c">write</a></div><div class="ttdeci">void write(uint8_t const ch, uint16_t const num)</div><div class="ttdoc">Write num to channel ch.</div><div class="ttdef"><b>Definition:</b> write.cpp:15</div></div>
-<div class="ttc" id="awrite_8hpp_html_abf02bd14dbaed6ab2bc63f978e2c0a48"><div class="ttname"><a href="write_8hpp.html#abf02bd14dbaed6ab2bc63f978e2c0a48">transfer_dac24</a></div><div class="ttdeci">void transfer_dac24(uint64_t const data)</div><div class="ttdoc">Low-level fnction for DAC update.</div><div class="ttdef"><b>Definition:</b> write.cpp:7</div></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="awrite_8hpp_html_ac9185a072b237023e7f1de4623789f8a"><div class="ttname"><a href="write_8hpp.html#ac9185a072b237023e7f1de4623789f8a">async_write</a></div><div class="ttdeci">void async_write(uint8_t const ch, uint16_t const num)</div><div class="ttdoc">Write num to channel ch.</div><div class="ttdef"><b>Definition:</b> write.cpp:8</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

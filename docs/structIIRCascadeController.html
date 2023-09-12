@@ -102,8 +102,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr
 <tr class="memitem:a143a98081dfd1c7814ce713e1da40acf inherit pub_methods_structController"><td class="memItemLeft" align="right" valign="top"><a id="a143a98081dfd1c7814ce713e1da40acf" name="a143a98081dfd1c7814ce713e1da40acf"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Controller</b> (read_func_t reader, write_func_t writer, <a class="el" href="structReferencePath.html">ReferencePath</a> *ref, <a class="el" href="structReferencePath.html">ReferencePath</a> *ref_hsp, double const lower, double const upper)</td></tr>
 <tr class="separator:a143a98081dfd1c7814ce713e1da40acf inherit pub_methods_structController"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4aa89576f0889183fd4c7ac3c68062d inherit pub_methods_structController"><td class="memItemLeft" align="right" valign="top"><a id="aa4aa89576f0889183fd4c7ac3c68062d" name="aa4aa89576f0889183fd4c7ac3c68062d"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> ()=0</td></tr>
+<tr class="memitem:aa4aa89576f0889183fd4c7ac3c68062d inherit pub_methods_structController"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structController.html#aa4aa89576f0889183fd4c7ac3c68062d">update</a> ()=0</td></tr>
 <tr class="separator:aa4aa89576f0889183fd4c7ac3c68062d inherit pub_methods_structController"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1e4ff82546769feec4f09965b0c8c0c inherit pub_methods_structController"><td class="memItemLeft" align="right" valign="top"><a id="ab1e4ff82546769feec4f09965b0c8c0c" name="ab1e4ff82546769feec4f09965b0c8c0c"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>read_from_serial</b> (uint8_t const)=0</td></tr>
@@ -111,15 +110,21 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>read_from_ser
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:aa775071ff7ef419fbab769caa34e6a99"><td class="memItemLeft" align="right" valign="top"><a id="aa775071ff7ef419fbab769caa34e6a99" name="aa775071ff7ef419fbab769caa34e6a99"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>overall_gain</b></td></tr>
-<tr class="separator:aa775071ff7ef419fbab769caa34e6a99"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2efac39f1f2c69728fd798a268ace8b0"><td class="memItemLeft" align="right" valign="top"><a id="a2efac39f1f2c69728fd798a268ace8b0" name="a2efac39f1f2c69728fd798a268ace8b0"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>last_out</b></td></tr>
-<tr class="separator:a2efac39f1f2c69728fd798a268ace8b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2c94a8e3d244c227f02bf888af6fd1c"><td class="memItemLeft" align="right" valign="top"><a id="ab2c94a8e3d244c227f02bf888af6fd1c" name="ab2c94a8e3d244c227f02bf888af6fd1c"></a>
-std::vector&lt; <a class="el" href="structIIRBaseController.html">IIRBaseController</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>controllers</b></td></tr>
-<tr class="separator:ab2c94a8e3d244c227f02bf888af6fd1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf0df1cb19840a406325423062285d3e"><td class="memItemLeft" align="right" valign="top"><a id="aaf0df1cb19840a406325423062285d3e" name="aaf0df1cb19840a406325423062285d3e"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>overall_gain</b></td></tr>
+<tr class="separator:aaf0df1cb19840a406325423062285d3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a884df979282149a21836f3deb9307f40"><td class="memItemLeft" align="right" valign="top"><a id="a884df979282149a21836f3deb9307f40" name="a884df979282149a21836f3deb9307f40"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>last_out</b></td></tr>
+<tr class="separator:a884df979282149a21836f3deb9307f40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2da7a05a3f2e0c6f1edad351a74f8361"><td class="memItemLeft" align="right" valign="top"><a id="a2da7a05a3f2e0c6f1edad351a74f8361" name="a2da7a05a3f2e0c6f1edad351a74f8361"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>real_g</b></td></tr>
+<tr class="separator:a2da7a05a3f2e0c6f1edad351a74f8361"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaaa67c59e55e982efbd40169e4770cca"><td class="memItemLeft" align="right" valign="top"><a id="aaaa67c59e55e982efbd40169e4770cca" name="aaaa67c59e55e982efbd40169e4770cca"></a>
+<a class="el" href="structIIRFirstOrderController.html">IIRFirstOrderController</a>&#160;</td><td class="memItemRight" valign="bottom"><b>focontrollers</b> [len_zeroes]</td></tr>
+<tr class="separator:aaaa67c59e55e982efbd40169e4770cca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaeaca98724084caa3ac983734fc358e9"><td class="memItemLeft" align="right" valign="top"><a id="aaeaca98724084caa3ac983734fc358e9" name="aaeaca98724084caa3ac983734fc358e9"></a>
+<a class="el" href="structIIRSinglePoleController.html">IIRSinglePoleController</a>&#160;</td><td class="memItemRight" valign="bottom"><b>spcontrollers</b> [len_poles - len_zeroes]</td></tr>
+<tr class="separator:aaeaca98724084caa3ac983734fc358e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_attribs_structController"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_structController')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="structController.html">Controller</a></td></tr>
 <tr class="memitem:a9258cf2fa80fa7344dcafae509642bf7 inherit pub_attribs_structController"><td class="memItemLeft" align="right" valign="top"><a id="a9258cf2fa80fa7344dcafae509642bf7" name="a9258cf2fa80fa7344dcafae509642bf7"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>on</b></td></tr>
@@ -136,12 +141,12 @@ write_func_t&#160;</td><td class="memItemRight" valign="bottom"><b>writer</b></t
 <tr class="memitem:ac9d66ff704ab8b474a30ad8f4a958fea inherit pub_attribs_structController"><td class="memItemLeft" align="right" valign="top"><a id="ac9d66ff704ab8b474a30ad8f4a958fea" name="ac9d66ff704ab8b474a30ad8f4a958fea"></a>
 <a class="el" href="structReferencePath.html">ReferencePath</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>reference_hsp</b></td></tr>
 <tr class="separator:ac9d66ff704ab8b474a30ad8f4a958fea inherit pub_attribs_structController"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a7037856d30c190dcecf22bcac88d12 inherit pub_attribs_structController"><td class="memItemLeft" align="right" valign="top"><a id="a2a7037856d30c190dcecf22bcac88d12" name="a2a7037856d30c190dcecf22bcac88d12"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>lower</b></td></tr>
-<tr class="separator:a2a7037856d30c190dcecf22bcac88d12 inherit pub_attribs_structController"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8272ad0d8f1eab31c7ebaa5ce9ccd152 inherit pub_attribs_structController"><td class="memItemLeft" align="right" valign="top"><a id="a8272ad0d8f1eab31c7ebaa5ce9ccd152" name="a8272ad0d8f1eab31c7ebaa5ce9ccd152"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>upper</b></td></tr>
-<tr class="separator:a8272ad0d8f1eab31c7ebaa5ce9ccd152 inherit pub_attribs_structController"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0cffbc271f86424f36b4e9c183ccac2 inherit pub_attribs_structController"><td class="memItemLeft" align="right" valign="top"><a id="ad0cffbc271f86424f36b4e9c183ccac2" name="ad0cffbc271f86424f36b4e9c183ccac2"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>lower</b></td></tr>
+<tr class="separator:ad0cffbc271f86424f36b4e9c183ccac2 inherit pub_attribs_structController"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c41e52faac28f4ac7cc085f5f9cc203 inherit pub_attribs_structController"><td class="memItemLeft" align="right" valign="top"><a id="a6c41e52faac28f4ac7cc085f5f9cc203" name="a6c41e52faac28f4ac7cc085f5f9cc203"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>upper</b></td></tr>
+<tr class="separator:a6c41e52faac28f4ac7cc085f5f9cc203 inherit pub_attribs_structController"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="aa1d49e9b020bf9c32fd8cc190a503bf1" name="aa1d49e9b020bf9c32fd8cc190a503bf1"></a>
@@ -198,6 +203,17 @@ template&lt;int len_zeroes, int len_poles&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >benchmark</p>
+<p >zero channel: 1590k &ndash; 629 ns</p>
+<p >one channel : 458 ns (total count, no opt)</p>
+<p >all: 920k &ndash; 1087 ns no reference: 930k &ndash; 1075 ns -&gt; reference: 12 ns no transfer: 1250k &ndash; 800 ns -&gt; transfer: 287 ns no out: 980k &ndash; 1020 ns -&gt; out: 67 ns</p>
+<p >all (no polymorphism): 980k -&gt; 1020 ns all (minimal fp): 1160k -&gt; 862 ns</p>
+<p >transfer (minimal fp): 52 ns</p>
+<p >all (abs -&gt; fabs): 1190k -&gt; 842 ns no reader: 1270k -&gt; 787 ns -&gt; reader() 55 ns</p>
+<p >all (async write): 1960k -&gt; 510 ns two channels : 920k -&gt; 1086 ns</p>
+<p >three channels : 781k -&gt; 1280 ns</p>
+<p >decode: 13 ns</p>
+<p >async write: (1) 2.06 485ns (2) 1.39 719ns (3) 1.03 970ns</p>
 
 <p>Implements <a class="el" href="structController.html">Controller</a>.</p>
 

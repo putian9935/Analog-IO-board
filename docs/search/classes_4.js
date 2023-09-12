@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['referencepath_0',['ReferencePath',['../structReferencePath.html',1,'']]]
+  ['serialreader_0',['SerialReader',['../structSerialReader.html',1,'']]]
 ];
