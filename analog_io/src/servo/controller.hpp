@@ -8,22 +8,24 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
+#include "is_int.hpp"
+#include "reference.hpp"
+#include "serial_reader.hpp"
 #include <Arduino.h>
 #include <cmath>
 #include <cstring>
 #include <vector>
-#include "is_int.hpp"
-#include "reference.hpp"
-#include "serial_reader.hpp"
 
 struct Controller;
 
-enum Command : uint8_t { SWEEP = 1,
-                         SERVO,
-                         CHANNEL,
-                         HSP,
-                         SHOW,
-                         REF };
+enum Command : uint8_t {
+    SWEEP = 1,
+    SERVO,
+    CHANNEL,
+    HSP,
+    SHOW,
+    REF
+};
 
 typedef float (*read_func_t)();
 typedef void (*write_func_t)(uint16_t);
@@ -47,11 +49,15 @@ struct Controller {
           reference_hsp(ref_hsp),
           lower(lower),
           upper(upper) {}
-    virtual void update()                        = 0;
+    // loop update
+    virtual void update() = 0;
+    // update parameter from serial
     virtual void read_from_serial(uint8_t const) = 0;
+    // clear internal state (say, integral) of the controller
+    virtual void clear() = 0;
     virtual ~Controller(){};
 };
 
 typedef Controller* const pController;
 
-#endif  // CONTROLLER_HPP
+#endif // CONTROLLER_HPP

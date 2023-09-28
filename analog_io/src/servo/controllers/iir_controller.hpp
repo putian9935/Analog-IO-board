@@ -9,8 +9,9 @@ struct IIRBaseController {
     float le, lo;  // last error and last output
     IIRBaseController() : le{}, lo{} {}
     void clear() {
-        le = 0;
-        lo = 0;
+        // clear last error and output
+        le = 0.f;
+        lo = 0.f;
     }
     virtual float transfer(float const err) = 0;
     virtual void show() = 0;
@@ -159,7 +160,7 @@ struct IIRCascadeController : public Controller {
         }
     }
 
-    void clear() {
+    void clear() override {
         int i = 0, j = 0;
         for (; i < len_zeroes; ++i) focontrollers[i].clear();
         for (; i < len_poles; ++i, ++j) spcontrollers[j].clear();
@@ -226,7 +227,6 @@ void ref_parser(IIRCascadeController<a, b>* c) {
     // clear everything
     c->reference->clear_reference();
     c->reference->clear_timer();
-    c->clear();
     // turn on the controller
     c->on = true;
 }
