@@ -10,7 +10,7 @@ inline void test1() {
         // delay(500);
         auto x = read_ain0();
         digitalWriteFast(40, x > 31500);
-        write(0, x);
+        async_write(0, x);
     }
 }
 
@@ -44,11 +44,11 @@ void test2() {
 void test4() {
     while (1) {
         auto x = read_ain0();
-        write(0, x);
+        async_write(0, x);
         read_bin0();
-        write(1, x);
+        async_write(1, x);
         read_bin0();
-        write(2, x);
+        async_write(2, x);
     }
 }
 

@@ -7,7 +7,7 @@ static ReferencePath refs[8] = {ReferencePath(), ReferencePath(), ReferencePath(
 
 static PIController
     servo326{[]() { return (float)read_ain0(); },
-             [](uint16_t x) { write(0, x); },
+             [](uint16_t x) { async_write(0, x); },
              {-1 / 7.},
              {0., -1 / 2.},
              -0.04,
