@@ -1,11 +1,11 @@
-#include <DMAChannel.h>
 #include "analog_io.h"
 #include "fsm2.h"
 #include "serial_reader.hpp"
 #include "servo/controllers/iir_controller.hpp"
 #include "servo/intensity_servo_helper.hpp"
 #include "servo/servo_system.hpp"
- 
+#include "trigger.h"
+#include <DMAChannel.h>
 enum class States {
     Idle,
     Servo,
@@ -24,18 +24,20 @@ extern DMAChannel rx, tx;
 static Triggers next_trig = Triggers::Heartbeat;
 
 static void servo_loop() {
-    // digitalWriteFast(40, HIGH);
-    //         int32_t x   = read_ain0();
-    //     int32_t err = (x - 32768);
-    //     write(0, ((int16_t)(-(double)(err)*1.21) + 32768));
-    // digitalWriteFast(40, LOW);
-
+    if (digitalReadFast(GLOBAL_ENABLE_PIN)) {
+        for (int ch = 0; ch < 4; ++ch)
+            if (servoes[ch]->on) {
+                auto x = servoes[ch]->reference_hsp->get_reference();
+                servoes[ch]->writer(x);
+            }
+        return;
+    }
     for (int ch = 0; ch < 4; ++ch) {
         if (servoes[ch]->on)
             servoes[ch]->update();
     }
 }
-static Controller *sweep_c;
+static Controller* sweep_c;
 
 static void channel_parser(uint8_t ch) {
     if (ch & (1 << 7))
@@ -58,7 +60,7 @@ void handle_serial() {
     tx.enable();
     uint8_t c  = SerialReader();
     uint8_t ch = SerialReader();
-    next_trig = Triggers::Heartbeat;
+    next_trig  = Triggers::Heartbeat;
     switch (c) {
         case CHANNEL: {
             channel_parser(ch);
@@ -75,8 +77,12 @@ void handle_serial() {
                 if (c == SWEEP) {
                     sweep_c   = servoes[ch];
                     next_trig = Triggers::TurnOnSweep;
-                } else if (c == SERVO || c == REF || c == HSP)
+                } else if (c == SERVO || c == REF || c == HSP) {
+                    // resets all controller related states 
+                    for (int ch = 0; ch < 4; ++ch)
+                        servoes[ch]->clear();
                     next_trig = Triggers::TurnOnServo;
+                }
             }
             break;
         }
@@ -94,13 +100,13 @@ void reset_next_trig() {
 void init_fsm() {
     fsm.add_transitions({
         {States::Idle, States::Idle, Triggers::Heartbeat, reset_next_trig},
-        {States::Idle, States::Idle, Triggers::SerialEvent,  handle_serial},
-        {States::Idle, States::Servo, Triggers::TurnOnServo,  reset_next_trig},
+        {States::Idle, States::Idle, Triggers::SerialEvent, handle_serial},
+        {States::Idle, States::Servo, Triggers::TurnOnServo, reset_next_trig},
         {States::Idle, States::Sweep, Triggers::TurnOnSweep, reset_next_trig},
-        {States::Servo, States::Servo, Triggers::Heartbeat,  servo_loop},
+        {States::Servo, States::Servo, Triggers::Heartbeat, servo_loop},
         {States::Sweep, States::Sweep, Triggers::Heartbeat, sweep_loop},
-        {States::Servo, States::Idle, Triggers::SerialEvent,  handle_serial},
-        {States::Sweep, States::Idle, Triggers::SerialEvent,  handle_serial},
+        {States::Servo, States::Idle, Triggers::SerialEvent, handle_serial},
+        {States::Sweep, States::Idle, Triggers::SerialEvent, handle_serial},
     });
 }
 
