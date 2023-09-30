@@ -61,7 +61,7 @@ static void end_fourway() {
     rx.source(spi_regs->RDR);
     rx.triggerAtHardwareEvent(DMAMUX_SOURCE_LPSPI4_RX);
     rx.destination(ain0);
-#ifdef ADC_SEQ_ON
+#ifdef ADC_FOUR_CHANNEL
     rx.transferCount(2);
     rx.TCD->DOFF = 4;
     rx.TCD->DLASTSGA = -8;

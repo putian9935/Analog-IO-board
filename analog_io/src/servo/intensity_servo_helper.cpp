@@ -12,7 +12,7 @@ PowerReading get_best_power(Controller* const c, uint16_t const step) {
     delay(5);
     for (auto i = c->lower; i < c->upper; i += step) {
         c->writer(i);
-        delayMicroseconds(500);
+        delayMicroseconds(5);
         auto x = c->reader();
         if (x > ret.pmax) {
             ret.pmax = x;
