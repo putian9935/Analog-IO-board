@@ -125,14 +125,13 @@ $(function() {
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> update() = 0;</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="comment">// update parameter from serial</span></div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> read_from_serial(uint8_t <span class="keyword">const</span>) = 0;</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="comment">// clear internal state (say, integral) of the controller</span></div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> clear() = 0;</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <span class="keyword">virtual</span> <a class="code hl_struct" href="structController.html">~Controller</a>(){};</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>};</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="keyword">typedef</span> <a class="code hl_struct" href="structController.html">Controller</a>* <span class="keyword">const</span> pController;</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="preprocessor">#endif </span><span class="comment">// CONTROLLER_HPP</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> clear() = 0;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <span class="keyword">virtual</span> <a class="code hl_struct" href="structController.html">~Controller</a>(){};</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>};</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="keyword">typedef</span> <a class="code hl_struct" href="structController.html">Controller</a>* <span class="keyword">const</span> pController;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="preprocessor">#endif </span><span class="comment">// CONTROLLER_HPP</span></div>
 <div class="ttc" id="ais__int_8hpp_html"><div class="ttname"><a href="is__int_8hpp.html">is_int.hpp</a></div><div class="ttdoc">Helper class to determine if a class is of type int.</div></div>
 <div class="ttc" id="areference_8hpp_html"><div class="ttname"><a href="reference_8hpp.html">reference.hpp</a></div><div class="ttdoc">Reference class for servo system.</div></div>
 <div class="ttc" id="aserial__reader_8hpp_html"><div class="ttname"><a href="serial__reader_8hpp.html">serial_reader.hpp</a></div><div class="ttdoc">Serial reader helper class.</div></div>

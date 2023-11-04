@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['serialreader_0',['SerialReader',['../structSerialReader.html',1,'']]]
+  ['vanillapicontroller_0',['VanillaPIController',['../structVanillaPIController.html',1,'']]]
 ];
