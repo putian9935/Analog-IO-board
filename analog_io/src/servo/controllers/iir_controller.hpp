@@ -41,6 +41,7 @@ struct IIRFirstOrderController : public IIRBaseController {
     IIRFirstOrderController() : z(0), p(0) {}
     float transfer(float const e) override {
         float ret = (a * lo - b * le + e);
+        ret = max(min(ret, 32767.), -32768.);
         lo = ret;
         le = e;
         return ret;
@@ -66,6 +67,7 @@ struct IIRSinglePoleController : public IIRBaseController {
     }
     float transfer(float const e) override {
         float ret = (b * lo + (le + e));
+        ret = max(min(ret, 32767.), -32768.);
         lo = ret;
         le = e;
         return ret;
@@ -151,7 +153,7 @@ struct IIRCascadeController : public Controller {
         for (; i < len_poles; ++i, ++j) {
             new_out = spcontrollers[j].transfer(new_out);
         }
-        new_out = max(min(real_g * new_out, upper), lower);
+        new_out = max(min(new_out, upper), lower);
         if (fabs(new_out - last_out) > 1.f)  // lazy update
         {
             last_out = new_out;
