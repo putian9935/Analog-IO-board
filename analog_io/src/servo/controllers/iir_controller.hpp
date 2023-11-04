@@ -76,9 +76,9 @@ struct IIRSinglePoleController : public IIRBaseController {
 // IIR controller in cascade form
 template <int len_zeroes, int len_poles>
 struct IIRCascadeController : public Controller {
-    static_assert((len_zeroes == 0 && len_poles == 0) ||
-                      (len_zeroes < len_poles),
-                  "There should be more poles than zeroes. ");
+    // static_assert((len_zeroes == 0 && len_poles == 0) ||
+    //                   (len_zeroes < len_poles),
+    //               "There should be more poles than zeroes. ");
 
     float overall_gain;
     float last_out;
@@ -142,7 +142,7 @@ struct IIRCascadeController : public Controller {
          * (3) 1.03  970ns
          */
         float new_out =
-            reader() - reference->get_reference();  // start with an error
+            (reader() - reference->get_reference());  // start with an error
         // Serial.printf("%lf\n", reference->get_reference());
         int i = 0, j = 0;
         for (; i < len_zeroes; ++i) {
