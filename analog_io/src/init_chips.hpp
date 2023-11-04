@@ -10,11 +10,9 @@
 #include <Arduino.h>
 
 
-#ifndef ADC_TWO_CHANNEL
-#    define ADC_FOUR_CHANNEL
-#endif
-
-#define ADC_SEQ_ON
+// #ifndef ADC_TWO_CHANNEL
+// #    define ADC_FOUR_CHANNEL
+// #endif
 
 /***
  * Clock frequency

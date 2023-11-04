@@ -31,11 +31,7 @@ struct VanillaPIController : public Controller {
             new_out = lower; 
             integral -= error; 
         }
-        // if (fabs(new_out - last_out) > 1.f)  // lazy update
-        // {
-            // last_out = new_out;
         writer((uint16_t)new_out);
-        // }
     }
 
     void clear() {
