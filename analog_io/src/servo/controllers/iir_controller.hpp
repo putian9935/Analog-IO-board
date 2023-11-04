@@ -153,7 +153,7 @@ struct IIRCascadeController : public Controller {
         for (; i < len_poles; ++i, ++j) {
             new_out = spcontrollers[j].transfer(new_out);
         }
-        new_out = max(min(new_out, upper), lower);
+        new_out = max(min(real_g * new_out, upper), lower);
         if (fabs(new_out - last_out) > 1.f)  // lazy update
         {
             last_out = new_out;

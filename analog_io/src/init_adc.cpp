@@ -115,7 +115,7 @@ void init_ADC() {
 #ifdef ADC_FOUR_CHANNEL
     // Turn on sequencer mode; rolling average; average size 2**1=2
     fourway_write((uint16_t)(ADC_WRITE | ADC_CFG1 | ADC_CFG1_SEQ |
-                             ADC_CFG1_ROLLING | ADC_CFG1_OSR(1)));
+                             ADC_CFG1_ROLLING | ADC_CFG1_OSR(3)));
 #else
     // Rolling average; average size 2**3=8
     fourway_write(

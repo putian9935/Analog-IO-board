@@ -49,6 +49,7 @@ struct Controller {
           upper(upper) {}
     virtual void update()                        = 0;
     virtual void read_from_serial(uint8_t const) = 0;
+    virtual void clear() = 0;
     virtual ~Controller(){};
 };
 

@@ -22,20 +22,20 @@ struct VanillaPIController : public Controller {
         float error =
             (reader() - reference->get_reference());  // start with an error
         integral += error; 
-        float new_out = kp * error + ki * integral;
-        if (new_out > upper) {
+        float new_out = kp * error + ki * integral + 32767.;
+        if (new_out > upper ) {
             new_out = upper; 
             integral -= error; 
         }
-        else if (new_out < lower) {
+        else if (new_out < lower ) {
             new_out = lower; 
             integral -= error; 
         }
-        if (fabs(new_out - last_out) > 1.f)  // lazy update
-        {
-            last_out = new_out;
-            writer((uint16_t)last_out);
-        }
+        // if (fabs(new_out - last_out) > 1.f)  // lazy update
+        // {
+            // last_out = new_out;
+        writer((uint16_t)new_out);
+        // }
     }
 
     void clear() {
@@ -48,8 +48,8 @@ struct VanillaPIController : public Controller {
 
 
 void sweep_parser(VanillaPIController* c) {
-    c->lower = SerialReader();
-    c->upper = SerialReader();
+    c->lower = (uint16_t) SerialReader();
+    c->upper = (uint16_t) SerialReader();
     uint16_t step = SerialReader();
     auto gp = get_best_power(c, step);
     Serial.printf("Max power of %d at DAC number %d.\n", gp.pmax, gp.vmax);
@@ -62,8 +62,8 @@ void show_parser(VanillaPIController* c) {
 }
 
 void servo_parser(VanillaPIController* c) {
-    c->kp = SerialReader(); 
-    c->ki = SerialReader(); 
+    c->kp = (double) SerialReader(); 
+    c->ki =(double) SerialReader(); 
     Serial.printf("kp %f, ki %f\n", c->kp, c->ki);
 }
 

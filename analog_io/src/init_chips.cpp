@@ -52,8 +52,8 @@ static void init_DAC() {
 
 void init_chips() {
     // increase CPU clock speed to 720MHz
-    set_arm_clock_cpp(720000000);
-    CCM_CBCDR = ((CCM_CBCDR & ~CCM_CBCDR_IPG_PODF_MASK) | CCM_CBCDR_IPG_PODF(2));
+    // set_arm_clock_cpp(720000000);
+    // CCM_CBCDR = ((CCM_CBCDR & ~CCM_CBCDR_IPG_PODF_MASK) | CCM_CBCDR_IPG_PODF(2));
 
     init_DAC();
     init_ADC();
